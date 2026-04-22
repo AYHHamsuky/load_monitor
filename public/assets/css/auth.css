@@ -1,0 +1,34 @@
+/* ===== AUTH / LOGIN ===== */
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1f2937, #111827);
+}
+
+.auth-card {
+    background: #fff;
+    padding: 30px;
+    width: 360px;
+    max-width: 90%;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.25);
+}
+
+.auth-card h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #1f2937;
+}
+
+.auth-card button {
+    width: 100%;
+}
+
+.auth-error {
+    margin-top: 10px;
+    color: #dc2626;
+    text-align: center;
+    font-size: 14px;
+}

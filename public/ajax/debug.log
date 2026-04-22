@@ -1,0 +1,80 @@
+File reached at 2026-01-26 14:52:05
+Session started
+Looking for bootstrap at: C:\laragon\www\load_monitor\public\ajax/../../app/bootstrap.php
+Bootstrap loaded
+Classes verified
+POST request confirmed
+User: 100901
+Form data: {"fdr11kv_code":"23","entry_date":"2026-01-26","entry_hour":"2","load_read":"2.11","fault_code":"","fault_remark":""}
+Database connected
+Test query successful. Feeders: 4
+File reached at 2026-01-26 14:52:10
+Session started
+Looking for bootstrap at: C:\laragon\www\load_monitor\public\ajax/../../app/bootstrap.php
+Bootstrap loaded
+Classes verified
+POST request confirmed
+User: 100901
+Form data: {"fdr11kv_code":"23","entry_date":"2026-01-26","entry_hour":"2","load_read":"2.11","fault_code":"","fault_remark":""}
+Database connected
+Test query successful. Feeders: 4
+File reached at 2026-01-26 15:01:29
+Session started
+Looking for bootstrap at: C:\laragon\www\load_monitor\public\ajax/../../app/bootstrap.php
+Bootstrap loaded
+Classes verified
+POST request confirmed
+User: 100901
+Form data: {"fdr11kv_code":"21","entry_date":"2026-01-26","entry_hour":"2","load_read":"0","fault_code":"VANL","fault_remark":"fhhfhfyfyfy"}
+Database connected
+Test query successful. Feeders: 4
+File reached at 2026-01-26 15:05:42
+Session started
+Looking for bootstrap at: C:\laragon\www\load_monitor\public\ajax/../../app/bootstrap.php
+Bootstrap loaded
+Classes verified
+POST request confirmed
+User: 100901
+Form data: {"fdr11kv_code":"23","entry_date":"2026-01-26","entry_hour":"5","load_read":"1.22","fault_code":"","fault_remark":""}
+Database connected
+Test query successful. Feeders: 4
+File reached at 2026-01-26 15:35:52
+Session started
+Looking for bootstrap at: C:\laragon\www\load_monitor\public\ajax/../../app/bootstrap.php
+Bootstrap loaded
+Classes verified
+POST request confirmed
+User: 100901
+Form data: {"fdr11kv_code":"23","entry_date":"2026-01-26","entry_hour":"3","load_read":"5.23","fault_code":"","fault_remark":""}
+Database connected
+Test query successful. Feeders: 4
+File reached at 2026-01-26 15:36:07
+Session started
+Looking for bootstrap at: C:\laragon\www\load_monitor\public\ajax/../../app/bootstrap.php
+Bootstrap loaded
+Classes verified
+POST request confirmed
+User: 100901
+Form data: {"fdr11kv_code":"23","entry_date":"2026-01-26","entry_hour":"3","load_read":"5.23","fault_code":"","fault_remark":""}
+Database connected
+Test query successful. Feeders: 4
+File reached at 2026-01-26 15:38:37
+Session started
+Looking for bootstrap at: C:\laragon\www\load_monitor\public\ajax/../../app/bootstrap.php
+Bootstrap loaded
+Classes verified
+POST request confirmed
+User: 100901
+Form data: {"fdr11kv_code":"23","entry_date":"2026-01-26","entry_hour":"1","load_read":"2.22","fault_code":"","fault_remark":""}
+Database connected
+Test query successful. Feeders: 4
+File reached at 2026-01-26 16:01:25
+Session started
+Looking for bootstrap at: C:\laragon\www\load_monitor\public\ajax/../../app/bootstrap.php
+Bootstrap loaded
+Classes verified
+POST request confirmed
+User: 100901
+Form data: {"fdr11kv_code":"21","entry_date":"2026-01-26","entry_hour":"4","load_read":"1.86","fault_code":"","fault_remark":""}
+Database connected
+Test query successful. Feeders: 4

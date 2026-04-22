@@ -1,0 +1,56 @@
+[2026-02-06 08:00:19] === 33kV Interruption Log Request Started ===
+[2026-02-06 08:00:19] POST data received: Array
+(
+    [fdr33kv_code] => 7
+    [interruption_type] => Unplanned
+    [interruption_code] => O/C
+    [datetime_out] => 2026-02-06T08:30
+    [datetime_in] => 2026-02-06T09:50
+    [load_loss] => 25.89
+    [weather_condition] => Rainy
+    [reason_for_interruption] => Ajhxvhjavxhjvhavxhja
+    [resolution] => bnxvhacgxcgjvhjvx
+    [reason_for_delay] => DSO communicated late
+    [other_reasons] => 
+)
+
+[2026-02-06 08:00:19] Bootstrap loaded successfully
+[2026-02-06 08:00:19] Model loaded successfully
+[2026-02-06 08:00:19] User authenticated: Array
+(
+    [payroll_id] => 888888
+    [role] => UL2
+)
+
+[2026-02-06 08:00:19] Date validation: Array
+(
+    [datetime_out] => 2026-02-06T08:30
+    [timestamp_out] => 1770366600
+    [today] => 1770336000
+    [is_past] => 
+)
+
+[2026-02-06 08:00:19] Data prepared for insertion: Array
+(
+    [interruption_code] => O/C
+    [fdr33kv_code] => 7
+    [interruption_type] => Unplanned
+    [load_loss] => 25.89
+    [datetime_out] => 2026-02-06T08:30
+    [datetime_in] => 2026-02-06T09:50
+    [reason_for_interruption] => Ajhxvhjavxhjvhavxhja
+    [resolution] => bnxvhacgxcgjvhjvx
+    [weather_condition] => Rainy
+    [reason_for_delay] => DSO communicated late
+    [other_reasons] => 
+    [user_id] => 888888
+)
+
+[2026-02-06 08:00:19] Model result: Array
+(
+    [success] => 1
+    [message] => Interruption logged successfully
+    [interruption_id] => 15
+)
+
+[2026-02-06 08:00:19] === Request Completed ===

@@ -1,0 +1,1016 @@
+[27-Feb-2026 13:42:38 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: 6rkgh6uu2kp9vdbukagqmuj0a1
+[27-Feb-2026 13:42:38 Europe/Berlin] LOGIN SUCCESS: 100901
+[27-Feb-2026 13:42:38 Europe/Berlin]   - POST received
+[27-Feb-2026 13:42:38 Europe/Berlin]   - Payroll: 100901
+[27-Feb-2026 13:42:38 Europe/Berlin]   - Session: 6rkgh6uu2kp9vdbukagqmuj0a1
+[27-Feb-2026 13:42:38 Europe/Berlin]   - Login result: SUCCESS
+[27-Feb-2026 13:42:38 Europe/Berlin]   - Session after: 6rkgh6uu2kp9vdbukagqmuj0a1
+[27-Feb-2026 13:42:38 Europe/Berlin]   - Auth::check(): TRUE
+[27-Feb-2026 13:42:38 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}
+[27-Feb-2026 13:56:18 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: 7tg73463c905g2ebdi1thha1va
+[27-Feb-2026 13:56:18 Europe/Berlin] LOGIN SUCCESS: 100901
+[27-Feb-2026 13:56:18 Europe/Berlin]   - POST received
+[27-Feb-2026 13:56:18 Europe/Berlin]   - Payroll: 100901
+[27-Feb-2026 13:56:18 Europe/Berlin]   - Session: 7tg73463c905g2ebdi1thha1va
+[27-Feb-2026 13:56:18 Europe/Berlin]   - Login result: SUCCESS
+[27-Feb-2026 13:56:18 Europe/Berlin]   - Session after: 7tg73463c905g2ebdi1thha1va
+[27-Feb-2026 13:56:18 Europe/Berlin]   - Auth::check(): TRUE
+[27-Feb-2026 13:56:18 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}
+[27-Feb-2026 14:01:10 Europe/Berlin] LOGIN ATTEMPT: 105421 | Session: ft543uq4em2ufsglohsbebslf7
+[27-Feb-2026 14:01:10 Europe/Berlin] LOGIN SUCCESS: 105421
+[27-Feb-2026 14:01:10 Europe/Berlin]   - POST received
+[27-Feb-2026 14:01:10 Europe/Berlin]   - Payroll: 105421
+[27-Feb-2026 14:01:10 Europe/Berlin]   - Session: ft543uq4em2ufsglohsbebslf7
+[27-Feb-2026 14:01:10 Europe/Berlin]   - Login result: SUCCESS
+[27-Feb-2026 14:01:10 Europe/Berlin]   - Session after: ft543uq4em2ufsglohsbebslf7
+[27-Feb-2026 14:01:10 Europe/Berlin]   - Auth::check(): TRUE
+[27-Feb-2026 14:01:10 Europe/Berlin]   - Session data: {"user":{"payroll_id":"105421","staff_name":"Elizabeth Sunday Daniel","role":"UL1","iss_code":"36","assigned_33kv_code":"44","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"elizabeth.sunday@example.com"},"user_id":"105421","role":"UL1"}
+[27-Feb-2026 14:02:47 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: ft543uq4em2ufsglohsbebslf7
+[27-Feb-2026 14:02:47 Europe/Berlin] LOGIN SUCCESS: 100901
+[27-Feb-2026 14:02:47 Europe/Berlin]   - POST received
+[27-Feb-2026 14:02:47 Europe/Berlin]   - Payroll: 100901
+[27-Feb-2026 14:02:47 Europe/Berlin]   - Session: ft543uq4em2ufsglohsbebslf7
+[27-Feb-2026 14:02:47 Europe/Berlin]   - Login result: SUCCESS
+[27-Feb-2026 14:02:47 Europe/Berlin]   - Session after: ft543uq4em2ufsglohsbebslf7
+[27-Feb-2026 14:02:47 Europe/Berlin]   - Auth::check(): TRUE
+[27-Feb-2026 14:02:47 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}
+[27-Feb-2026 14:03:50 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: ft543uq4em2ufsglohsbebslf7
+[27-Feb-2026 14:03:50 Europe/Berlin] LOGIN SUCCESS: 121212
+[27-Feb-2026 14:03:50 Europe/Berlin]   - POST received
+[27-Feb-2026 14:03:50 Europe/Berlin]   - Payroll: 121212
+[27-Feb-2026 14:03:50 Europe/Berlin]   - Session: ft543uq4em2ufsglohsbebslf7
+[27-Feb-2026 14:03:50 Europe/Berlin]   - Login result: SUCCESS
+[27-Feb-2026 14:03:50 Europe/Berlin]   - Session after: ft543uq4em2ufsglohsbebslf7
+[27-Feb-2026 14:03:50 Europe/Berlin]   - Auth::check(): TRUE
+[27-Feb-2026 14:03:50 Europe/Berlin]   - Session data: {"user":{"payroll_id":"121212","staff_name":"Lead Dispatch","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"0800000000","email":"dispatchlead@example.com"},"user_id":"121212","role":"UL8"}
+[02-Mar-2026 09:45:59 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: 4j5puke3fvjq6tsk677qa74u64
+[02-Mar-2026 09:45:59 Europe/Berlin] LOGIN SUCCESS: 121212
+[02-Mar-2026 09:45:59 Europe/Berlin]   - POST received
+[02-Mar-2026 09:45:59 Europe/Berlin]   - Payroll: 121212
+[02-Mar-2026 09:45:59 Europe/Berlin]   - Session: 4j5puke3fvjq6tsk677qa74u64
+[02-Mar-2026 09:45:59 Europe/Berlin]   - Login result: SUCCESS
+[02-Mar-2026 09:45:59 Europe/Berlin]   - Session after: 4j5puke3fvjq6tsk677qa74u64
+[02-Mar-2026 09:45:59 Europe/Berlin]   - Auth::check(): TRUE
+[02-Mar-2026 09:45:59 Europe/Berlin]   - Session data: {"user":{"payroll_id":"121212","staff_name":"Lead Dispatch","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"0800000000","email":"dispatchlead@example.com"},"user_id":"121212","role":"UL8"}
+[02-Mar-2026 14:37:48 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: rbh213afu8pugnmgmrj84bopf5
+[02-Mar-2026 14:37:48 Europe/Berlin] LOGIN SUCCESS: 121212
+[02-Mar-2026 14:37:48 Europe/Berlin]   - POST received
+[02-Mar-2026 14:37:48 Europe/Berlin]   - Payroll: 121212
+[02-Mar-2026 14:37:48 Europe/Berlin]   - Session: rbh213afu8pugnmgmrj84bopf5
+[02-Mar-2026 14:37:48 Europe/Berlin]   - Login result: SUCCESS
+[02-Mar-2026 14:37:48 Europe/Berlin]   - Session after: rbh213afu8pugnmgmrj84bopf5
+[02-Mar-2026 14:37:48 Europe/Berlin]   - Auth::check(): TRUE
+[02-Mar-2026 14:37:48 Europe/Berlin]   - Session data: {"user":{"payroll_id":"121212","staff_name":"Lead Dispatch","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"0800000000","email":"dispatchlead@example.com"},"user_id":"121212","role":"UL8"}
+[02-Mar-2026 14:40:17 Europe/Berlin] LOGIN ATTEMPT: 888888 | Session: rbh213afu8pugnmgmrj84bopf5
+[02-Mar-2026 14:40:18 Europe/Berlin] LOGIN SUCCESS: 888888
+[02-Mar-2026 14:40:18 Europe/Berlin]   - POST received
+[02-Mar-2026 14:40:18 Europe/Berlin]   - Payroll: 888888
+[02-Mar-2026 14:40:18 Europe/Berlin]   - Session: rbh213afu8pugnmgmrj84bopf5
+[02-Mar-2026 14:40:18 Europe/Berlin]   - Login result: SUCCESS
+[02-Mar-2026 14:40:18 Europe/Berlin]   - Session after: rbh213afu8pugnmgmrj84bopf5
+[02-Mar-2026 14:40:18 Europe/Berlin]   - Auth::check(): TRUE
+[02-Mar-2026 14:40:18 Europe/Berlin]   - Session data: {"user":{"payroll_id":"888888","staff_name":"Star C User 33kv","role":"UL2","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"HDSO","phone":"08012345678","email":"star.c.user33kv@example.com"},"user_id":"888888","role":"UL2"}
+[02-Mar-2026 14:44:01 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: rbh213afu8pugnmgmrj84bopf5
+[02-Mar-2026 14:44:01 Europe/Berlin] LOGIN SUCCESS: 100901
+[02-Mar-2026 14:44:01 Europe/Berlin]   - POST received
+[02-Mar-2026 14:44:01 Europe/Berlin]   - Payroll: 100901
+[02-Mar-2026 14:44:01 Europe/Berlin]   - Session: rbh213afu8pugnmgmrj84bopf5
+[02-Mar-2026 14:44:01 Europe/Berlin]   - Login result: SUCCESS
+[02-Mar-2026 14:44:01 Europe/Berlin]   - Session after: rbh213afu8pugnmgmrj84bopf5
+[02-Mar-2026 14:44:01 Europe/Berlin]   - Auth::check(): TRUE
+[02-Mar-2026 14:44:01 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}
+[02-Mar-2026 15:13:47 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: dkubca9uvgs4anjtlph02120ms
+[02-Mar-2026 15:13:47 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[02-Mar-2026 15:13:47 Europe/Berlin]   - POST received
+[02-Mar-2026 15:13:47 Europe/Berlin]   - Payroll: 121212
+[02-Mar-2026 15:13:47 Europe/Berlin]   - Session: dkubca9uvgs4anjtlph02120ms
+[02-Mar-2026 15:13:47 Europe/Berlin]   - Login result: FAILED
+[02-Mar-2026 15:13:47 Europe/Berlin]   - ERROR: Invalid credentials
+[02-Mar-2026 15:13:56 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: dkubca9uvgs4anjtlph02120ms
+[02-Mar-2026 15:13:56 Europe/Berlin] LOGIN SUCCESS: 121212
+[02-Mar-2026 15:13:56 Europe/Berlin]   - POST received
+[02-Mar-2026 15:13:56 Europe/Berlin]   - Payroll: 121212
+[02-Mar-2026 15:13:56 Europe/Berlin]   - Session: dkubca9uvgs4anjtlph02120ms
+[02-Mar-2026 15:13:56 Europe/Berlin]   - Login result: SUCCESS
+[02-Mar-2026 15:13:56 Europe/Berlin]   - Session after: dkubca9uvgs4anjtlph02120ms
+[02-Mar-2026 15:13:56 Europe/Berlin]   - Auth::check(): TRUE
+[02-Mar-2026 15:13:56 Europe/Berlin]   - Session data: {"user":{"payroll_id":"121212","staff_name":"Lead Dispatch","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"0800000000","email":"dispatchlead@example.com"},"user_id":"121212","role":"UL8"}
+[02-Mar-2026 15:19:51 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: dkubca9uvgs4anjtlph02120ms
+[02-Mar-2026 15:19:51 Europe/Berlin] LOGIN SUCCESS: 100901
+[02-Mar-2026 15:19:51 Europe/Berlin]   - POST received
+[02-Mar-2026 15:19:51 Europe/Berlin]   - Payroll: 100901
+[02-Mar-2026 15:19:51 Europe/Berlin]   - Session: dkubca9uvgs4anjtlph02120ms
+[02-Mar-2026 15:19:51 Europe/Berlin]   - Login result: SUCCESS
+[02-Mar-2026 15:19:51 Europe/Berlin]   - Session after: dkubca9uvgs4anjtlph02120ms
+[02-Mar-2026 15:19:51 Europe/Berlin]   - Auth::check(): TRUE
+[02-Mar-2026 15:19:51 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}
+[02-Mar-2026 15:23:21 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: dkubca9uvgs4anjtlph02120ms
+[02-Mar-2026 15:23:22 Europe/Berlin] LOGIN SUCCESS: 121212
+[02-Mar-2026 15:23:22 Europe/Berlin]   - POST received
+[02-Mar-2026 15:23:22 Europe/Berlin]   - Payroll: 121212
+[02-Mar-2026 15:23:22 Europe/Berlin]   - Session: dkubca9uvgs4anjtlph02120ms
+[02-Mar-2026 15:23:22 Europe/Berlin]   - Login result: SUCCESS
+[02-Mar-2026 15:23:22 Europe/Berlin]   - Session after: dkubca9uvgs4anjtlph02120ms
+[02-Mar-2026 15:23:22 Europe/Berlin]   - Auth::check(): TRUE
+[02-Mar-2026 15:23:22 Europe/Berlin]   - Session data: {"user":{"payroll_id":"121212","staff_name":"Lead Dispatch","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"0800000000","email":"dispatchlead@example.com"},"user_id":"121212","role":"UL8"}
+[02-Mar-2026 15:34:41 Europe/Berlin] LOGIN ATTEMPT: 705075 | Session: 88g2g68p81ebi9ds7hdt2farhn
+[02-Mar-2026 15:34:41 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[02-Mar-2026 15:34:41 Europe/Berlin]   - POST received
+[02-Mar-2026 15:34:41 Europe/Berlin]   - Payroll: 705075
+[02-Mar-2026 15:34:41 Europe/Berlin]   - Session: 88g2g68p81ebi9ds7hdt2farhn
+[02-Mar-2026 15:34:41 Europe/Berlin]   - Login result: FAILED
+[02-Mar-2026 15:34:41 Europe/Berlin]   - ERROR: Invalid credentials
+[02-Mar-2026 15:35:03 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: 88g2g68p81ebi9ds7hdt2farhn
+[02-Mar-2026 15:35:03 Europe/Berlin] LOGIN SUCCESS: 100901
+[02-Mar-2026 15:35:03 Europe/Berlin]   - POST received
+[02-Mar-2026 15:35:03 Europe/Berlin]   - Payroll: 100901
+[02-Mar-2026 15:35:03 Europe/Berlin]   - Session: 88g2g68p81ebi9ds7hdt2farhn
+[02-Mar-2026 15:35:03 Europe/Berlin]   - Login result: SUCCESS
+[02-Mar-2026 15:35:03 Europe/Berlin]   - Session after: 88g2g68p81ebi9ds7hdt2farhn
+[02-Mar-2026 15:35:03 Europe/Berlin]   - Auth::check(): TRUE
+[02-Mar-2026 15:35:03 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}
+[02-Mar-2026 15:42:45 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: 88g2g68p81ebi9ds7hdt2farhn
+[02-Mar-2026 15:42:46 Europe/Berlin] LOGIN SUCCESS: 121212
+[02-Mar-2026 15:42:46 Europe/Berlin]   - POST received
+[02-Mar-2026 15:42:46 Europe/Berlin]   - Payroll: 121212
+[02-Mar-2026 15:42:46 Europe/Berlin]   - Session: 88g2g68p81ebi9ds7hdt2farhn
+[02-Mar-2026 15:42:46 Europe/Berlin]   - Login result: SUCCESS
+[02-Mar-2026 15:42:46 Europe/Berlin]   - Session after: 88g2g68p81ebi9ds7hdt2farhn
+[02-Mar-2026 15:42:46 Europe/Berlin]   - Auth::check(): TRUE
+[02-Mar-2026 15:42:46 Europe/Berlin]   - Session data: {"user":{"payroll_id":"121212","staff_name":"Lead Dispatch","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"0800000000","email":"dispatchlead@example.com"},"user_id":"121212","role":"UL8"}
+[02-Mar-2026 15:47:46 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1 no such function: HOUR in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php:66
+Stack trace:
+#0 C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php(66): PDO->prepare('\n        SELECT...')
+#1 C:\Users\abubakar.hamza\Desktop\load_monitor\app\controllers\LeadDispatchDashboardController.php(56): require('C:\\Users\\abubak...')
+#2 C:\Users\abubakar.hamza\Desktop\load_monitor\public\index.php(55): require('C:\\Users\\abubak...')
+#3 {main}
+  thrown in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php on line 66
+[02-Mar-2026 15:48:02 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1 no such function: HOUR in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php:66
+Stack trace:
+#0 C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php(66): PDO->prepare('\n        SELECT...')
+#1 C:\Users\abubakar.hamza\Desktop\load_monitor\app\controllers\LeadDispatchDashboardController.php(56): require('C:\\Users\\abubak...')
+#2 C:\Users\abubakar.hamza\Desktop\load_monitor\public\index.php(55): require('C:\\Users\\abubak...')
+#3 {main}
+  thrown in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php on line 66
+[02-Mar-2026 15:48:04 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1 no such function: HOUR in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php:66
+Stack trace:
+#0 C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php(66): PDO->prepare('\n        SELECT...')
+#1 C:\Users\abubakar.hamza\Desktop\load_monitor\app\controllers\LeadDispatchDashboardController.php(56): require('C:\\Users\\abubak...')
+#2 C:\Users\abubakar.hamza\Desktop\load_monitor\public\index.php(55): require('C:\\Users\\abubak...')
+#3 {main}
+  thrown in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php on line 66
+[02-Mar-2026 15:48:06 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1 no such function: HOUR in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php:66
+Stack trace:
+#0 C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php(66): PDO->prepare('\n        SELECT...')
+#1 C:\Users\abubakar.hamza\Desktop\load_monitor\app\controllers\LeadDispatchDashboardController.php(56): require('C:\\Users\\abubak...')
+#2 C:\Users\abubakar.hamza\Desktop\load_monitor\public\index.php(55): require('C:\\Users\\abubak...')
+#3 {main}
+  thrown in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php on line 66
+[02-Mar-2026 15:48:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1 no such function: HOUR in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php:66
+Stack trace:
+#0 C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php(66): PDO->prepare('\n        SELECT...')
+#1 C:\Users\abubakar.hamza\Desktop\load_monitor\app\controllers\LeadDispatchDashboardController.php(56): require('C:\\Users\\abubak...')
+#2 C:\Users\abubakar.hamza\Desktop\load_monitor\public\index.php(55): require('C:\\Users\\abubak...')
+#3 {main}
+  thrown in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php on line 66
+[02-Mar-2026 15:49:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1 no such function: HOUR in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php:66
+Stack trace:
+#0 C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php(66): PDO->prepare('\n        SELECT...')
+#1 C:\Users\abubakar.hamza\Desktop\load_monitor\app\controllers\LeadDispatchDashboardController.php(56): require('C:\\Users\\abubak...')
+#2 C:\Users\abubakar.hamza\Desktop\load_monitor\public\index.php(55): require('C:\\Users\\abubak...')
+#3 {main}
+  thrown in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php on line 66
+[02-Mar-2026 15:49:14 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1 no such function: HOUR in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php:66
+Stack trace:
+#0 C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php(66): PDO->prepare('\n        SELECT...')
+#1 C:\Users\abubakar.hamza\Desktop\load_monitor\app\controllers\LeadDispatchDashboardController.php(56): require('C:\\Users\\abubak...')
+#2 C:\Users\abubakar.hamza\Desktop\load_monitor\public\index.php(55): require('C:\\Users\\abubak...')
+#3 {main}
+  thrown in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php on line 66
+[02-Mar-2026 15:49:18 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1 no such function: HOUR in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php:66
+Stack trace:
+#0 C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php(66): PDO->prepare('\n        SELECT...')
+#1 C:\Users\abubakar.hamza\Desktop\load_monitor\app\controllers\LeadDispatchDashboardController.php(56): require('C:\\Users\\abubak...')
+#2 C:\Users\abubakar.hamza\Desktop\load_monitor\public\index.php(55): require('C:\\Users\\abubak...')
+#3 {main}
+  thrown in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php on line 66
+[02-Mar-2026 15:54:07 Europe/Berlin] LOGIN ATTEMPT: 105421 | Session: 88g2g68p81ebi9ds7hdt2farhn
+[02-Mar-2026 15:54:07 Europe/Berlin] LOGIN SUCCESS: 105421
+[02-Mar-2026 15:54:07 Europe/Berlin]   - POST received
+[02-Mar-2026 15:54:07 Europe/Berlin]   - Payroll: 105421
+[02-Mar-2026 15:54:07 Europe/Berlin]   - Session: 88g2g68p81ebi9ds7hdt2farhn
+[02-Mar-2026 15:54:07 Europe/Berlin]   - Login result: SUCCESS
+[02-Mar-2026 15:54:07 Europe/Berlin]   - Session after: 88g2g68p81ebi9ds7hdt2farhn
+[02-Mar-2026 15:54:07 Europe/Berlin]   - Auth::check(): TRUE
+[02-Mar-2026 15:54:07 Europe/Berlin]   - Session data: {"user":{"payroll_id":"105421","staff_name":"Elizabeth Sunday Daniel","role":"UL1","iss_code":"36","assigned_33kv_code":"44","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"elizabeth.sunday@example.com"},"user_id":"105421","role":"UL1"}
+[02-Mar-2026 16:07:08 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: 88g2g68p81ebi9ds7hdt2farhn
+[02-Mar-2026 16:07:08 Europe/Berlin] LOGIN SUCCESS: 121212
+[02-Mar-2026 16:07:08 Europe/Berlin]   - POST received
+[02-Mar-2026 16:07:08 Europe/Berlin]   - Payroll: 121212
+[02-Mar-2026 16:07:08 Europe/Berlin]   - Session: 88g2g68p81ebi9ds7hdt2farhn
+[02-Mar-2026 16:07:08 Europe/Berlin]   - Login result: SUCCESS
+[02-Mar-2026 16:07:08 Europe/Berlin]   - Session after: 88g2g68p81ebi9ds7hdt2farhn
+[02-Mar-2026 16:07:08 Europe/Berlin]   - Auth::check(): TRUE
+[02-Mar-2026 16:07:08 Europe/Berlin]   - Session data: {"user":{"payroll_id":"121212","staff_name":"Lead Dispatch","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"0800000000","email":"dispatchlead@example.com"},"user_id":"121212","role":"UL8"}
+[02-Mar-2026 16:54:12 Europe/Berlin] LOGIN ATTEMPT: 999999 | Session: 88g2g68p81ebi9ds7hdt2farhn
+[02-Mar-2026 16:54:12 Europe/Berlin] LOGIN SUCCESS: 999999
+[02-Mar-2026 16:54:12 Europe/Berlin]   - POST received
+[02-Mar-2026 16:54:12 Europe/Berlin]   - Payroll: 999999
+[02-Mar-2026 16:54:12 Europe/Berlin]   - Session: 88g2g68p81ebi9ds7hdt2farhn
+[02-Mar-2026 16:54:12 Europe/Berlin]   - Login result: SUCCESS
+[02-Mar-2026 16:54:12 Europe/Berlin]   - Session after: 88g2g68p81ebi9ds7hdt2farhn
+[02-Mar-2026 16:54:12 Europe/Berlin]   - Auth::check(): TRUE
+[02-Mar-2026 16:54:12 Europe/Berlin]   - Session data: {"user":{"payroll_id":"999999","staff_name":"Star D User 33kv","role":"UL2","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"HDSO","phone":"08012345678","email":"star.d.user33kv@example.com"},"user_id":"999999","role":"UL2"}
+[03-Mar-2026 04:56:39 Europe/Berlin] LOGIN ATTEMPT:  | Session: 9vunntk2bqiu5ltp0vdasava3l
+[03-Mar-2026 04:56:41 Europe/Berlin] LOGIN ERROR: All fields are required
+[03-Mar-2026 04:56:42 Europe/Berlin]   - POST received
+[03-Mar-2026 04:56:42 Europe/Berlin]   - Payroll: 
+[03-Mar-2026 04:56:42 Europe/Berlin]   - Session: 9vunntk2bqiu5ltp0vdasava3l
+[03-Mar-2026 04:56:42 Europe/Berlin]   - ERROR: Empty fields
+[03-Mar-2026 11:34:42 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: q5kd8baf6k7ao4t5lv5qacvquj
+[03-Mar-2026 11:34:43 Europe/Berlin] LOGIN SUCCESS: 121212
+[03-Mar-2026 11:34:43 Europe/Berlin]   - POST received
+[03-Mar-2026 11:34:43 Europe/Berlin]   - Payroll: 121212
+[03-Mar-2026 11:34:43 Europe/Berlin]   - Session: q5kd8baf6k7ao4t5lv5qacvquj
+[03-Mar-2026 11:34:43 Europe/Berlin]   - Login result: SUCCESS
+[03-Mar-2026 11:34:43 Europe/Berlin]   - Session after: q5kd8baf6k7ao4t5lv5qacvquj
+[03-Mar-2026 11:34:43 Europe/Berlin]   - Auth::check(): TRUE
+[03-Mar-2026 11:34:43 Europe/Berlin]   - Session data: {"user":{"payroll_id":"121212","staff_name":"Lead Dispatch","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"0800000000","email":"dispatchlead@example.com"},"user_id":"121212","role":"UL8"}
+[04-Mar-2026 01:40:10 Europe/Berlin] LOGIN ATTEMPT:  | Session: 7k5g8cggrph91gbvkh0aptppnr
+[04-Mar-2026 01:40:10 Europe/Berlin] LOGIN ERROR: All fields are required
+[04-Mar-2026 01:40:10 Europe/Berlin]   - POST received
+[04-Mar-2026 01:40:10 Europe/Berlin]   - Payroll: 
+[04-Mar-2026 01:40:10 Europe/Berlin]   - Session: 7k5g8cggrph91gbvkh0aptppnr
+[04-Mar-2026 01:40:10 Europe/Berlin]   - ERROR: Empty fields
+[04-Mar-2026 11:33:45 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: 92l4v09kdub0psom68qprqssub
+[04-Mar-2026 11:33:45 Europe/Berlin] LOGIN SUCCESS: 121212
+[04-Mar-2026 11:33:45 Europe/Berlin]   - POST received
+[04-Mar-2026 11:33:45 Europe/Berlin]   - Payroll: 121212
+[04-Mar-2026 11:33:45 Europe/Berlin]   - Session: 92l4v09kdub0psom68qprqssub
+[04-Mar-2026 11:33:45 Europe/Berlin]   - Login result: SUCCESS
+[04-Mar-2026 11:33:45 Europe/Berlin]   - Session after: 92l4v09kdub0psom68qprqssub
+[04-Mar-2026 11:33:45 Europe/Berlin]   - Auth::check(): TRUE
+[04-Mar-2026 11:33:45 Europe/Berlin]   - Session data: {"user":{"payroll_id":"121212","staff_name":"Lead Dispatch","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"0800000000","email":"dispatchlead@example.com"},"user_id":"121212","role":"UL8"}
+[04-Mar-2026 12:59:41 Europe/Berlin] LOGIN ATTEMPT: 769545 | Session: 975upf2kkajs6mijddftf6q9sc
+[04-Mar-2026 12:59:41 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[04-Mar-2026 12:59:41 Europe/Berlin]   - POST received
+[04-Mar-2026 12:59:41 Europe/Berlin]   - Payroll: 769545
+[04-Mar-2026 12:59:41 Europe/Berlin]   - Session: 975upf2kkajs6mijddftf6q9sc
+[04-Mar-2026 12:59:41 Europe/Berlin]   - Login result: FAILED
+[04-Mar-2026 12:59:41 Europe/Berlin]   - ERROR: Invalid credentials
+[04-Mar-2026 13:00:11 Europe/Berlin] LOGIN ATTEMPT: 769545 | Session: 975upf2kkajs6mijddftf6q9sc
+[04-Mar-2026 13:00:11 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[04-Mar-2026 13:00:11 Europe/Berlin]   - POST received
+[04-Mar-2026 13:00:11 Europe/Berlin]   - Payroll: 769545
+[04-Mar-2026 13:00:11 Europe/Berlin]   - Session: 975upf2kkajs6mijddftf6q9sc
+[04-Mar-2026 13:00:11 Europe/Berlin]   - Login result: FAILED
+[04-Mar-2026 13:00:11 Europe/Berlin]   - ERROR: Invalid credentials
+[04-Mar-2026 13:01:26 Europe/Berlin] LOGIN ATTEMPT: 769545 | Session: 975upf2kkajs6mijddftf6q9sc
+[04-Mar-2026 13:01:26 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[04-Mar-2026 13:01:26 Europe/Berlin]   - POST received
+[04-Mar-2026 13:01:26 Europe/Berlin]   - Payroll: 769545
+[04-Mar-2026 13:01:26 Europe/Berlin]   - Session: 975upf2kkajs6mijddftf6q9sc
+[04-Mar-2026 13:01:26 Europe/Berlin]   - Login result: FAILED
+[04-Mar-2026 13:01:26 Europe/Berlin]   - ERROR: Invalid credentials
+[04-Mar-2026 18:35:36 Europe/Berlin] GUARD: Auth check failed, redirecting to login
+[04-Mar-2026 18:35:45 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: 5hfi12qphbpv63i249d4q5cbgn
+[04-Mar-2026 18:35:45 Europe/Berlin] LOGIN SUCCESS: 121212
+[04-Mar-2026 18:35:45 Europe/Berlin]   - POST received
+[04-Mar-2026 18:35:45 Europe/Berlin]   - Payroll: 121212
+[04-Mar-2026 18:35:45 Europe/Berlin]   - Session: 5hfi12qphbpv63i249d4q5cbgn
+[04-Mar-2026 18:35:45 Europe/Berlin]   - Login result: SUCCESS
+[04-Mar-2026 18:35:45 Europe/Berlin]   - Session after: 5hfi12qphbpv63i249d4q5cbgn
+[04-Mar-2026 18:35:45 Europe/Berlin]   - Auth::check(): TRUE
+[04-Mar-2026 18:35:45 Europe/Berlin]   - Session data: {"user":{"payroll_id":"121212","staff_name":"Lead Dispatch","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"0800000000","email":"dispatchlead@example.com"},"user_id":"121212","role":"UL8"}
+[05-Mar-2026 00:00:05 Europe/Berlin] LOGIN ATTEMPT:  | Session: 2esvjh93vb2mur4mkbj6c1urd0
+[05-Mar-2026 00:00:05 Europe/Berlin] LOGIN ERROR: All fields are required
+[05-Mar-2026 00:00:05 Europe/Berlin]   - POST received
+[05-Mar-2026 00:00:05 Europe/Berlin]   - Payroll: 
+[05-Mar-2026 00:00:05 Europe/Berlin]   - Session: 2esvjh93vb2mur4mkbj6c1urd0
+[05-Mar-2026 00:00:05 Europe/Berlin]   - ERROR: Empty fields
+[05-Mar-2026 10:37:55 Europe/Berlin] LOGIN ATTEMPT: 836297 | Session: 236j1ma36n12olbeobedfnojqe
+[05-Mar-2026 10:37:55 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[05-Mar-2026 10:37:55 Europe/Berlin]   - POST received
+[05-Mar-2026 10:37:55 Europe/Berlin]   - Payroll: 836297
+[05-Mar-2026 10:37:55 Europe/Berlin]   - Session: 236j1ma36n12olbeobedfnojqe
+[05-Mar-2026 10:37:55 Europe/Berlin]   - Login result: FAILED
+[05-Mar-2026 10:37:55 Europe/Berlin]   - ERROR: Invalid credentials
+[05-Mar-2026 10:38:17 Europe/Berlin] LOGIN ATTEMPT: 836297 | Session: 236j1ma36n12olbeobedfnojqe
+[05-Mar-2026 10:38:17 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[05-Mar-2026 10:38:17 Europe/Berlin]   - POST received
+[05-Mar-2026 10:38:17 Europe/Berlin]   - Payroll: 836297
+[05-Mar-2026 10:38:17 Europe/Berlin]   - Session: 236j1ma36n12olbeobedfnojqe
+[05-Mar-2026 10:38:17 Europe/Berlin]   - Login result: FAILED
+[05-Mar-2026 10:38:17 Europe/Berlin]   - ERROR: Invalid credentials
+[05-Mar-2026 10:39:34 Europe/Berlin] LOGIN ATTEMPT: 100303 | Session: 236j1ma36n12olbeobedfnojqe
+[05-Mar-2026 10:39:34 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[05-Mar-2026 10:39:34 Europe/Berlin]   - POST received
+[05-Mar-2026 10:39:34 Europe/Berlin]   - Payroll: 100303
+[05-Mar-2026 10:39:34 Europe/Berlin]   - Session: 236j1ma36n12olbeobedfnojqe
+[05-Mar-2026 10:39:34 Europe/Berlin]   - Login result: FAILED
+[05-Mar-2026 10:39:34 Europe/Berlin]   - ERROR: Invalid credentials
+[05-Mar-2026 10:40:39 Europe/Berlin] LOGIN ATTEMPT: 836297 | Session: 236j1ma36n12olbeobedfnojqe
+[05-Mar-2026 10:40:39 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[05-Mar-2026 10:40:39 Europe/Berlin]   - POST received
+[05-Mar-2026 10:40:39 Europe/Berlin]   - Payroll: 836297
+[05-Mar-2026 10:40:39 Europe/Berlin]   - Session: 236j1ma36n12olbeobedfnojqe
+[05-Mar-2026 10:40:39 Europe/Berlin]   - Login result: FAILED
+[05-Mar-2026 10:40:39 Europe/Berlin]   - ERROR: Invalid credentials
+[05-Mar-2026 10:48:01 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: 0olpb43um85uc6g7bdj8gtvhe4
+[05-Mar-2026 10:48:01 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[05-Mar-2026 10:48:01 Europe/Berlin]   - POST received
+[05-Mar-2026 10:48:01 Europe/Berlin]   - Payroll: 100901
+[05-Mar-2026 10:48:01 Europe/Berlin]   - Session: 0olpb43um85uc6g7bdj8gtvhe4
+[05-Mar-2026 10:48:01 Europe/Berlin]   - Login result: FAILED
+[05-Mar-2026 10:48:01 Europe/Berlin]   - ERROR: Invalid credentials
+[05-Mar-2026 10:48:34 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: 0olpb43um85uc6g7bdj8gtvhe4
+[05-Mar-2026 10:48:34 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[05-Mar-2026 10:48:34 Europe/Berlin]   - POST received
+[05-Mar-2026 10:48:34 Europe/Berlin]   - Payroll: 100901
+[05-Mar-2026 10:48:34 Europe/Berlin]   - Session: 0olpb43um85uc6g7bdj8gtvhe4
+[05-Mar-2026 10:48:34 Europe/Berlin]   - Login result: FAILED
+[05-Mar-2026 10:48:34 Europe/Berlin]   - ERROR: Invalid credentials
+[05-Mar-2026 10:49:33 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: 0olpb43um85uc6g7bdj8gtvhe4
+[05-Mar-2026 10:49:33 Europe/Berlin] LOGIN SUCCESS: 100901
+[05-Mar-2026 10:49:33 Europe/Berlin]   - POST received
+[05-Mar-2026 10:49:33 Europe/Berlin]   - Payroll: 100901
+[05-Mar-2026 10:49:33 Europe/Berlin]   - Session: 0olpb43um85uc6g7bdj8gtvhe4
+[05-Mar-2026 10:49:33 Europe/Berlin]   - Login result: SUCCESS
+[05-Mar-2026 10:49:33 Europe/Berlin]   - Session after: 0olpb43um85uc6g7bdj8gtvhe4
+[05-Mar-2026 10:49:33 Europe/Berlin]   - Auth::check(): TRUE
+[05-Mar-2026 10:49:33 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}
+[05-Mar-2026 10:49:36 Europe/Berlin] GUARD: Auth check failed, redirecting to login
+[05-Mar-2026 11:04:32 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: fnjhe9dj62k02joveo5c73bhvu
+[05-Mar-2026 11:04:32 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[05-Mar-2026 11:04:32 Europe/Berlin]   - POST received
+[05-Mar-2026 11:04:32 Europe/Berlin]   - Payroll: 121212
+[05-Mar-2026 11:04:32 Europe/Berlin]   - Session: fnjhe9dj62k02joveo5c73bhvu
+[05-Mar-2026 11:04:32 Europe/Berlin]   - Login result: FAILED
+[05-Mar-2026 11:04:32 Europe/Berlin]   - ERROR: Invalid credentials
+[05-Mar-2026 11:04:58 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: fnjhe9dj62k02joveo5c73bhvu
+[05-Mar-2026 11:04:58 Europe/Berlin] LOGIN SUCCESS: 121212
+[05-Mar-2026 11:04:58 Europe/Berlin]   - POST received
+[05-Mar-2026 11:04:58 Europe/Berlin]   - Payroll: 121212
+[05-Mar-2026 11:04:58 Europe/Berlin]   - Session: fnjhe9dj62k02joveo5c73bhvu
+[05-Mar-2026 11:04:58 Europe/Berlin]   - Login result: SUCCESS
+[05-Mar-2026 11:04:58 Europe/Berlin]   - Session after: fnjhe9dj62k02joveo5c73bhvu
+[05-Mar-2026 11:04:58 Europe/Berlin]   - Auth::check(): TRUE
+[05-Mar-2026 11:04:58 Europe/Berlin]   - Session data: {"user":{"payroll_id":"121212","staff_name":"Lead Dispatch","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"0800000000","email":"dispatchlead@example.com"},"user_id":"121212","role":"UL8"}
+[05-Mar-2026 11:08:40 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1 no such function: HOUR in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php:66
+Stack trace:
+#0 C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php(66): PDO->prepare('\n        SELECT...')
+#1 C:\Users\abubakar.hamza\Desktop\load_monitor\app\controllers\LeadDispatchDashboardController.php(56): require('C:\\Users\\abubak...')
+#2 C:\Users\abubakar.hamza\Desktop\load_monitor\public\index.php(55): require('C:\\Users\\abubak...')
+#3 {main}
+  thrown in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php on line 66
+[05-Mar-2026 11:12:15 Europe/Berlin] LOGIN ATTEMPT: 656495 | Session: ngt6g9jjhvh14876ql459okgds
+[05-Mar-2026 11:12:15 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[05-Mar-2026 11:12:15 Europe/Berlin]   - POST received
+[05-Mar-2026 11:12:15 Europe/Berlin]   - Payroll: 656495
+[05-Mar-2026 11:12:15 Europe/Berlin]   - Session: ngt6g9jjhvh14876ql459okgds
+[05-Mar-2026 11:12:15 Europe/Berlin]   - Login result: FAILED
+[05-Mar-2026 11:12:15 Europe/Berlin]   - ERROR: Invalid credentials
+[05-Mar-2026 11:13:01 Europe/Berlin] LOGIN ATTEMPT: 656495 | Session: ngt6g9jjhvh14876ql459okgds
+[05-Mar-2026 11:13:01 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[05-Mar-2026 11:13:01 Europe/Berlin]   - POST received
+[05-Mar-2026 11:13:01 Europe/Berlin]   - Payroll: 656495
+[05-Mar-2026 11:13:01 Europe/Berlin]   - Session: ngt6g9jjhvh14876ql459okgds
+[05-Mar-2026 11:13:01 Europe/Berlin]   - Login result: FAILED
+[05-Mar-2026 11:13:01 Europe/Berlin]   - ERROR: Invalid credentials
+[05-Mar-2026 20:11:22 Europe/Berlin] GUARD: Auth check failed, redirecting to login
+[05-Mar-2026 20:11:52 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: s5elkjdo0b6b9b5idqb35km2ld
+[05-Mar-2026 20:11:53 Europe/Berlin] LOGIN SUCCESS: 121212
+[05-Mar-2026 20:11:53 Europe/Berlin]   - POST received
+[05-Mar-2026 20:11:53 Europe/Berlin]   - Payroll: 121212
+[05-Mar-2026 20:11:53 Europe/Berlin]   - Session: s5elkjdo0b6b9b5idqb35km2ld
+[05-Mar-2026 20:11:53 Europe/Berlin]   - Login result: SUCCESS
+[05-Mar-2026 20:11:53 Europe/Berlin]   - Session after: s5elkjdo0b6b9b5idqb35km2ld
+[05-Mar-2026 20:11:53 Europe/Berlin]   - Auth::check(): TRUE
+[05-Mar-2026 20:11:53 Europe/Berlin]   - Session data: {"user":{"payroll_id":"121212","staff_name":"Lead Dispatch","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"0800000000","email":"dispatchlead@example.com"},"user_id":"121212","role":"UL8"}
+[05-Mar-2026 20:11:55 Europe/Berlin] GUARD: Auth check failed, redirecting to login
+[06-Mar-2026 17:59:07 Europe/Berlin] LOGIN ATTEMPT:  | Session: 8lpgsiqdjt4b2bacplbd61im8l
+[06-Mar-2026 17:59:07 Europe/Berlin] LOGIN ERROR: All fields are required
+[06-Mar-2026 17:59:07 Europe/Berlin]   - POST received
+[06-Mar-2026 17:59:07 Europe/Berlin]   - Payroll: 
+[06-Mar-2026 17:59:07 Europe/Berlin]   - Session: 8lpgsiqdjt4b2bacplbd61im8l
+[06-Mar-2026 17:59:07 Europe/Berlin]   - ERROR: Empty fields
+[07-Mar-2026 05:10:45 Europe/Berlin] LOGIN ATTEMPT:  | Session: pv4f5ij2svavq80ngc8i7eou4b
+[07-Mar-2026 05:10:45 Europe/Berlin] LOGIN ERROR: All fields are required
+[07-Mar-2026 05:10:45 Europe/Berlin]   - POST received
+[07-Mar-2026 05:10:45 Europe/Berlin]   - Payroll: 
+[07-Mar-2026 05:10:45 Europe/Berlin]   - Session: pv4f5ij2svavq80ngc8i7eou4b
+[07-Mar-2026 05:10:45 Europe/Berlin]   - ERROR: Empty fields
+[07-Mar-2026 05:15:32 Europe/Berlin] LOGIN ATTEMPT:  | Session: sgc17g9hlebd090pt01bac79l5
+[07-Mar-2026 05:15:32 Europe/Berlin] LOGIN ERROR: All fields are required
+[07-Mar-2026 05:15:32 Europe/Berlin]   - POST received
+[07-Mar-2026 05:15:32 Europe/Berlin]   - Payroll: 
+[07-Mar-2026 05:15:32 Europe/Berlin]   - Session: sgc17g9hlebd090pt01bac79l5
+[07-Mar-2026 05:15:32 Europe/Berlin]   - ERROR: Empty fields
+[07-Mar-2026 13:58:27 Europe/Berlin] LOGIN ATTEMPT:  | Session: 7bsr8nb07109htgigm7nlbchd2
+[07-Mar-2026 13:58:27 Europe/Berlin] LOGIN ERROR: All fields are required
+[07-Mar-2026 13:58:27 Europe/Berlin]   - POST received
+[07-Mar-2026 13:58:27 Europe/Berlin]   - Payroll: 
+[07-Mar-2026 13:58:27 Europe/Berlin]   - Session: 7bsr8nb07109htgigm7nlbchd2
+[07-Mar-2026 13:58:27 Europe/Berlin]   - ERROR: Empty fields
+[07-Mar-2026 14:17:05 Europe/Berlin] LOGIN ATTEMPT:  | Session: 2qm7cbklk5b1j6hn2t66iuvse8
+[07-Mar-2026 14:17:05 Europe/Berlin] LOGIN ERROR: All fields are required
+[07-Mar-2026 14:17:05 Europe/Berlin]   - POST received
+[07-Mar-2026 14:17:05 Europe/Berlin]   - Payroll: 
+[07-Mar-2026 14:17:05 Europe/Berlin]   - Session: 2qm7cbklk5b1j6hn2t66iuvse8
+[07-Mar-2026 14:17:05 Europe/Berlin]   - ERROR: Empty fields
+[07-Mar-2026 16:50:39 Europe/Berlin] LOGIN ATTEMPT:  | Session: sr1k93qcn6fnqb83i7lqbjicp5
+[07-Mar-2026 16:50:39 Europe/Berlin] LOGIN ERROR: All fields are required
+[07-Mar-2026 16:50:39 Europe/Berlin]   - POST received
+[07-Mar-2026 16:50:39 Europe/Berlin]   - Payroll: 
+[07-Mar-2026 16:50:39 Europe/Berlin]   - Session: sr1k93qcn6fnqb83i7lqbjicp5
+[07-Mar-2026 16:50:39 Europe/Berlin]   - ERROR: Empty fields
+[08-Mar-2026 05:28:50 Europe/Berlin] LOGIN ATTEMPT:  | Session: s1icfpftk7vpruehn0jlbjbrkc
+[08-Mar-2026 05:28:50 Europe/Berlin] LOGIN ERROR: All fields are required
+[08-Mar-2026 05:28:50 Europe/Berlin]   - POST received
+[08-Mar-2026 05:28:50 Europe/Berlin]   - Payroll: 
+[08-Mar-2026 05:28:50 Europe/Berlin]   - Session: s1icfpftk7vpruehn0jlbjbrkc
+[08-Mar-2026 05:28:50 Europe/Berlin]   - ERROR: Empty fields
+[08-Mar-2026 09:24:03 Europe/Berlin] LOGIN ATTEMPT:  | Session: 4gttqj30p9dgv8ntcse49r12ai
+[08-Mar-2026 09:24:03 Europe/Berlin] LOGIN ERROR: All fields are required
+[08-Mar-2026 09:24:03 Europe/Berlin]   - POST received
+[08-Mar-2026 09:24:03 Europe/Berlin]   - Payroll: 
+[08-Mar-2026 09:24:03 Europe/Berlin]   - Session: 4gttqj30p9dgv8ntcse49r12ai
+[08-Mar-2026 09:24:03 Europe/Berlin]   - ERROR: Empty fields
+[08-Mar-2026 21:44:26 Europe/Berlin] LOGIN ATTEMPT:  | Session: s7ds302ugtmoejgmdf30207q86
+[08-Mar-2026 21:44:26 Europe/Berlin] LOGIN ERROR: All fields are required
+[08-Mar-2026 21:44:26 Europe/Berlin]   - POST received
+[08-Mar-2026 21:44:26 Europe/Berlin]   - Payroll: 
+[08-Mar-2026 21:44:26 Europe/Berlin]   - Session: s7ds302ugtmoejgmdf30207q86
+[08-Mar-2026 21:44:26 Europe/Berlin]   - ERROR: Empty fields
+[09-Mar-2026 00:41:03 Europe/Berlin] LOGIN ATTEMPT:  | Session: vq0titnjvp8u41themslgbvqhk
+[09-Mar-2026 00:41:03 Europe/Berlin] LOGIN ERROR: All fields are required
+[09-Mar-2026 00:41:03 Europe/Berlin]   - POST received
+[09-Mar-2026 00:41:03 Europe/Berlin]   - Payroll: 
+[09-Mar-2026 00:41:03 Europe/Berlin]   - Session: vq0titnjvp8u41themslgbvqhk
+[09-Mar-2026 00:41:03 Europe/Berlin]   - ERROR: Empty fields
+[09-Mar-2026 11:29:51 Europe/Berlin] LOGIN ATTEMPT:  | Session: 0qvq3fe0uq8k7dtrun9fnplhoa
+[09-Mar-2026 11:29:51 Europe/Berlin] LOGIN ERROR: All fields are required
+[09-Mar-2026 11:29:51 Europe/Berlin]   - POST received
+[09-Mar-2026 11:29:51 Europe/Berlin]   - Payroll: 
+[09-Mar-2026 11:29:51 Europe/Berlin]   - Session: 0qvq3fe0uq8k7dtrun9fnplhoa
+[09-Mar-2026 11:29:51 Europe/Berlin]   - ERROR: Empty fields
+[09-Mar-2026 12:37:05 Europe/Berlin] LOGIN ATTEMPT:  | Session: tptcfhea75ui4ls69eeg2qk93e
+[09-Mar-2026 12:37:05 Europe/Berlin] LOGIN ERROR: All fields are required
+[09-Mar-2026 12:37:05 Europe/Berlin]   - POST received
+[09-Mar-2026 12:37:05 Europe/Berlin]   - Payroll: 
+[09-Mar-2026 12:37:05 Europe/Berlin]   - Session: tptcfhea75ui4ls69eeg2qk93e
+[09-Mar-2026 12:37:05 Europe/Berlin]   - ERROR: Empty fields
+[09-Mar-2026 13:14:38 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: 3f0324if73qclio6trdkh3bl30
+[09-Mar-2026 13:14:39 Europe/Berlin] LOGIN SUCCESS: 121212
+[09-Mar-2026 13:14:39 Europe/Berlin]   - POST received
+[09-Mar-2026 13:14:39 Europe/Berlin]   - Payroll: 121212
+[09-Mar-2026 13:14:39 Europe/Berlin]   - Session: 3f0324if73qclio6trdkh3bl30
+[09-Mar-2026 13:14:39 Europe/Berlin]   - Login result: SUCCESS
+[09-Mar-2026 13:14:39 Europe/Berlin]   - Session after: 3f0324if73qclio6trdkh3bl30
+[09-Mar-2026 13:14:39 Europe/Berlin]   - Auth::check(): TRUE
+[09-Mar-2026 13:14:39 Europe/Berlin]   - Session data: {"user":{"payroll_id":"121212","staff_name":"Lead Dispatch","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"0800000000","email":"dispatchlead@example.com"},"user_id":"121212","role":"UL8"}
+[09-Mar-2026 13:40:23 Europe/Berlin] LOGIN ATTEMPT:  | Session: 59rq8fnoadddqsjq4t043b6ivb
+[09-Mar-2026 13:40:23 Europe/Berlin] LOGIN ERROR: All fields are required
+[09-Mar-2026 13:40:23 Europe/Berlin]   - POST received
+[09-Mar-2026 13:40:23 Europe/Berlin]   - Payroll: 
+[09-Mar-2026 13:40:23 Europe/Berlin]   - Session: 59rq8fnoadddqsjq4t043b6ivb
+[09-Mar-2026 13:40:23 Europe/Berlin]   - ERROR: Empty fields
+[09-Mar-2026 17:15:35 Europe/Berlin] LOGIN ATTEMPT: 664209 | Session: sepb0rcgeia5mr6jts9bgn4d6c
+[09-Mar-2026 17:15:35 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[09-Mar-2026 17:15:35 Europe/Berlin]   - POST received
+[09-Mar-2026 17:15:35 Europe/Berlin]   - Payroll: 664209
+[09-Mar-2026 17:15:35 Europe/Berlin]   - Session: sepb0rcgeia5mr6jts9bgn4d6c
+[09-Mar-2026 17:15:35 Europe/Berlin]   - Login result: FAILED
+[09-Mar-2026 17:15:35 Europe/Berlin]   - ERROR: Invalid credentials
+[09-Mar-2026 17:15:51 Europe/Berlin] LOGIN ATTEMPT: 664209 | Session: sepb0rcgeia5mr6jts9bgn4d6c
+[09-Mar-2026 17:15:51 Europe/Berlin] LOGIN SUCCESS: 664209
+[09-Mar-2026 17:15:51 Europe/Berlin]   - POST received
+[09-Mar-2026 17:15:51 Europe/Berlin]   - Payroll: 664209
+[09-Mar-2026 17:15:51 Europe/Berlin]   - Session: sepb0rcgeia5mr6jts9bgn4d6c
+[09-Mar-2026 17:15:51 Europe/Berlin]   - Login result: SUCCESS
+[09-Mar-2026 17:15:51 Europe/Berlin]   - Session after: sepb0rcgeia5mr6jts9bgn4d6c
+[09-Mar-2026 17:15:51 Europe/Berlin]   - Auth::check(): TRUE
+[09-Mar-2026 17:15:51 Europe/Berlin]   - Session data: {"dbadmin_auth":true,"user":{"payroll_id":"664209","staff_name":"Nura illiyasu","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"0800000000","email":"dispatchlead@example.com"},"user_id":"664209","role":"UL8"}
+[09-Mar-2026 20:19:35 Europe/Berlin] LOGIN ATTEMPT:  | Session: vbrs90r05gl9vvjvhfgn4k2t2o
+[09-Mar-2026 20:19:35 Europe/Berlin] LOGIN ERROR: All fields are required
+[09-Mar-2026 20:19:35 Europe/Berlin]   - POST received
+[09-Mar-2026 20:19:35 Europe/Berlin]   - Payroll: 
+[09-Mar-2026 20:19:35 Europe/Berlin]   - Session: vbrs90r05gl9vvjvhfgn4k2t2o
+[09-Mar-2026 20:19:35 Europe/Berlin]   - ERROR: Empty fields
+[10-Mar-2026 12:23:50 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: 7vnbl0782s4mphqkv3bnvukvqc
+[10-Mar-2026 12:23:50 Europe/Berlin] LOGIN SUCCESS: 100901
+[10-Mar-2026 12:23:50 Europe/Berlin]   - POST received
+[10-Mar-2026 12:23:50 Europe/Berlin]   - Payroll: 100901
+[10-Mar-2026 12:23:50 Europe/Berlin]   - Session: 7vnbl0782s4mphqkv3bnvukvqc
+[10-Mar-2026 12:23:50 Europe/Berlin]   - Login result: SUCCESS
+[10-Mar-2026 12:23:50 Europe/Berlin]   - Session after: 7vnbl0782s4mphqkv3bnvukvqc
+[10-Mar-2026 12:23:50 Europe/Berlin]   - Auth::check(): TRUE
+[10-Mar-2026 12:23:50 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}
+[30-Mar-2026 18:41:25 Europe/Berlin] LOGIN ATTEMPT:  | Session: p6l9phosbqrtsthl5m5i5jdigf
+[30-Mar-2026 18:41:25 Europe/Berlin] LOGIN ERROR: All fields are required
+[30-Mar-2026 18:41:25 Europe/Berlin]   - POST received
+[30-Mar-2026 18:41:25 Europe/Berlin]   - Payroll: 
+[30-Mar-2026 18:41:25 Europe/Berlin]   - Session: p6l9phosbqrtsthl5m5i5jdigf
+[30-Mar-2026 18:41:25 Europe/Berlin]   - ERROR: Empty fields
+[31-Mar-2026 10:42:27 Europe/Berlin] LOGIN ATTEMPT:  | Session: sc5npbrb2bb19jcstuth9id6ea
+[31-Mar-2026 10:42:27 Europe/Berlin] LOGIN ERROR: All fields are required
+[31-Mar-2026 10:42:27 Europe/Berlin]   - POST received
+[31-Mar-2026 10:42:27 Europe/Berlin]   - Payroll: 
+[31-Mar-2026 10:42:27 Europe/Berlin]   - Session: sc5npbrb2bb19jcstuth9id6ea
+[31-Mar-2026 10:42:27 Europe/Berlin]   - ERROR: Empty fields
+[31-Mar-2026 11:01:01 Europe/Berlin] LOGIN ATTEMPT:  | Session: oc9trjv19n8at8ftsgblgfd0dk
+[31-Mar-2026 11:01:01 Europe/Berlin] LOGIN ERROR: All fields are required
+[31-Mar-2026 11:01:01 Europe/Berlin]   - POST received
+[31-Mar-2026 11:01:01 Europe/Berlin]   - Payroll: 
+[31-Mar-2026 11:01:01 Europe/Berlin]   - Session: oc9trjv19n8at8ftsgblgfd0dk
+[31-Mar-2026 11:01:01 Europe/Berlin]   - ERROR: Empty fields
+[31-Mar-2026 11:03:37 Europe/Berlin] LOGIN ATTEMPT:  | Session: cmi91vtij3d8uqo1gsbmtlttro
+[31-Mar-2026 11:03:37 Europe/Berlin] LOGIN ERROR: All fields are required
+[31-Mar-2026 11:03:37 Europe/Berlin]   - POST received
+[31-Mar-2026 11:03:37 Europe/Berlin]   - Payroll: 
+[31-Mar-2026 11:03:37 Europe/Berlin]   - Session: cmi91vtij3d8uqo1gsbmtlttro
+[31-Mar-2026 11:03:37 Europe/Berlin]   - ERROR: Empty fields
+[31-Mar-2026 12:20:50 Europe/Berlin] LOGIN ATTEMPT:  | Session: 46bo9svpggkeko1lm7vhm7cvgt
+[31-Mar-2026 12:20:50 Europe/Berlin] LOGIN ERROR: All fields are required
+[31-Mar-2026 12:20:50 Europe/Berlin]   - POST received
+[31-Mar-2026 12:20:50 Europe/Berlin]   - Payroll: 
+[31-Mar-2026 12:20:50 Europe/Berlin]   - Session: 46bo9svpggkeko1lm7vhm7cvgt
+[31-Mar-2026 12:20:50 Europe/Berlin]   - ERROR: Empty fields
+[31-Mar-2026 14:50:04 Europe/Berlin] LOGIN ATTEMPT:  | Session: nge2fgtddcioutottlee0corom
+[31-Mar-2026 14:50:04 Europe/Berlin] LOGIN ERROR: All fields are required
+[31-Mar-2026 14:50:04 Europe/Berlin]   - POST received
+[31-Mar-2026 14:50:04 Europe/Berlin]   - Payroll: 
+[31-Mar-2026 14:50:04 Europe/Berlin]   - Session: nge2fgtddcioutottlee0corom
+[31-Mar-2026 14:50:04 Europe/Berlin]   - ERROR: Empty fields
+[01-Apr-2026 18:22:32 Europe/Berlin] LOGIN ATTEMPT:  | Session: 7meru4in02ah21s5dif0q4hdvf
+[01-Apr-2026 18:22:32 Europe/Berlin] LOGIN ERROR: All fields are required
+[01-Apr-2026 18:22:32 Europe/Berlin]   - POST received
+[01-Apr-2026 18:22:32 Europe/Berlin]   - Payroll: 
+[01-Apr-2026 18:22:32 Europe/Berlin]   - Session: 7meru4in02ah21s5dif0q4hdvf
+[01-Apr-2026 18:22:32 Europe/Berlin]   - ERROR: Empty fields
+[02-Apr-2026 10:07:04 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: n9bapiu3dbb1p2bc196sf7u71e
+[02-Apr-2026 10:07:05 Europe/Berlin] LOGIN SUCCESS: 100901
+[02-Apr-2026 10:07:05 Europe/Berlin]   - POST received
+[02-Apr-2026 10:07:05 Europe/Berlin]   - Payroll: 100901
+[02-Apr-2026 10:07:05 Europe/Berlin]   - Session: n9bapiu3dbb1p2bc196sf7u71e
+[02-Apr-2026 10:07:05 Europe/Berlin]   - Login result: SUCCESS
+[02-Apr-2026 10:07:05 Europe/Berlin]   - Session after: n9bapiu3dbb1p2bc196sf7u71e
+[02-Apr-2026 10:07:05 Europe/Berlin]   - Auth::check(): TRUE
+[02-Apr-2026 10:07:05 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}
+[02-Apr-2026 15:32:56 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: ibs707ghujv7pnm34i1krpn0ns
+[02-Apr-2026 15:32:56 Europe/Berlin] LOGIN SUCCESS: 100901
+[02-Apr-2026 15:32:56 Europe/Berlin]   - POST received
+[02-Apr-2026 15:32:56 Europe/Berlin]   - Payroll: 100901
+[02-Apr-2026 15:32:56 Europe/Berlin]   - Session: ibs707ghujv7pnm34i1krpn0ns
+[02-Apr-2026 15:32:56 Europe/Berlin]   - Login result: SUCCESS
+[02-Apr-2026 15:32:56 Europe/Berlin]   - Session after: ibs707ghujv7pnm34i1krpn0ns
+[02-Apr-2026 15:32:56 Europe/Berlin]   - Auth::check(): TRUE
+[02-Apr-2026 15:32:56 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}
+[03-Apr-2026 04:40:50 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:40:50 Europe/Berlin] LOGIN SUCCESS: 100901
+[03-Apr-2026 04:40:50 Europe/Berlin]   - POST received
+[03-Apr-2026 04:40:50 Europe/Berlin]   - Payroll: 100901
+[03-Apr-2026 04:40:50 Europe/Berlin]   - Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:40:50 Europe/Berlin]   - Login result: SUCCESS
+[03-Apr-2026 04:40:50 Europe/Berlin]   - Session after: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:40:50 Europe/Berlin]   - Auth::check(): TRUE
+[03-Apr-2026 04:40:50 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}
+[03-Apr-2026 04:57:08 Europe/Berlin] LOGIN ATTEMPT: 105421 | Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:57:08 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[03-Apr-2026 04:57:08 Europe/Berlin]   - POST received
+[03-Apr-2026 04:57:08 Europe/Berlin]   - Payroll: 105421
+[03-Apr-2026 04:57:08 Europe/Berlin]   - Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:57:08 Europe/Berlin]   - Login result: FAILED
+[03-Apr-2026 04:57:08 Europe/Berlin]   - ERROR: Invalid credentials
+[03-Apr-2026 04:57:32 Europe/Berlin] LOGIN ATTEMPT: 105421 | Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:57:32 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[03-Apr-2026 04:57:32 Europe/Berlin]   - POST received
+[03-Apr-2026 04:57:32 Europe/Berlin]   - Payroll: 105421
+[03-Apr-2026 04:57:32 Europe/Berlin]   - Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:57:32 Europe/Berlin]   - Login result: FAILED
+[03-Apr-2026 04:57:32 Europe/Berlin]   - ERROR: Invalid credentials
+[03-Apr-2026 04:57:56 Europe/Berlin] LOGIN ATTEMPT: 105421 | Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:57:56 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[03-Apr-2026 04:57:56 Europe/Berlin]   - POST received
+[03-Apr-2026 04:57:56 Europe/Berlin]   - Payroll: 105421
+[03-Apr-2026 04:57:56 Europe/Berlin]   - Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:57:56 Europe/Berlin]   - Login result: FAILED
+[03-Apr-2026 04:57:56 Europe/Berlin]   - ERROR: Invalid credentials
+[03-Apr-2026 04:58:21 Europe/Berlin] LOGIN ATTEMPT: 105421 | Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:58:21 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[03-Apr-2026 04:58:21 Europe/Berlin]   - POST received
+[03-Apr-2026 04:58:21 Europe/Berlin]   - Payroll: 105421
+[03-Apr-2026 04:58:21 Europe/Berlin]   - Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:58:21 Europe/Berlin]   - Login result: FAILED
+[03-Apr-2026 04:58:21 Europe/Berlin]   - ERROR: Invalid credentials
+[03-Apr-2026 04:58:51 Europe/Berlin] LOGIN ATTEMPT: 105421 | Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:58:51 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[03-Apr-2026 04:58:51 Europe/Berlin]   - POST received
+[03-Apr-2026 04:58:51 Europe/Berlin]   - Payroll: 105421
+[03-Apr-2026 04:58:51 Europe/Berlin]   - Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:58:51 Europe/Berlin]   - Login result: FAILED
+[03-Apr-2026 04:58:51 Europe/Berlin]   - ERROR: Invalid credentials
+[03-Apr-2026 04:59:05 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:59:06 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[03-Apr-2026 04:59:06 Europe/Berlin]   - POST received
+[03-Apr-2026 04:59:06 Europe/Berlin]   - Payroll: 100901
+[03-Apr-2026 04:59:06 Europe/Berlin]   - Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:59:06 Europe/Berlin]   - Login result: FAILED
+[03-Apr-2026 04:59:06 Europe/Berlin]   - ERROR: Invalid credentials
+[03-Apr-2026 04:59:20 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:59:20 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[03-Apr-2026 04:59:20 Europe/Berlin]   - POST received
+[03-Apr-2026 04:59:20 Europe/Berlin]   - Payroll: 100901
+[03-Apr-2026 04:59:20 Europe/Berlin]   - Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:59:20 Europe/Berlin]   - Login result: FAILED
+[03-Apr-2026 04:59:20 Europe/Berlin]   - ERROR: Invalid credentials
+[03-Apr-2026 04:59:36 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:59:36 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[03-Apr-2026 04:59:36 Europe/Berlin]   - POST received
+[03-Apr-2026 04:59:36 Europe/Berlin]   - Payroll: 100901
+[03-Apr-2026 04:59:36 Europe/Berlin]   - Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 04:59:36 Europe/Berlin]   - Login result: FAILED
+[03-Apr-2026 04:59:36 Europe/Berlin]   - ERROR: Invalid credentials
+[03-Apr-2026 05:00:11 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 05:00:11 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[03-Apr-2026 05:00:11 Europe/Berlin]   - POST received
+[03-Apr-2026 05:00:11 Europe/Berlin]   - Payroll: 100901
+[03-Apr-2026 05:00:11 Europe/Berlin]   - Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 05:00:11 Europe/Berlin]   - Login result: FAILED
+[03-Apr-2026 05:00:11 Europe/Berlin]   - ERROR: Invalid credentials
+[03-Apr-2026 05:00:33 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 05:00:33 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[03-Apr-2026 05:00:33 Europe/Berlin]   - POST received
+[03-Apr-2026 05:00:33 Europe/Berlin]   - Payroll: 100901
+[03-Apr-2026 05:00:33 Europe/Berlin]   - Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 05:00:33 Europe/Berlin]   - Login result: FAILED
+[03-Apr-2026 05:00:33 Europe/Berlin]   - ERROR: Invalid credentials
+[03-Apr-2026 05:01:03 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 05:01:03 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[03-Apr-2026 05:01:03 Europe/Berlin]   - POST received
+[03-Apr-2026 05:01:03 Europe/Berlin]   - Payroll: 100901
+[03-Apr-2026 05:01:03 Europe/Berlin]   - Session: k5ssefc2ca6404uejbhbogk60r
+[03-Apr-2026 05:01:03 Europe/Berlin]   - Login result: FAILED
+[03-Apr-2026 05:01:03 Europe/Berlin]   - ERROR: Invalid credentials
+[03-Apr-2026 09:54:06 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: abbbl6acsvbm2fqtkhaag05m0t
+[03-Apr-2026 09:54:06 Europe/Berlin] LOGIN SUCCESS: 100901
+[03-Apr-2026 09:54:06 Europe/Berlin]   - POST received
+[03-Apr-2026 09:54:06 Europe/Berlin]   - Payroll: 100901
+[03-Apr-2026 09:54:06 Europe/Berlin]   - Session: abbbl6acsvbm2fqtkhaag05m0t
+[03-Apr-2026 09:54:06 Europe/Berlin]   - Login result: SUCCESS
+[03-Apr-2026 09:54:06 Europe/Berlin]   - Session after: abbbl6acsvbm2fqtkhaag05m0t
+[03-Apr-2026 09:54:06 Europe/Berlin]   - Auth::check(): TRUE
+[03-Apr-2026 09:54:06 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}
+[07-Apr-2026 09:57:12 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: vv05ojkbkiun3urdhcpi3klins
+[07-Apr-2026 09:57:13 Europe/Berlin] LOGIN SUCCESS: 100901
+[07-Apr-2026 09:57:13 Europe/Berlin]   - POST received
+[07-Apr-2026 09:57:13 Europe/Berlin]   - Payroll: 100901
+[07-Apr-2026 09:57:13 Europe/Berlin]   - Session: vv05ojkbkiun3urdhcpi3klins
+[07-Apr-2026 09:57:13 Europe/Berlin]   - Login result: SUCCESS
+[07-Apr-2026 09:57:13 Europe/Berlin]   - Session after: vv05ojkbkiun3urdhcpi3klins
+[07-Apr-2026 09:57:13 Europe/Berlin]   - Auth::check(): TRUE
+[07-Apr-2026 09:57:13 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}
+[07-Apr-2026 11:21:00 Europe/Berlin] LOGIN ATTEMPT:  | Session: uarlm4lme3732e7hj933l5iujr
+[07-Apr-2026 11:21:00 Europe/Berlin] LOGIN ERROR: All fields are required
+[07-Apr-2026 11:21:00 Europe/Berlin]   - POST received
+[07-Apr-2026 11:21:00 Europe/Berlin]   - Payroll: 
+[07-Apr-2026 11:21:00 Europe/Berlin]   - Session: uarlm4lme3732e7hj933l5iujr
+[07-Apr-2026 11:21:00 Europe/Berlin]   - ERROR: Empty fields
+[07-Apr-2026 11:32:48 Europe/Berlin] LOGIN ATTEMPT:  | Session: jn55ftpof491nhdk1lse16frmh
+[07-Apr-2026 11:32:48 Europe/Berlin] LOGIN ERROR: All fields are required
+[07-Apr-2026 11:32:48 Europe/Berlin]   - POST received
+[07-Apr-2026 11:32:48 Europe/Berlin]   - Payroll: 
+[07-Apr-2026 11:32:48 Europe/Berlin]   - Session: jn55ftpof491nhdk1lse16frmh
+[07-Apr-2026 11:32:48 Europe/Berlin]   - ERROR: Empty fields
+[07-Apr-2026 11:52:32 Europe/Berlin] LOGIN ATTEMPT:  | Session: 9asuaocbbuos9gdrecs9u40q29
+[07-Apr-2026 11:52:32 Europe/Berlin] LOGIN ERROR: All fields are required
+[07-Apr-2026 11:52:32 Europe/Berlin]   - POST received
+[07-Apr-2026 11:52:32 Europe/Berlin]   - Payroll: 
+[07-Apr-2026 11:52:32 Europe/Berlin]   - Session: 9asuaocbbuos9gdrecs9u40q29
+[07-Apr-2026 11:52:32 Europe/Berlin]   - ERROR: Empty fields
+[07-Apr-2026 11:58:02 Europe/Berlin] LOGIN ATTEMPT:  | Session: kgn147nit83qr1m58ormh17ekr
+[07-Apr-2026 11:58:02 Europe/Berlin] LOGIN ERROR: All fields are required
+[07-Apr-2026 11:58:02 Europe/Berlin]   - POST received
+[07-Apr-2026 11:58:02 Europe/Berlin]   - Payroll: 
+[07-Apr-2026 11:58:02 Europe/Berlin]   - Session: kgn147nit83qr1m58ormh17ekr
+[07-Apr-2026 11:58:02 Europe/Berlin]   - ERROR: Empty fields
+[07-Apr-2026 12:54:26 Europe/Berlin] LOGIN ATTEMPT:  | Session: 6q7iou9iuo0ip53mgm2ppfbens
+[07-Apr-2026 12:54:26 Europe/Berlin] LOGIN ERROR: All fields are required
+[07-Apr-2026 12:54:26 Europe/Berlin]   - POST received
+[07-Apr-2026 12:54:26 Europe/Berlin]   - Payroll: 
+[07-Apr-2026 12:54:26 Europe/Berlin]   - Session: 6q7iou9iuo0ip53mgm2ppfbens
+[07-Apr-2026 12:54:26 Europe/Berlin]   - ERROR: Empty fields
+[07-Apr-2026 13:13:24 Europe/Berlin] LOGIN ATTEMPT:  | Session: j25nf41ka7nomtj8af07jt8b20
+[07-Apr-2026 13:13:24 Europe/Berlin] LOGIN ERROR: All fields are required
+[07-Apr-2026 13:13:24 Europe/Berlin]   - POST received
+[07-Apr-2026 13:13:24 Europe/Berlin]   - Payroll: 
+[07-Apr-2026 13:13:24 Europe/Berlin]   - Session: j25nf41ka7nomtj8af07jt8b20
+[07-Apr-2026 13:13:24 Europe/Berlin]   - ERROR: Empty fields
+[07-Apr-2026 15:43:37 Europe/Berlin] LOGIN ATTEMPT: 104715 | Session: v9ihfpoai9cq96maokkusbr3l1
+[07-Apr-2026 15:43:37 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[07-Apr-2026 15:43:37 Europe/Berlin]   - POST received
+[07-Apr-2026 15:43:37 Europe/Berlin]   - Payroll: 104715
+[07-Apr-2026 15:43:37 Europe/Berlin]   - Session: v9ihfpoai9cq96maokkusbr3l1
+[07-Apr-2026 15:43:37 Europe/Berlin]   - Login result: FAILED
+[07-Apr-2026 15:43:37 Europe/Berlin]   - ERROR: Invalid credentials
+[07-Apr-2026 16:00:41 Europe/Berlin] LOGIN ATTEMPT: admin | Session: v9ihfpoai9cq96maokkusbr3l1
+[07-Apr-2026 16:00:41 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[07-Apr-2026 16:00:41 Europe/Berlin]   - POST received
+[07-Apr-2026 16:00:41 Europe/Berlin]   - Payroll: admin
+[07-Apr-2026 16:00:41 Europe/Berlin]   - Session: v9ihfpoai9cq96maokkusbr3l1
+[07-Apr-2026 16:00:41 Europe/Berlin]   - Login result: FAILED
+[07-Apr-2026 16:00:41 Europe/Berlin]   - ERROR: Invalid credentials
+[07-Apr-2026 16:00:49 Europe/Berlin] LOGIN ATTEMPT: admin | Session: v9ihfpoai9cq96maokkusbr3l1
+[07-Apr-2026 16:00:49 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[07-Apr-2026 16:00:49 Europe/Berlin]   - POST received
+[07-Apr-2026 16:00:49 Europe/Berlin]   - Payroll: admin
+[07-Apr-2026 16:00:49 Europe/Berlin]   - Session: v9ihfpoai9cq96maokkusbr3l1
+[07-Apr-2026 16:00:49 Europe/Berlin]   - Login result: FAILED
+[07-Apr-2026 16:00:49 Europe/Berlin]   - ERROR: Invalid credentials
+[07-Apr-2026 20:48:16 Europe/Berlin] LOGIN ATTEMPT:  | Session: a4vhfpp1b6kv30ikptttcpbvh5
+[07-Apr-2026 20:48:16 Europe/Berlin] LOGIN ERROR: All fields are required
+[07-Apr-2026 20:48:16 Europe/Berlin]   - POST received
+[07-Apr-2026 20:48:16 Europe/Berlin]   - Payroll: 
+[07-Apr-2026 20:48:16 Europe/Berlin]   - Session: a4vhfpp1b6kv30ikptttcpbvh5
+[07-Apr-2026 20:48:16 Europe/Berlin]   - ERROR: Empty fields
+[07-Apr-2026 20:48:53 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: a4vhfpp1b6kv30ikptttcpbvh5
+[07-Apr-2026 20:48:53 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[07-Apr-2026 20:48:53 Europe/Berlin]   - POST received
+[07-Apr-2026 20:48:53 Europe/Berlin]   - Payroll: 100901
+[07-Apr-2026 20:48:53 Europe/Berlin]   - Session: a4vhfpp1b6kv30ikptttcpbvh5
+[07-Apr-2026 20:48:53 Europe/Berlin]   - Login result: FAILED
+[07-Apr-2026 20:48:53 Europe/Berlin]   - ERROR: Invalid credentials
+[07-Apr-2026 20:49:30 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: a4vhfpp1b6kv30ikptttcpbvh5
+[07-Apr-2026 20:49:30 Europe/Berlin] LOGIN SUCCESS: 100901
+[07-Apr-2026 20:49:30 Europe/Berlin]   - POST received
+[07-Apr-2026 20:49:30 Europe/Berlin]   - Payroll: 100901
+[07-Apr-2026 20:49:30 Europe/Berlin]   - Session: a4vhfpp1b6kv30ikptttcpbvh5
+[07-Apr-2026 20:49:30 Europe/Berlin]   - Login result: SUCCESS
+[07-Apr-2026 20:49:30 Europe/Berlin]   - Session after: a4vhfpp1b6kv30ikptttcpbvh5
+[07-Apr-2026 20:49:30 Europe/Berlin]   - Auth::check(): TRUE
+[07-Apr-2026 20:49:30 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}
+[07-Apr-2026 22:01:03 Europe/Berlin] GUARD: Auth check failed, redirecting to login
+[08-Apr-2026 18:46:48 Europe/Berlin] GUARD: Auth check failed, redirecting to login
+[08-Apr-2026 18:47:29 Europe/Berlin] LOGIN ATTEMPT: 836298 | Session: q1hpbm9bo137k0bn0pmmsncvq7
+[08-Apr-2026 18:47:30 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[08-Apr-2026 18:47:30 Europe/Berlin]   - POST received
+[08-Apr-2026 18:47:30 Europe/Berlin]   - Payroll: 836298
+[08-Apr-2026 18:47:30 Europe/Berlin]   - Session: q1hpbm9bo137k0bn0pmmsncvq7
+[08-Apr-2026 18:47:30 Europe/Berlin]   - Login result: FAILED
+[08-Apr-2026 18:47:30 Europe/Berlin]   - ERROR: Invalid credentials
+[08-Apr-2026 18:48:18 Europe/Berlin] LOGIN ATTEMPT: 836297 | Session: q1hpbm9bo137k0bn0pmmsncvq7
+[08-Apr-2026 18:48:18 Europe/Berlin] LOGIN SUCCESS: 836297
+[08-Apr-2026 18:48:18 Europe/Berlin]   - POST received
+[08-Apr-2026 18:48:18 Europe/Berlin]   - Payroll: 836297
+[08-Apr-2026 18:48:18 Europe/Berlin]   - Session: q1hpbm9bo137k0bn0pmmsncvq7
+[08-Apr-2026 18:48:18 Europe/Berlin]   - Login result: SUCCESS
+[08-Apr-2026 18:48:18 Europe/Berlin]   - Session after: q1hpbm9bo137k0bn0pmmsncvq7
+[08-Apr-2026 18:48:18 Europe/Berlin]   - Auth::check(): TRUE
+[08-Apr-2026 18:48:18 Europe/Berlin]   - Session data: {"user":{"payroll_id":"836297","staff_name":"Isiaka Bala Muas","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"0808000000","email":"dispatchlead2@example.com"},"user_id":"836297","role":"UL8"}
+[08-Apr-2026 18:50:43 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1 no such function: HOUR in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php:66
+Stack trace:
+#0 C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php(66): PDO->prepare('\n        SELECT...')
+#1 C:\Users\abubakar.hamza\Desktop\load_monitor\app\controllers\LeadDispatchDashboardController.php(56): require('C:\\Users\\abubak...')
+#2 C:\Users\abubakar.hamza\Desktop\load_monitor\public\index.php(55): require('C:\\Users\\abubak...')
+#3 {main}
+  thrown in C:\Users\abubakar.hamza\Desktop\load_monitor\app\views\lead_dispatch\interruptions.php on line 66
+[08-Apr-2026 18:51:05 Europe/Berlin] GUARD: Auth check failed, redirecting to login
+[09-Apr-2026 19:47:21 Europe/Berlin] LOGIN ATTEMPT:  | Session: 20pebuf4e6k1tl7omhs87kmjff
+[09-Apr-2026 19:47:21 Europe/Berlin] LOGIN ERROR: All fields are required
+[09-Apr-2026 19:47:21 Europe/Berlin]   - POST received
+[09-Apr-2026 19:47:21 Europe/Berlin]   - Payroll: 
+[09-Apr-2026 19:47:21 Europe/Berlin]   - Session: 20pebuf4e6k1tl7omhs87kmjff
+[09-Apr-2026 19:47:21 Europe/Berlin]   - ERROR: Empty fields
+[09-Apr-2026 20:15:06 Europe/Berlin] LOGIN ATTEMPT:  | Session: mg7ida1dvn4akum5180qnrtc5p
+[09-Apr-2026 20:15:06 Europe/Berlin] LOGIN ERROR: All fields are required
+[09-Apr-2026 20:15:06 Europe/Berlin]   - POST received
+[09-Apr-2026 20:15:06 Europe/Berlin]   - Payroll: 
+[09-Apr-2026 20:15:06 Europe/Berlin]   - Session: mg7ida1dvn4akum5180qnrtc5p
+[09-Apr-2026 20:15:06 Europe/Berlin]   - ERROR: Empty fields
+[10-Apr-2026 13:16:36 Europe/Berlin] LOGIN ATTEMPT:  | Session: 0j02vrbnf39mn5qevvffdd984e
+[10-Apr-2026 13:16:36 Europe/Berlin] LOGIN ERROR: All fields are required
+[10-Apr-2026 13:16:36 Europe/Berlin]   - POST received
+[10-Apr-2026 13:16:36 Europe/Berlin]   - Payroll: 
+[10-Apr-2026 13:16:36 Europe/Berlin]   - Session: 0j02vrbnf39mn5qevvffdd984e
+[10-Apr-2026 13:16:36 Europe/Berlin]   - ERROR: Empty fields
+[10-Apr-2026 13:24:04 Europe/Berlin] LOGIN ATTEMPT:  | Session: nckh2al7n3i4g9ovtqgg1tjv5c
+[10-Apr-2026 13:24:04 Europe/Berlin] LOGIN ERROR: All fields are required
+[10-Apr-2026 13:24:04 Europe/Berlin]   - POST received
+[10-Apr-2026 13:24:04 Europe/Berlin]   - Payroll: 
+[10-Apr-2026 13:24:04 Europe/Berlin]   - Session: nckh2al7n3i4g9ovtqgg1tjv5c
+[10-Apr-2026 13:24:04 Europe/Berlin]   - ERROR: Empty fields
+[10-Apr-2026 17:22:10 Europe/Berlin] LOGIN ATTEMPT:  | Session: ea3bbmcjq6if9and6ppdjsea44
+[10-Apr-2026 17:22:10 Europe/Berlin] LOGIN ERROR: All fields are required
+[10-Apr-2026 17:22:10 Europe/Berlin]   - POST received
+[10-Apr-2026 17:22:10 Europe/Berlin]   - Payroll: 
+[10-Apr-2026 17:22:10 Europe/Berlin]   - Session: ea3bbmcjq6if9and6ppdjsea44
+[10-Apr-2026 17:22:10 Europe/Berlin]   - ERROR: Empty fields
+[10-Apr-2026 17:27:59 Europe/Berlin] LOGIN ATTEMPT:  | Session: ugfeqf8ub8s31cceucj0nntv4l
+[10-Apr-2026 17:27:59 Europe/Berlin] LOGIN ERROR: All fields are required
+[10-Apr-2026 17:27:59 Europe/Berlin]   - POST received
+[10-Apr-2026 17:27:59 Europe/Berlin]   - Payroll: 
+[10-Apr-2026 17:27:59 Europe/Berlin]   - Session: ugfeqf8ub8s31cceucj0nntv4l
+[10-Apr-2026 17:27:59 Europe/Berlin]   - ERROR: Empty fields
+[10-Apr-2026 17:46:16 Europe/Berlin] LOGIN ATTEMPT:  | Session: 9b2e0brs5abrosm84noti2sdfl
+[10-Apr-2026 17:46:16 Europe/Berlin] LOGIN ERROR: All fields are required
+[10-Apr-2026 17:46:16 Europe/Berlin]   - POST received
+[10-Apr-2026 17:46:16 Europe/Berlin]   - Payroll: 
+[10-Apr-2026 17:46:16 Europe/Berlin]   - Session: 9b2e0brs5abrosm84noti2sdfl
+[10-Apr-2026 17:46:16 Europe/Berlin]   - ERROR: Empty fields
+[10-Apr-2026 17:55:13 Europe/Berlin] LOGIN ATTEMPT:  | Session: 8dclcttearnkod93t5oidvo326
+[10-Apr-2026 17:55:13 Europe/Berlin] LOGIN ERROR: All fields are required
+[10-Apr-2026 17:55:13 Europe/Berlin]   - POST received
+[10-Apr-2026 17:55:13 Europe/Berlin]   - Payroll: 
+[10-Apr-2026 17:55:13 Europe/Berlin]   - Session: 8dclcttearnkod93t5oidvo326
+[10-Apr-2026 17:55:13 Europe/Berlin]   - ERROR: Empty fields
+[10-Apr-2026 18:43:17 Europe/Berlin] LOGIN ATTEMPT:  | Session: avs6knmlf6foocodf6jqvac2go
+[10-Apr-2026 18:43:17 Europe/Berlin] LOGIN ERROR: All fields are required
+[10-Apr-2026 18:43:17 Europe/Berlin]   - POST received
+[10-Apr-2026 18:43:17 Europe/Berlin]   - Payroll: 
+[10-Apr-2026 18:43:17 Europe/Berlin]   - Session: avs6knmlf6foocodf6jqvac2go
+[10-Apr-2026 18:43:17 Europe/Berlin]   - ERROR: Empty fields
+[10-Apr-2026 18:49:04 Europe/Berlin] LOGIN ATTEMPT:  | Session: 0a44trojcb8jm30qt60a3595c1
+[10-Apr-2026 18:49:04 Europe/Berlin] LOGIN ERROR: All fields are required
+[10-Apr-2026 18:49:04 Europe/Berlin]   - POST received
+[10-Apr-2026 18:49:04 Europe/Berlin]   - Payroll: 
+[10-Apr-2026 18:49:04 Europe/Berlin]   - Session: 0a44trojcb8jm30qt60a3595c1
+[10-Apr-2026 18:49:04 Europe/Berlin]   - ERROR: Empty fields
+[10-Apr-2026 18:54:54 Europe/Berlin] LOGIN ATTEMPT:  | Session: os6hrb1d6r80qjhn10fjpqht7b
+[10-Apr-2026 18:54:54 Europe/Berlin] LOGIN ERROR: All fields are required
+[10-Apr-2026 18:54:54 Europe/Berlin]   - POST received
+[10-Apr-2026 18:54:54 Europe/Berlin]   - Payroll: 
+[10-Apr-2026 18:54:54 Europe/Berlin]   - Session: os6hrb1d6r80qjhn10fjpqht7b
+[10-Apr-2026 18:54:54 Europe/Berlin]   - ERROR: Empty fields
+[10-Apr-2026 19:03:08 Europe/Berlin] LOGIN ATTEMPT:  | Session: u2i2i1tctcv97jb3fhcdj1e6hr
+[10-Apr-2026 19:03:08 Europe/Berlin] LOGIN ERROR: All fields are required
+[10-Apr-2026 19:03:08 Europe/Berlin]   - POST received
+[10-Apr-2026 19:03:08 Europe/Berlin]   - Payroll: 
+[10-Apr-2026 19:03:08 Europe/Berlin]   - Session: u2i2i1tctcv97jb3fhcdj1e6hr
+[10-Apr-2026 19:03:08 Europe/Berlin]   - ERROR: Empty fields
+[12-Apr-2026 18:34:07 Europe/Berlin] LOGIN ATTEMPT:  | Session: iehcqh435qk2nb28mpsjicl23p
+[12-Apr-2026 18:34:07 Europe/Berlin] LOGIN ERROR: All fields are required
+[12-Apr-2026 18:34:07 Europe/Berlin]   - POST received
+[12-Apr-2026 18:34:07 Europe/Berlin]   - Payroll: 
+[12-Apr-2026 18:34:07 Europe/Berlin]   - Session: iehcqh435qk2nb28mpsjicl23p
+[12-Apr-2026 18:34:07 Europe/Berlin]   - ERROR: Empty fields
+[12-Apr-2026 18:43:36 Europe/Berlin] LOGIN ATTEMPT:  | Session: 3eslbhonk7g12rnpphhqr5cbiq
+[12-Apr-2026 18:43:36 Europe/Berlin] LOGIN ERROR: All fields are required
+[12-Apr-2026 18:43:36 Europe/Berlin]   - POST received
+[12-Apr-2026 18:43:36 Europe/Berlin]   - Payroll: 
+[12-Apr-2026 18:43:36 Europe/Berlin]   - Session: 3eslbhonk7g12rnpphhqr5cbiq
+[12-Apr-2026 18:43:36 Europe/Berlin]   - ERROR: Empty fields
+[14-Apr-2026 16:49:26 Europe/Berlin] LOGIN ATTEMPT: 100435 | Session: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 16:49:26 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[14-Apr-2026 16:49:26 Europe/Berlin]   - POST received
+[14-Apr-2026 16:49:26 Europe/Berlin]   - Payroll: 100435
+[14-Apr-2026 16:49:26 Europe/Berlin]   - Session: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 16:49:26 Europe/Berlin]   - Login result: FAILED
+[14-Apr-2026 16:49:26 Europe/Berlin]   - ERROR: Invalid credentials
+[14-Apr-2026 16:49:45 Europe/Berlin] LOGIN ATTEMPT: 100435 | Session: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 16:49:45 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[14-Apr-2026 16:49:45 Europe/Berlin]   - POST received
+[14-Apr-2026 16:49:45 Europe/Berlin]   - Payroll: 100435
+[14-Apr-2026 16:49:45 Europe/Berlin]   - Session: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 16:49:45 Europe/Berlin]   - Login result: FAILED
+[14-Apr-2026 16:49:45 Europe/Berlin]   - ERROR: Invalid credentials
+[14-Apr-2026 16:51:25 Europe/Berlin] LOGIN ATTEMPT: 100435 | Session: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 16:51:25 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[14-Apr-2026 16:51:25 Europe/Berlin]   - POST received
+[14-Apr-2026 16:51:25 Europe/Berlin]   - Payroll: 100435
+[14-Apr-2026 16:51:25 Europe/Berlin]   - Session: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 16:51:25 Europe/Berlin]   - Login result: FAILED
+[14-Apr-2026 16:51:25 Europe/Berlin]   - ERROR: Invalid credentials
+[14-Apr-2026 16:51:54 Europe/Berlin] LOGIN ATTEMPT: 100435 | Session: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 16:51:54 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[14-Apr-2026 16:51:54 Europe/Berlin]   - POST received
+[14-Apr-2026 16:51:54 Europe/Berlin]   - Payroll: 100435
+[14-Apr-2026 16:51:54 Europe/Berlin]   - Session: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 16:51:54 Europe/Berlin]   - Login result: FAILED
+[14-Apr-2026 16:51:54 Europe/Berlin]   - ERROR: Invalid credentials
+[14-Apr-2026 16:52:50 Europe/Berlin] LOGIN ATTEMPT: 100435 | Session: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 16:52:50 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[14-Apr-2026 16:52:50 Europe/Berlin]   - POST received
+[14-Apr-2026 16:52:50 Europe/Berlin]   - Payroll: 100435
+[14-Apr-2026 16:52:50 Europe/Berlin]   - Session: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 16:52:50 Europe/Berlin]   - Login result: FAILED
+[14-Apr-2026 16:52:50 Europe/Berlin]   - ERROR: Invalid credentials
+[14-Apr-2026 16:55:07 Europe/Berlin] LOGIN ATTEMPT: 100435 | Session: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 16:55:07 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[14-Apr-2026 16:55:07 Europe/Berlin]   - POST received
+[14-Apr-2026 16:55:07 Europe/Berlin]   - Payroll: 100435
+[14-Apr-2026 16:55:07 Europe/Berlin]   - Session: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 16:55:07 Europe/Berlin]   - Login result: FAILED
+[14-Apr-2026 16:55:07 Europe/Berlin]   - ERROR: Invalid credentials
+[14-Apr-2026 17:10:30 Europe/Berlin] LOGIN ATTEMPT: 100435 | Session: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 17:10:30 Europe/Berlin] LOGIN SUCCESS: 100435
+[14-Apr-2026 17:10:30 Europe/Berlin]   - POST received
+[14-Apr-2026 17:10:30 Europe/Berlin]   - Payroll: 100435
+[14-Apr-2026 17:10:30 Europe/Berlin]   - Session: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 17:10:30 Europe/Berlin]   - Login result: SUCCESS
+[14-Apr-2026 17:10:30 Europe/Berlin]   - Session after: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 17:10:30 Europe/Berlin]   - Auth::check(): TRUE
+[14-Apr-2026 17:10:30 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100435","staff_name":"Babatunde Odesoji","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"08184428175","email":"babatunde.odesoji@kadunaelectric.com"},"user_id":"100435","role":"UL8"}
+[14-Apr-2026 17:12:14 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 17:12:14 Europe/Berlin] LOGIN SUCCESS: 100901
+[14-Apr-2026 17:12:14 Europe/Berlin]   - POST received
+[14-Apr-2026 17:12:14 Europe/Berlin]   - Payroll: 100901
+[14-Apr-2026 17:12:14 Europe/Berlin]   - Session: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 17:12:14 Europe/Berlin]   - Login result: SUCCESS
+[14-Apr-2026 17:12:14 Europe/Berlin]   - Session after: 0gfghp06d348tqq5rtn494sips
+[14-Apr-2026 17:12:14 Europe/Berlin]   - Auth::check(): TRUE
+[14-Apr-2026 17:12:14 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}
+[16-Apr-2026 10:49:42 Europe/Berlin] LOGIN ATTEMPT: 100435 | Session: u7mpnejus25solhg8i3qof1dq4
+[16-Apr-2026 10:49:43 Europe/Berlin] LOGIN SUCCESS: 100435
+[16-Apr-2026 10:49:43 Europe/Berlin]   - POST received
+[16-Apr-2026 10:49:43 Europe/Berlin]   - Payroll: 100435
+[16-Apr-2026 10:49:43 Europe/Berlin]   - Session: u7mpnejus25solhg8i3qof1dq4
+[16-Apr-2026 10:49:43 Europe/Berlin]   - Login result: SUCCESS
+[16-Apr-2026 10:49:43 Europe/Berlin]   - Session after: u7mpnejus25solhg8i3qof1dq4
+[16-Apr-2026 10:49:43 Europe/Berlin]   - Auth::check(): TRUE
+[16-Apr-2026 10:49:43 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100435","staff_name":"Babatunde Odesoji","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"08184428175","email":"babatunde.odesoji@kadunaelectric.com"},"user_id":"100435","role":"UL8"}
+[16-Apr-2026 15:52:57 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: qnutkoapldqcpn02iku3bj6ec3
+[16-Apr-2026 15:52:57 Europe/Berlin] LOGIN SUCCESS: 100901
+[16-Apr-2026 15:52:57 Europe/Berlin]   - POST received
+[16-Apr-2026 15:52:57 Europe/Berlin]   - Payroll: 100901
+[16-Apr-2026 15:52:57 Europe/Berlin]   - Session: qnutkoapldqcpn02iku3bj6ec3
+[16-Apr-2026 15:52:57 Europe/Berlin]   - Login result: SUCCESS
+[16-Apr-2026 15:52:57 Europe/Berlin]   - Session after: qnutkoapldqcpn02iku3bj6ec3
+[16-Apr-2026 15:52:57 Europe/Berlin]   - Auth::check(): TRUE
+[16-Apr-2026 15:52:57 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}
+[16-Apr-2026 16:12:12 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: qnutkoapldqcpn02iku3bj6ec3
+[16-Apr-2026 16:12:12 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[16-Apr-2026 16:12:12 Europe/Berlin]   - POST received
+[16-Apr-2026 16:12:12 Europe/Berlin]   - Payroll: 121212
+[16-Apr-2026 16:12:12 Europe/Berlin]   - Session: qnutkoapldqcpn02iku3bj6ec3
+[16-Apr-2026 16:12:12 Europe/Berlin]   - Login result: FAILED
+[16-Apr-2026 16:12:12 Europe/Berlin]   - ERROR: Invalid credentials
+[16-Apr-2026 16:12:24 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: qnutkoapldqcpn02iku3bj6ec3
+[16-Apr-2026 16:12:24 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[16-Apr-2026 16:12:24 Europe/Berlin]   - POST received
+[16-Apr-2026 16:12:24 Europe/Berlin]   - Payroll: 121212
+[16-Apr-2026 16:12:24 Europe/Berlin]   - Session: qnutkoapldqcpn02iku3bj6ec3
+[16-Apr-2026 16:12:24 Europe/Berlin]   - Login result: FAILED
+[16-Apr-2026 16:12:24 Europe/Berlin]   - ERROR: Invalid credentials
+[16-Apr-2026 16:12:36 Europe/Berlin] LOGIN ATTEMPT: 121212 | Session: h08gcr3gqfm2gdh13dn7ddd4os
+[16-Apr-2026 16:12:36 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[16-Apr-2026 16:12:36 Europe/Berlin]   - POST received
+[16-Apr-2026 16:12:36 Europe/Berlin]   - Payroll: 121212
+[16-Apr-2026 16:12:36 Europe/Berlin]   - Session: h08gcr3gqfm2gdh13dn7ddd4os
+[16-Apr-2026 16:12:36 Europe/Berlin]   - Login result: FAILED
+[16-Apr-2026 16:12:36 Europe/Berlin]   - ERROR: Invalid credentials
+[16-Apr-2026 16:13:44 Europe/Berlin] LOGIN ATTEMPT: 100435 | Session: h08gcr3gqfm2gdh13dn7ddd4os
+[16-Apr-2026 16:13:44 Europe/Berlin] LOGIN SUCCESS: 100435
+[16-Apr-2026 16:13:44 Europe/Berlin]   - POST received
+[16-Apr-2026 16:13:44 Europe/Berlin]   - Payroll: 100435
+[16-Apr-2026 16:13:44 Europe/Berlin]   - Session: h08gcr3gqfm2gdh13dn7ddd4os
+[16-Apr-2026 16:13:44 Europe/Berlin]   - Login result: SUCCESS
+[16-Apr-2026 16:13:44 Europe/Berlin]   - Session after: h08gcr3gqfm2gdh13dn7ddd4os
+[16-Apr-2026 16:13:44 Europe/Berlin]   - Auth::check(): TRUE
+[16-Apr-2026 16:13:44 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100435","staff_name":"Babatunde Odesoji","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"08184428175","email":"babatunde.odesoji@kadunaelectric.com"},"user_id":"100435","role":"UL8"}
+[20-Apr-2026 22:41:08 Europe/Berlin] LOGIN ATTEMPT:  | Session: 8df6acdfb4e2851b67b0e5462ebaf31f
+[20-Apr-2026 22:41:08 Europe/Berlin] LOGIN ERROR: All fields are required
+[20-Apr-2026 22:41:08 Europe/Berlin]   - POST received
+[20-Apr-2026 22:41:08 Europe/Berlin]   - Payroll: 
+[20-Apr-2026 22:41:08 Europe/Berlin]   - Session: 8df6acdfb4e2851b67b0e5462ebaf31f
+[20-Apr-2026 22:41:08 Europe/Berlin]   - ERROR: Empty fields
+[22-Apr-2026 11:51:34 Europe/Berlin] LOGIN ATTEMPT: 100435 | Session: uhipba30tsoh5ea8n6nlrpnk2e
+[22-Apr-2026 11:51:35 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[22-Apr-2026 11:51:35 Europe/Berlin]   - POST received
+[22-Apr-2026 11:51:35 Europe/Berlin]   - Payroll: 100435
+[22-Apr-2026 11:51:35 Europe/Berlin]   - Session: uhipba30tsoh5ea8n6nlrpnk2e
+[22-Apr-2026 11:51:35 Europe/Berlin]   - Login result: FAILED
+[22-Apr-2026 11:51:35 Europe/Berlin]   - ERROR: Invalid credentials
+[22-Apr-2026 11:51:47 Europe/Berlin] LOGIN ATTEMPT: 100435 | Session: uhipba30tsoh5ea8n6nlrpnk2e
+[22-Apr-2026 11:51:47 Europe/Berlin] LOGIN SUCCESS: 100435
+[22-Apr-2026 11:51:47 Europe/Berlin]   - POST received
+[22-Apr-2026 11:51:47 Europe/Berlin]   - Payroll: 100435
+[22-Apr-2026 11:51:47 Europe/Berlin]   - Session: uhipba30tsoh5ea8n6nlrpnk2e
+[22-Apr-2026 11:51:47 Europe/Berlin]   - Login result: SUCCESS
+[22-Apr-2026 11:51:47 Europe/Berlin]   - Session after: uhipba30tsoh5ea8n6nlrpnk2e
+[22-Apr-2026 11:51:47 Europe/Berlin]   - Auth::check(): TRUE
+[22-Apr-2026 11:51:47 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100435","staff_name":"Babatunde Odesoji","role":"UL8","iss_code":"0","assigned_33kv_code":"0","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"TL","phone":"08184428175","email":"babatunde.odesoji@kadunaelectric.com"},"user_id":"100435","role":"UL8"}
+[22-Apr-2026 11:55:43 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: mgcasvq3046vsre6kp57pnhh2s
+[22-Apr-2026 11:55:43 Europe/Berlin] LOGIN ERROR: Invalid Payroll ID or Password
+[22-Apr-2026 11:55:43 Europe/Berlin]   - POST received
+[22-Apr-2026 11:55:43 Europe/Berlin]   - Payroll: 100901
+[22-Apr-2026 11:55:43 Europe/Berlin]   - Session: mgcasvq3046vsre6kp57pnhh2s
+[22-Apr-2026 11:55:43 Europe/Berlin]   - Login result: FAILED
+[22-Apr-2026 11:55:43 Europe/Berlin]   - ERROR: Invalid credentials
+[22-Apr-2026 11:55:56 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: mgcasvq3046vsre6kp57pnhh2s
+[22-Apr-2026 11:55:56 Europe/Berlin] LOGIN SUCCESS: 100901
+[22-Apr-2026 11:55:56 Europe/Berlin]   - POST received
+[22-Apr-2026 11:55:56 Europe/Berlin]   - Payroll: 100901
+[22-Apr-2026 11:55:56 Europe/Berlin]   - Session: mgcasvq3046vsre6kp57pnhh2s
+[22-Apr-2026 11:55:56 Europe/Berlin]   - Login result: SUCCESS
+[22-Apr-2026 11:55:56 Europe/Berlin]   - Session after: mgcasvq3046vsre6kp57pnhh2s
+[22-Apr-2026 11:55:56 Europe/Berlin]   - Auth::check(): TRUE
+[22-Apr-2026 11:55:56 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}
+[22-Apr-2026 13:13:56 Europe/Berlin] LOGIN ATTEMPT: 100901 | Session: uhipba30tsoh5ea8n6nlrpnk2e
+[22-Apr-2026 13:13:57 Europe/Berlin] LOGIN SUCCESS: 100901
+[22-Apr-2026 13:13:57 Europe/Berlin]   - POST received
+[22-Apr-2026 13:13:57 Europe/Berlin]   - Payroll: 100901
+[22-Apr-2026 13:13:57 Europe/Berlin]   - Session: uhipba30tsoh5ea8n6nlrpnk2e
+[22-Apr-2026 13:13:57 Europe/Berlin]   - Login result: SUCCESS
+[22-Apr-2026 13:13:57 Europe/Berlin]   - Session after: uhipba30tsoh5ea8n6nlrpnk2e
+[22-Apr-2026 13:13:57 Europe/Berlin]   - Auth::check(): TRUE
+[22-Apr-2026 13:13:57 Europe/Berlin]   - Session data: {"user":{"payroll_id":"100901","staff_name":"Lawal Garba Madaki","role":"UL1","iss_code":"17","assigned_33kv_code":"22","password_hash":"$2y$10$A9j2vFzDZXLmIU6JGdwoM.ZNFdCph2g9Nfdz2U98LDq71X0Vah52G","is_active":"Yes","staff_level":"UL1","phone":"08012345678","email":"lawal.madaki@example.com"},"user_id":"100901","role":"UL1"}

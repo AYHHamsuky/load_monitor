@@ -1,0 +1,58 @@
+/* ===== HEADER ===== */
+.top-bar {
+    height: 60px;
+    background: #1f2937;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    font-weight: 600;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 220px;
+    height: calc(100vh - 60px);
+    background: #111827;
+    color: #cbd5e1;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 10px 0;
+}
+
+.sidebar li a {
+    display: block;
+    padding: 12px 20px;
+    color: #cbd5e1;
+}
+
+.sidebar li a:hover {
+    background: #1f2937;
+    color: #fff;
+}
+
+/* ===== CONTENT ===== */
+.app-content {
+    margin-left: 220px;
+    padding: 20px;
+    margin-top: 60px;
+}
+
+/* ===== FOOTER ===== */
+.app-footer {
+    margin-left: 220px;
+    height: 40px;
+    background: #e5e7eb;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    font-size: 13px;
+}
