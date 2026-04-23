@@ -1,18 +1,15 @@
 FROM php:8.2-fpm-alpine
 
-# Install nginx, supervisord, gettext (for envsubst), sqlite3 dev headers
-RUN apk add --no-cache nginx supervisor gettext sqlite-dev
+# System packages: nginx, supervisord, sqlite3 headers for pdo_sqlite
+RUN apk add --no-cache nginx supervisor sqlite-dev
 
-# pdo is already available in the base image; pdo_sqlite needs sqlite-dev headers
+# Enable SQLite PDO extension (needs sqlite-dev headers)
 RUN docker-php-ext-install pdo_sqlite
 
-# nginx config template (PORT is substituted at startup)
-COPY docker/nginx.conf.template /etc/nginx/templates/default.conf.template
-
-# supervisord config to run php-fpm + nginx together
+# supervisord config — runs php-fpm + nginx together
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Entrypoint: handles PORT env var and generates nginx config
+# Entrypoint generates the nginx config at startup and starts supervisord
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
@@ -20,15 +17,15 @@ RUN chmod +x /entrypoint.sh
 COPY . /app
 WORKDIR /app
 
-# Ensure writable directories exist and have correct ownership
+# Ensure writable directories have correct ownership
 RUN mkdir -p /app/logs /app/database && \
     chown -R www-data:www-data /app/logs /app/database && \
     chmod -R 775 /app/logs && \
-    [ -f /app/database/load_monitor.sqlite ] && \
-        chown www-data:www-data /app/database/load_monitor.sqlite && \
-        chmod 664 /app/database/load_monitor.sqlite || true
+    { [ -f /app/database/load_monitor.sqlite ] && \
+      chown www-data:www-data /app/database/load_monitor.sqlite && \
+      chmod 664 /app/database/load_monitor.sqlite; } || true
 
-# Set APP_BASE_PATH to empty so Docker deployment serves from root (fixes port-80 detection bug)
+# APP_BASE_PATH= (empty) tells bootstrap.php the web root IS public/
 ENV APP_BASE_PATH=
 
 EXPOSE 80
