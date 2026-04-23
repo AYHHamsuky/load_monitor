@@ -1,5 +1,8 @@
 # ─── Load Monitor – Public directory .htaccess ──────────────────────────────
 
+# Serve index.php first (before index.html) when hitting a directory
+DirectoryIndex index.php index.html
+
 # Prevent directory listing
 Options -Indexes
 
