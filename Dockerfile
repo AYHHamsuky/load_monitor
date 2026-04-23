@@ -1,11 +1,11 @@
 FROM php:8.3-apache
 
-# SQLite3 dev headers needed for pdo_sqlite
+# pdo_mysql (production) + pdo_sqlite (local dev fallback)
 RUN apt-get update && apt-get install -y --no-install-recommends libsqlite3-dev \
-    && docker-php-ext-install pdo_sqlite \
+    && docker-php-ext-install pdo_mysql pdo_sqlite \
     && rm -rf /var/lib/apt/lists/*
 
-# Apache modules: rewrite (URL routing), headers (security headers), expires (cache)
+# Apache modules: rewrite, headers, expires
 RUN a2enmod rewrite headers expires
 
 # Point document root at public/
@@ -15,25 +15,24 @@ RUN sed -ri -e 's|/var/www/html|${APACHE_DOCUMENT_ROOT}|g' \
     sed -ri -e 's|/var/www/html|${APACHE_DOCUMENT_ROOT}|g' \
         /etc/apache2/apache2.conf
 
-# Allow .htaccess overrides everywhere under /var/www
+# Allow .htaccess overrides
 RUN sed -i 's|AllowOverride None|AllowOverride All|g' /etc/apache2/apache2.conf
 
 # Copy application
 COPY . /var/www/html
 WORKDIR /var/www/html
 
-# Writable dirs
+# Writable dirs (logs + sqlite fallback dir)
 RUN mkdir -p /var/www/html/logs /var/www/html/database && \
     chown -R www-data:www-data /var/www/html/logs /var/www/html/database && \
-    chmod -R 775 /var/www/html/logs && \
-    { [ -f /var/www/html/database/load_monitor.sqlite ] && \
-      chown www-data:www-data /var/www/html/database/load_monitor.sqlite && \
-      chmod 664 /var/www/html/database/load_monitor.sqlite; } || true
+    chmod -R 775 /var/www/html/logs
 
-# Empty base path so bootstrap.php serves from domain root
+# Default: empty base path (serves from domain root)
 ENV APP_BASE_PATH=
 
-# Entrypoint handles PORT env var then starts Apache
+# Default: SQLite (override with DB_DRIVER=mysql + DB_HOST etc. for production)
+ENV DB_DRIVER=sqlite
+
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 

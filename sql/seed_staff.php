@@ -1,18 +1,17 @@
 <?php
 /**
  * Staff Seeder
- * Imports all staff from load.sql into the SQLite database
- * and sets every password to password@123.
+ * Imports all staff from load.sql and sets every password to password@123.
+ * Works with both MySQL (production) and SQLite (local dev).
  *
- * Run once:  php sql/seed_staff.php
- * Or via browser (protected by token check below).
+ * CLI:     php sql/seed_staff.php
+ * Browser: /sql/seed_staff.php?token=seed2026
  */
 
 // ── CLI or browser with token ────────────────────────────────────────────────
 $isCli = PHP_SAPI === 'cli';
 
 if (!$isCli) {
-    // Protect browser access: ?token=seed2026
     $token = $_GET['token'] ?? '';
     if ($token !== 'seed2026') {
         http_response_code(403);
@@ -21,20 +20,18 @@ if (!$isCli) {
     echo "<pre>\n";
 }
 
-$dbPath  = __DIR__ . '/../database/load_monitor.sqlite';
 $sqlFile = __DIR__ . '/load.sql';
-
 if (!file_exists($sqlFile)) {
     exit("ERROR: sql/load.sql not found.\n");
 }
-if (!file_exists($dbPath)) {
-    exit("ERROR: database/load_monitor.sqlite not found. Run sql/init_sqlite.php first.\n");
-}
 
-// ── Connect ──────────────────────────────────────────────────────────────────
-$db = new PDO("sqlite:$dbPath", null, null, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-$db->exec('PRAGMA journal_mode=WAL');
-$db->exec('PRAGMA foreign_keys=ON');
+// ── Connect via Database class (respects DB_DRIVER env var) ─────────────────
+require_once __DIR__ . '/../app/core/Database.php';
+
+// Suppress session functions when running from CLI/entrypoint
+if ($isCli && !defined('BASE_PATH')) define('BASE_PATH', '');
+
+$db = Database::connect();
 
 // ── Generate hash once — bcrypt is slow by design ────────────────────────────
 $defaultPassword = 'password@123';
