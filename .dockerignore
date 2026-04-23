@@ -1,0 +1,7 @@
+.git/
+.gitignore
+.dockerignore
+logs/
+database/load_monitor.sqlite
+*.md
+.DS_Store

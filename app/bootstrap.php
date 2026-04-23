@@ -29,12 +29,17 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// ── Base path: auto-detect based on port ────────────────────────────────────
-// Port 5006 VirtualHost has DocumentRoot = public/, so base path is empty.
-// Port 80 uses Alias /load_monitor/public, so base path must include it.
+// ── Base path ────────────────────────────────────────────────────────────────
+// Docker/container: set ENV APP_BASE_PATH=  (empty string) so the app serves
+// from the domain root.  Legacy Apache on port 80 uses /load_monitor/public.
 if (!defined('BASE_PATH')) {
-    $port = $_SERVER['SERVER_PORT'] ?? '5006';
-    define('BASE_PATH', $port === '5006' ? '' : '/load_monitor/public');
+    $envBase = getenv('APP_BASE_PATH');
+    if ($envBase !== false) {
+        define('BASE_PATH', $envBase);
+    } else {
+        $port = $_SERVER['SERVER_PORT'] ?? '5006';
+        define('BASE_PATH', $port === '5006' ? '' : '/load_monitor/public');
+    }
 }
 
 require_once __DIR__ . '/core/Database.php';

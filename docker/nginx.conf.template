@@ -1,0 +1,54 @@
+server {
+    listen ${PORT};
+    server_name _;
+
+    root /app/public;
+    index index.php;
+
+    # Security headers
+    add_header X-Content-Type-Options  "nosniff"                        always;
+    add_header X-Frame-Options         "SAMEORIGIN"                     always;
+    add_header X-XSS-Protection        "1; mode=block"                  always;
+    add_header Referrer-Policy         "strict-origin-when-cross-origin" always;
+
+    # All requests: try the file, then directory, then hand off to index.php
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # PHP via PHP-FPM
+    location ~ \.php$ {
+        fastcgi_pass             127.0.0.1:9000;
+        fastcgi_index            index.php;
+        include                  fastcgi_params;
+        fastcgi_param            SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param            PATH_INFO       $fastcgi_path_info;
+        fastcgi_buffers          16 16k;
+        fastcgi_buffer_size      32k;
+        fastcgi_read_timeout     60;
+    }
+
+    # Block hidden files (.git, .env, .htaccess …)
+    location ~ /\. {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
+    # Block direct HTTP access to app/ (files are included by PHP, not served directly)
+    location ^~ /app/ {
+        deny all;
+    }
+
+    # Block direct HTTP access to database/
+    location ^~ /database/ {
+        deny all;
+    }
+
+    # Gzip
+    gzip            on;
+    gzip_types      text/plain text/css application/json application/javascript text/xml;
+    gzip_min_length 1024;
+
+    client_max_body_size 10M;
+}
