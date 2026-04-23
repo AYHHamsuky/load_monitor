@@ -1,6 +1,12 @@
 <?php
 // public/index.php
 
+// Temporary: enable errors for debug token
+if (($_GET['debug'] ?? '') === 'diag2026') {
+    ini_set('display_errors', 1);
+    error_reporting(E_ALL);
+}
+
 require_once __DIR__ . '/../app/bootstrap.php';
 
 // Get the requested page
