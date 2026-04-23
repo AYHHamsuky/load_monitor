@@ -5,8 +5,10 @@
  */
 
 // ── Production error handling ──────────────────────────────────────────────
-ini_set('display_errors', 0);          // Never expose errors to the browser
-ini_set('log_errors', 1);             // Log errors to file instead
+// DEBUG_MODE is set by index.php when ?debug=diag2026 is passed
+$_debugMode = defined('DEBUG_MODE') && DEBUG_MODE;
+ini_set('display_errors', $_debugMode ? 1 : 0);
+ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/../logs/php_errors.log');
 error_reporting(E_ALL);
 
