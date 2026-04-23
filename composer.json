@@ -1,0 +1,14 @@
+{
+    "name": "kaduna-electric/load-monitor",
+    "description": "Load Monitor application",
+    "require": {
+        "php": ">=8.2",
+        "ext-pdo": "*",
+        "ext-pdo_sqlite": "*"
+    },
+    "config": {
+        "platform": {
+            "php": "8.3"
+        }
+    }
+}
