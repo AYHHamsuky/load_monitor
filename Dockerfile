@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.3-fpm-alpine
 
 # System packages: nginx, supervisord, sqlite3 headers for pdo_sqlite
 RUN apk add --no-cache nginx supervisor sqlite-dev
