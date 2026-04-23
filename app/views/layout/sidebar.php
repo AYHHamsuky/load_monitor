@@ -13,7 +13,8 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
 
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-        <h3>⚡ Energy</h3>
+        <?php $bp = defined('BASE_PATH') ? BASE_PATH : ''; ?>
+        <img src="<?= $bp ?>/assets/img/ke_logo.png" alt="Kaduna Electric" class="sidebar-logo-img">
         <button class="sidebar-toggle" onclick="toggleSidebar()">
             <i class="fas fa-bars"></i>
         </button>
@@ -343,159 +344,143 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
 <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="closeSidebar()"></div>
 
 <style>
+/* ── Sidebar – Kaduna Electric  #004B23 / #008000 / #6CAE27 ── */
 .sidebar {
-    width: 260px;
+    width: 252px;
     height: 100vh;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    background: linear-gradient(180deg, #004B23 0%, #003519 100%);
     position: fixed;
     left: 0;
     top: 0;
     overflow-y: auto;
-    transition: transform 0.3s ease;
-    z-index: 1000;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    transition: transform 0.28s ease;
+    z-index: 1001;
+    box-shadow: 3px 0 16px rgba(0,0,0,0.22);
+    border-right: 1px solid rgba(108,174,39,0.2);
 }
 
+/* ── Header ───────────────────────────────────────────────── */
 .sidebar-header {
-    padding: 20px;
-    background: rgba(255,255,255,0.1);
+    padding: 14px 16px;
+    background: rgba(0,0,0,0.25);
+    border-bottom: 2px solid #6CAE27;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    min-height: 62px;
 }
 
-.sidebar-header h3 {
-    color: white;
-    margin: 0;
-    font-size: 24px;
-    font-weight: 700;
+.sidebar-logo-img {
+    height: 36px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
 }
 
 .sidebar-toggle {
     background: none;
     border: none;
-    color: white;
-    font-size: 20px;
+    color: #d4f0b5;
+    font-size: 18px;
     cursor: pointer;
+    padding: 4px;
     display: none;
+    line-height: 1;
 }
 
+/* ── Backdrop (mobile) ────────────────────────────────────── */
 .sidebar-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0,0,0,0.5);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.25s ease;
-    z-index: 900;
+    z-index: 1000;
     display: none;
 }
-
 .sidebar-backdrop.active {
     opacity: 1;
     pointer-events: auto;
 }
 
-.sidebar-nav {
-    padding: 20px 0;
-}
+/* ── Nav ──────────────────────────────────────────────────── */
+.sidebar-nav { padding: 10px 0; }
 
-.sidebar-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+.sidebar-nav ul { list-style: none; padding: 0; margin: 0; }
 
-.sidebar-nav li {
-    margin: 5px 0;
-}
-
-.sidebar-nav a {
-    display: flex;
-    align-items: center;
-    padding: 12px 20px;
-    color: rgba(255,255,255,0.8);
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.sidebar-nav a:hover {
-    background: rgba(255,255,255,0.1);
-    color: white;
-    padding-left: 25px;
-}
-
-.sidebar-nav li.active a {
-    background: rgba(255,255,255,0.15);
-    color: white;
-    border-left: 4px solid #4CAF50;
-}
-
-.sidebar-nav i {
-    margin-right: 12px;
-    width: 20px;
-    text-align: center;
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 100%;
-        max-width: 320px;
-        transform: translateX(-100%);
-        top: 0;
-        left: 0;
-        height: 100vh;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
-    }
-    
-    .sidebar.active {
-        transform: translateX(0);
-    }
-    
-    .sidebar-toggle {
-        display: block;
-    }
-
-    .sidebar-backdrop {
-        display: block;
-    }
-}
-
-/* Scrollbar */
-.sidebar::-webkit-scrollbar {
-    width: 6px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.05);
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.2);
-    border-radius: 3px;
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover {
-    background: rgba(255,255,255,0.3);
-}
-.sidebar-nav .badge, .sidebar-nav .badge-notify {
-    background: #dc2626;
-    color: white;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 700;
-    margin-left: auto;
-}
+.sidebar-nav li { margin: 1px 0; }
 
 .sidebar-nav a {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 11px 18px;
+    color: rgba(255,255,255,0.78);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    border-left: 3px solid transparent;
+    transition: background 0.18s, color 0.18s, border-color 0.18s, padding-left 0.18s;
+    gap: 10px;
 }
 
+.sidebar-nav a:hover {
+    background: rgba(108,174,39,0.15);
+    color: #fff;
+    border-left-color: #6CAE27;
+    padding-left: 22px;
+}
 
+.sidebar-nav li.active a {
+    background: rgba(108,174,39,0.22);
+    color: #fff;
+    border-left-color: #6CAE27;
+    font-weight: 700;
+}
+
+.sidebar-nav i {
+    width: 20px;
+    text-align: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    color: #a3c47a;
+}
+
+.sidebar-nav li.active a i,
+.sidebar-nav a:hover i { color: #6CAE27; }
+
+.sidebar-nav span { flex: 1; }
+
+/* ── Badges ───────────────────────────────────────────────── */
+.sidebar-nav .badge,
+.sidebar-nav .badge-notify {
+    background: #dc2626;
+    color: #fff;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 800;
+    flex-shrink: 0;
+    min-width: 18px;
+    text-align: center;
+}
+
+/* ── Scrollbar ────────────────────────────────────────────── */
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(108,174,39,0.35); border-radius: 4px; }
+.sidebar::-webkit-scrollbar-thumb:hover { background: rgba(108,174,39,0.55); }
+
+/* ── Mobile ───────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 280px;
+        transform: translateX(-100%);
+    }
+    .sidebar.active  { transform: translateX(0); }
+    .sidebar-toggle  { display: block; }
+    .sidebar-backdrop { display: block; }
+}
 </style>
 
 <script>
