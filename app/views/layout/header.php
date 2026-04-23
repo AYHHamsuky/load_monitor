@@ -65,62 +65,59 @@ $basePath = defined('BASE_PATH') ? BASE_PATH : '/load_monitor/public';
 <body>
 
 <style>
-/* ===== HEADER ===== */
+/* ── Header ─────────────────────────────────────────────── */
 .top-header {
     position: fixed;
-    top: 0;
-    left: 0;
-    height: 64px;
+    top: 0; left: 0;
+    height: 62px;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 18px;
-    background: rgba(6, 25, 60, 0.85);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 0 20px;
+    background: linear-gradient(90deg, #004B23 0%, #005a2a 100%);
+    border-bottom: 3px solid #6CAE27;
+    box-shadow: 0 2px 12px rgba(0,75,35,0.35);
     z-index: 1000;
 }
 
-/* ===== LEFT ===== */
 .header-left {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
 }
 
-.header-left img {
-    height: 38px;
-}
+.header-left img { height: 38px; object-fit: contain; }
 
 #sidebarToggle {
     font-size: 22px;
     cursor: pointer;
-    color: #e5e7eb;
-    display: none; /* hidden on desktop */
-}
+    color: #d4f0b5;
+    display: none;
+    background: none;
+    border: none;
+    padding: 0;
+    line-height: 1;
 }
 
-/* ===== CENTER ===== */
 .header-center {
-    font-size: 16px;
-    font-weight: 600;
-    color: #f9fafb;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
     text-align: center;
     white-space: nowrap;
+    letter-spacing: 0.2px;
 }
 
-/* ===== RIGHT ===== */
 .header-right {
     display: flex;
     align-items: center;
-    gap: 18px;
-    color: #e5e7eb;
+    gap: 16px;
+    color: #d4f0b5;
     font-size: 13px;
 }
 
-/* ===== PROFILE ===== */
+/* ── Profile ─────────────────────────────────────────────── */
 .profile {
     position: relative;
     cursor: pointer;
@@ -130,15 +127,16 @@ $basePath = defined('BASE_PATH') ? BASE_PATH : '/load_monitor/public';
 }
 
 .profile-name {
-    font-weight: 600;
+    font-weight: 700;
     color: #ffffff;
+    font-size: 13px;
 }
 
 .profile-role {
     font-size: 10px;
-    font-weight: 600;
-    background: rgba(59, 130, 246, 0.3);
-    color: #93c5fd;
+    font-weight: 700;
+    background: rgba(108,174,39,0.28);
+    color: #d4f0b5;
     padding: 2px 8px;
     border-radius: 10px;
     text-transform: uppercase;
@@ -149,64 +147,54 @@ $basePath = defined('BASE_PATH') ? BASE_PATH : '/load_monitor/public';
     display: none;
     position: absolute;
     right: 0;
-    top: 44px;
-    background: rgba(17, 24, 39, 0.95);
-    backdrop-filter: blur(10px);
+    top: 46px;
+    background: #004B23;
     border-radius: 10px;
-    min-width: 200px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+    min-width: 210px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
     overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(108,174,39,0.3);
+    z-index: 2000;
 }
 
 .profile-menu-header {
-    padding: 12px 14px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.05);
+    padding: 12px 16px;
+    background: rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(108,174,39,0.2);
 }
 
 .profile-menu-header .name {
     font-size: 13px;
-    font-weight: 600;
-    color: #ffffff;
-    margin-bottom: 2px;
+    font-weight: 700;
+    color: #fff;
 }
 
 .profile-menu-header .id {
     font-size: 11px;
-    color: #9ca3af;
+    color: #a3c47a;
+    margin-top: 2px;
 }
 
 .profile-menu a {
     display: block;
-    padding: 10px 14px;
-    color: #e5e7eb;
+    padding: 10px 16px;
+    color: #d4f0b5;
     text-decoration: none;
     font-size: 13px;
-    transition: background 0.15s ease;
+    transition: background 0.15s;
 }
 
-.profile-menu a:hover {
-    background: rgba(255,255,255,0.08);
-}
+.profile-menu a:hover { background: rgba(108,174,39,0.2); color: #fff; }
 
-/* ===== CONTENT OFFSET ===== */
-.app-container {
-    padding-top: 64px;
-}
+/* ── Layout offset ───────────────────────────────────────── */
+.app-container { padding-top: 62px; }
 
-/* ===== MOBILE ===== */
+/* ── Mobile ──────────────────────────────────────────────── */
 @media (max-width: 768px) {
-    .header-center {
-        display: none;
-    }
-    
-    #sidebarToggle {
-        display: block;
-    }
-    
+    .header-center { display: none; }
+    #sidebarToggle { display: block; }
     .profile-name {
-        max-width: 150px;
+        max-width: 130px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

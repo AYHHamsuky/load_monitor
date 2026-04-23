@@ -76,15 +76,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kaduna Electric Load Reading Management System – Login</title>
 <style>
-* {
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 body {
     min-height: 100vh;
-    background: linear-gradient(135deg, #0b3a82 0%, #081a3a 100%);
+    background: linear-gradient(135deg, #004B23 0%, #006b30 55%, #008000 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -92,71 +92,81 @@ body {
 }
 .login-container {
     width: 100%;
-    max-width: 380px;
+    max-width: 400px;
 }
 .login-box {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 32px;
+    background: #ffffff;
+    padding: 36px 32px;
     border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
+    border-top: 5px solid #6CAE27;
 }
 .login-logo {
     display: block;
-    margin: 0 auto 12px;
-    height: 56px;
+    margin: 0 auto 14px;
+    height: 60px;
     object-fit: contain;
 }
 .login-box h2 {
-    color: #1a5c1a;
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 22px;
+    color: #004B23;
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 24px;
     text-align: center;
     text-transform: uppercase;
-    letter-spacing: 0.4px;
-    line-height: 1.4;
+    letter-spacing: 0.5px;
+    line-height: 1.45;
 }
 .form-group {
     margin-bottom: 16px;
 }
 .form-group label {
     display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: #374151;
+    font-size: 11px;
+    font-weight: 800;
+    color: #004B23;
     margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
 }
 .form-group input {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #cbd5e1;
+    padding: 12px 14px;
+    border: 1.5px solid #d4eabf;
     border-radius: 8px;
     font-size: 14px;
-    transition: border-color 0.2s;
+    color: #1a2e1a;
+    background: #f8fdf4;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
 }
 .form-group input:focus {
     outline: none;
-    border-color: #0b3a82;
+    border-color: #6CAE27;
+    box-shadow: 0 0 0 3px rgba(108,174,39,0.18);
+    background: #fff;
 }
 .login-btn {
     width: 100%;
-    padding: 12px;
-    background: #0b3a82;
-    color: white;
+    padding: 13px;
+    background: #004B23;
+    color: #fff;
     border: none;
     border-radius: 8px;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 800;
     cursor: pointer;
-    transition: background 0.2s;
+    letter-spacing: 0.4px;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 6px;
 }
-.login-btn:hover {
-    background: #082f66;
-}
+.login-btn:hover  { background: #008000; }
+.login-btn:active { transform: scale(0.98); }
 .error {
-    background: #fee2e2;
-    color: #991b1b;
-    padding: 12px;
+    background: #fde8e8;
+    color: #9b1c1c;
+    border: 1px solid #fca5a5;
+    padding: 11px 14px;
     border-radius: 8px;
     font-size: 13px;
     margin-bottom: 16px;

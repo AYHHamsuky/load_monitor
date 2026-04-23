@@ -1,40 +1,254 @@
-/* File: /public/assets/css/app.css */
+/* ============================================================
+   app.css  –  Kaduna Electric Brand  #004B23 / #008000 / #6CAE27
+   ============================================================ */
+
+:root {
+    --ke-dark:    #004B23;
+    --ke-medium:  #008000;
+    --ke-light:   #6CAE27;
+    --ke-bg:      #f2f8ee;
+    --ke-border:  #d4eabf;
+    --ke-text:    #1a2e1a;
+    --ke-muted:   #5a7a5a;
+    --ke-white:   #ffffff;
+    --ke-shadow:  0 2px 12px rgba(0,75,35,0.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--ke-bg);
+    color: var(--ke-text);
+    font-size: 14px;
+    line-height: 1.5;
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 20px;
-    background: #1f2937;
+a { color: var(--ke-medium); text-decoration: none; }
+a:hover { color: var(--ke-dark); text-decoration: underline; }
+
+/* ── Utility ─────────────────────────────────────────────── */
+.text-success  { color: var(--ke-medium) !important; }
+.text-primary  { color: var(--ke-dark)   !important; }
+.text-accent   { color: var(--ke-light)  !important; }
+.bg-primary    { background: var(--ke-dark)   !important; color: #fff !important; }
+.bg-accent     { background: var(--ke-light)  !important; color: #fff !important; }
+
+/* ── Cards ───────────────────────────────────────────────── */
+.card {
+    background: var(--ke-white);
+    border-radius: 10px;
+    box-shadow: var(--ke-shadow);
+    border: 1px solid var(--ke-border);
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.card-header {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ke-dark);
+    border-bottom: 2px solid var(--ke-light);
+    padding-bottom: 10px;
+    margin-bottom: 16px;
+}
+
+/* ── Badges ──────────────────────────────────────────────── */
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+.badge-success { background: #d4f1c4; color: var(--ke-dark); }
+.badge-warning { background: #fff3cd; color: #7a5700; }
+.badge-danger  { background: #fde8e8; color: #9b1c1c; }
+.badge-info    { background: #d4eabf; color: var(--ke-dark); }
+.badge-primary { background: var(--ke-dark); color: #fff; }
+
+/* ── Alerts ──────────────────────────────────────────────── */
+.alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    border-left: 4px solid;
+}
+.alert-success { background: #eaf7e4; border-color: var(--ke-medium); color: var(--ke-dark); }
+.alert-warning { background: #fffbea; border-color: #d97706; color: #7a5700; }
+.alert-danger  { background: #fef2f2; border-color: #ef4444; color: #9b1c1c; }
+.alert-info    { background: #f0f9ff; border-color: var(--ke-light); color: var(--ke-dark); }
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background 0.18s, box-shadow 0.18s, transform 0.1s;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+    background: var(--ke-dark);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0,75,35,0.25);
+}
+.btn-primary:hover { background: var(--ke-medium); color: #fff; }
+
+.btn-success {
+    background: var(--ke-medium);
     color: #fff;
 }
+.btn-success:hover { background: var(--ke-dark); color: #fff; }
 
-.container {
+.btn-accent {
+    background: var(--ke-light);
+    color: #fff;
+}
+.btn-accent:hover { background: var(--ke-medium); color: #fff; }
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--ke-dark);
+    color: var(--ke-dark);
+}
+.btn-outline:hover { background: var(--ke-dark); color: #fff; }
+
+.btn-sm  { padding: 6px 12px; font-size: 12px; }
+.btn-lg  { padding: 12px 24px; font-size: 15px; }
+
+/* ── Stat Cards ──────────────────────────────────────────── */
+.stat-card {
+    background: var(--ke-white);
+    border-radius: 12px;
+    padding: 18px 20px;
+    border-left: 5px solid var(--ke-light);
+    box-shadow: var(--ke-shadow);
     display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
+.stat-card .stat-label { font-size: 11px; font-weight: 700; color: var(--ke-muted); text-transform: uppercase; letter-spacing: 0.6px; }
+.stat-card .stat-value { font-size: 26px; font-weight: 800; color: var(--ke-dark); }
+.stat-card .stat-sub   { font-size: 11px; color: var(--ke-muted); }
+.stat-card.accent  { border-left-color: var(--ke-dark); }
+.stat-card.success { border-left-color: var(--ke-medium); }
 
-.sidebar {
-    width: 200px;
-    background: #f3f4f6;
-    padding: 15px;
-}
+/* ── Tables ──────────────────────────────────────────────── */
+.table-wrapper { overflow-x: auto; border-radius: 10px; box-shadow: var(--ke-shadow); }
 
-.sidebar a {
-    display: block;
-    padding: 8px;
-    color: #111;
-    text-decoration: none;
-}
-
-.sidebar a:hover {
-    background: #ddd;
-}
-
-.content {
-    padding: 20px;
+table {
     width: 100%;
+    border-collapse: collapse;
+    background: var(--ke-white);
+    font-size: 13px;
+}
+
+thead th {
+    background: var(--ke-dark);
+    color: #fff;
+    padding: 11px 14px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+tbody tr { border-bottom: 1px solid var(--ke-border); }
+tbody tr:hover { background: #f0f9e8; }
+tbody tr:last-child { border-bottom: none; }
+
+tbody td {
+    padding: 10px 14px;
+    color: var(--ke-text);
+    vertical-align: middle;
+}
+
+tfoot td {
+    background: #e8f5df;
+    font-weight: 700;
+    color: var(--ke-dark);
+    padding: 10px 14px;
+    border-top: 2px solid var(--ke-border);
+}
+
+/* ── Forms ───────────────────────────────────────────────── */
+.form-group { margin-bottom: 16px; }
+
+.form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ke-dark);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.form-control,
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid var(--ke-border);
+    border-radius: 7px;
+    font-size: 13px;
+    color: var(--ke-text);
+    background: #fff;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    box-sizing: border-box;
+}
+
+.form-control:focus,
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--ke-light);
+    box-shadow: 0 0 0 3px rgba(108,174,39,0.18);
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+.footer {
+    background: var(--ke-dark);
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    padding: 10px 20px;
+    font-size: 12px;
+}
+
+.footer a { color: var(--ke-light); }
+
+/* ── Page title ──────────────────────────────────────────── */
+.page-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--ke-dark);
+    margin: 0 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--ke-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
