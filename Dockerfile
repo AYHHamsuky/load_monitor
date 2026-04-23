@@ -1,10 +1,10 @@
 FROM php:8.2-fpm-alpine
 
-# Install nginx, supervisord, gettext (for envsubst)
-RUN apk add --no-cache nginx supervisor gettext
+# Install nginx, supervisord, gettext (for envsubst), sqlite3 dev headers
+RUN apk add --no-cache nginx supervisor gettext sqlite-dev
 
-# Enable SQLite PDO extension (bundled with PHP, just needs enabling)
-RUN docker-php-ext-install pdo pdo_sqlite
+# pdo is already available in the base image; pdo_sqlite needs sqlite-dev headers
+RUN docker-php-ext-install pdo_sqlite
 
 # nginx config template (PORT is substituted at startup)
 COPY docker/nginx.conf.template /etc/nginx/templates/default.conf.template
