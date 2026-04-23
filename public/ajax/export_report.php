@@ -289,7 +289,7 @@ function exportPDF($data, $filename, $report_type, $date_from, $date_to, $feeder
         
         <div class="header">
             <h1><?= strtoupper(htmlspecialchars($report_type)) ?> REPORT</h1>
-            <p>Load Monitoring System - Comprehensive Report</p>
+            <p>Kaduna Electric Load Reading Management System - Comprehensive Report</p>
         </div>
 
         <div class="info-section">
@@ -345,7 +345,7 @@ function exportPDF($data, $filename, $report_type, $date_from, $date_to, $feeder
         <?php endif; ?>
 
         <div class="footer">
-            <p><strong>Load Monitoring System</strong> | Generated on <?= date('F j, Y') ?> at <?= date('g:i A') ?></p>
+            <p><strong>Kaduna Electric Load Reading Management System</strong> | Generated on <?= date('F j, Y') ?> at <?= date('g:i A') ?></p>
             <p>This is a computer-generated report. No signature is required.</p>
         </div>
 

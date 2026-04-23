@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Energy Management System</title>
+    <title>Kaduna Electric Load Reading Management System</title>
 
     <?php $bp = defined('BASE_PATH') ? BASE_PATH : '/load_monitor/public'; ?>
     <link rel="stylesheet" href="<?= $bp ?>/assets/css/main.css">
@@ -11,7 +11,8 @@
 
 <div class="landing-wrapper">
     <header class="landing-header">
-        ⚡ Enerygy Management System
+        <img src="<?= $bp ?>/assets/img/ke_logo.png" alt="Kaduna Electric" style="height:44px;vertical-align:middle;margin-right:10px;">
+        Kaduna Electric Load Reading Management System
     </header>
 
     <section class="landing-hero">
@@ -30,7 +31,7 @@
 
     <section class="landing-features">
         <div>
-            <h3>⚡ Load Monitoring</h3>
+            <h3>⚡ Load Reading</h3>
             <p>
                 Hourly capture of 11KV and 33KV feeder loads with built-in
                 validation and role-based access control.
@@ -55,7 +56,7 @@
     </section>
 
     <footer class="landing-footer">
-        © <?= date('Y') ?> Power Operations Unit
+        © <?= date('Y') ?> Kaduna Electric – Load Reading Management System
     </footer>
 </div>
 

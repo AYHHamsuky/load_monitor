@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Load Monitoring System – Login</title>
+<title>Kaduna Electric Load Reading Management System – Login</title>
 <style>
 * {
     margin: 0;
@@ -100,12 +100,21 @@ body {
     border-radius: 16px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
+.login-logo {
+    display: block;
+    margin: 0 auto 12px;
+    height: 56px;
+    object-fit: contain;
+}
 .login-box h2 {
-    color: #0b3a82;
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 24px;
+    color: #1a5c1a;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 22px;
     text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    line-height: 1.4;
 }
 .form-group {
     margin-bottom: 16px;
@@ -173,7 +182,8 @@ body {
 
 <div class="login-container">
     <div class="login-box">
-        <h2>⚡ Load Monitoring</h2>
+        <img src="assets/img/ke_logo.png" alt="Kaduna Electric" class="login-logo">
+        <h2>Load Reading Management System</h2>
 
         <?php if ($error): ?>
             <div class="error"><?= htmlspecialchars($error) ?></div>

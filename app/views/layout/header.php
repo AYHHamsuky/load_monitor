@@ -46,7 +46,7 @@ $basePath = defined('BASE_PATH') ? BASE_PATH : '/load_monitor/public';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Load Monitor</title>
+    <title>Kaduna Electric Load Reading Management System</title>
 
     <!-- Favicon (optional — place file at public/assets/img/favicon.ico) -->
     <link rel="icon" type="image/x-icon" href="<?= $basePath ?>/assets/img/favicon.ico">
