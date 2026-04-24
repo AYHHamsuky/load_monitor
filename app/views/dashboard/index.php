@@ -676,12 +676,7 @@ form { padding:25px; }
 
 <script>
 // ── Config ────────────────────────────────────────────────────────────────────
-const saveUrl = <?= json_encode(
-    (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http')
-    . '://' . $_SERVER['HTTP_HOST']
-    . $_SERVER['SCRIPT_NAME']
-    . '?page=load_entry'
-) ?>;
+const saveUrl = '<?= BASE_PATH ?>/index.php?page=load_entry';
 
 // Feeder max-load map built from PHP
 const feederMaxLoad = {};

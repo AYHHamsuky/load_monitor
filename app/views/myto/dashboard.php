@@ -1374,12 +1374,7 @@ document.addEventListener('keydown', e => {
 
 // ── AJAX endpoint URL ─────────────────────────────────────────────────────────
 // Resolved server-side so it works at any directory depth
-const TREND_AJAX_URL = <?= json_encode(
-    (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http')
-    . '://' . $_SERVER['HTTP_HOST']
-    . rtrim(dirname($_SERVER['SCRIPT_NAME']), '/')
-    . '/ajax/myto_trend.php'
-) ?>;
+const TREND_AJAX_URL = '<?= BASE_PATH ?>/ajax/myto_trend.php';
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let trendChartInst = null;

@@ -1347,7 +1347,7 @@ table.dt td{padding:13px 12px;vertical-align:middle;}
 <script>
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const SELECTED_DATE = '<?= $selected_date ?>';
-const BASE_URL = '<?= (isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']==='on'?'https':'http').'://'.$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME'] ?>';
+const BASE_URL = '<?= BASE_PATH ?>/index.php';
 const FEEDERSBY_TS = <?= json_encode($feeders_by_ts) ?>;
 
 function updateParam(key, val) {
