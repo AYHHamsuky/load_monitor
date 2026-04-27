@@ -257,24 +257,20 @@ body.sidebar-closed .main-content { margin-left: 0    !important; }
 </header>
 
 <script>
-(function () {
-    const body    = document.body;
-    const sidebar = document.getElementById('sidebar');
-    const toggle  = document.getElementById('sidebarToggle');
-    const backdrop= document.getElementById('sidebarBackdrop');
+document.addEventListener('DOMContentLoaded', function () {
+    const body     = document.body;
+    const sidebar  = document.getElementById('sidebar');
+    const toggle   = document.getElementById('sidebarToggle');
+    const backdrop = document.getElementById('sidebarBackdrop');
 
-    // Restore saved state on desktop; default = open
-    const saved = localStorage.getItem('sidebarState');
     const isMobile = () => window.innerWidth <= 768;
 
     function applyState(open) {
         if (isMobile()) {
-            // Mobile: slide in/out using .active class
             sidebar  && sidebar.classList.toggle('active', open);
             backdrop && backdrop.classList.toggle('active', open);
             body.classList.remove('sidebar-open', 'sidebar-closed');
         } else {
-            // Desktop: shift main-content via body class
             body.classList.toggle('sidebar-open',   open);
             body.classList.toggle('sidebar-closed', !open);
             sidebar  && sidebar.classList.toggle('desktop-hidden', !open);
@@ -283,20 +279,16 @@ body.sidebar-closed .main-content { margin-left: 0    !important; }
         if (toggle) toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     }
 
-    // Init
-    if (!isMobile()) {
-        applyState(saved !== 'closed');
-    } else {
-        body.classList.remove('sidebar-open', 'sidebar-closed');
-    }
+    // Initialise — default open on desktop
+    const saved = localStorage.getItem('sidebarState');
+    applyState(isMobile() ? false : saved !== 'closed');
 
-    // Toggle button click
+    // Header ☰ toggle
     if (toggle) {
         toggle.addEventListener('click', function (e) {
             e.stopPropagation();
             if (isMobile()) {
-                const open = !sidebar.classList.contains('active');
-                applyState(open);
+                applyState(!sidebar.classList.contains('active'));
             } else {
                 const open = body.classList.contains('sidebar-closed');
                 applyState(open);
@@ -305,21 +297,17 @@ body.sidebar-closed .main-content { margin-left: 0    !important; }
         });
     }
 
-    // Backdrop closes on mobile
+    // Backdrop closes sidebar on mobile
     if (backdrop) {
         backdrop.addEventListener('click', function () { applyState(false); });
     }
 
-    // Reapply on resize
+    // Re-evaluate on viewport resize
     window.addEventListener('resize', function () {
-        if (isMobile()) {
-            body.classList.remove('sidebar-open', 'sidebar-closed');
-        } else {
-            applyState(localStorage.getItem('sidebarState') !== 'closed');
-        }
+        applyState(isMobile() ? false : localStorage.getItem('sidebarState') !== 'closed');
     });
 
-    // Profile menu
+    // Profile dropdown
     const profileToggle = document.getElementById('profileToggle');
     const profileMenu   = document.getElementById('profileMenu');
     if (profileToggle && profileMenu) {
@@ -332,5 +320,5 @@ body.sidebar-closed .main-content { margin-left: 0    !important; }
             profileMenu.style.display = 'none';
         });
     }
-})();
+});
 </script>

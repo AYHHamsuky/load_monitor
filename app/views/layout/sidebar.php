@@ -380,24 +380,24 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
 /* ── Sidebar – Kaduna Electric  #004B23 / #008000 / #6CAE27 ── */
 .sidebar {
     width: 252px;
-    height: 100vh;
+    height: calc(100vh - 62px);
     background: linear-gradient(180deg, #004B23 0%, #003519 100%);
     position: fixed;
     left: 0;
-    top: 0;
+    top: 62px;
     overflow-y: auto;
     transition: transform 0.28s ease;
-    z-index: 1001;
+    z-index: 999;
     box-shadow: 3px 0 16px rgba(0,0,0,0.22);
     border-right: 1px solid rgba(108,174,39,0.2);
 }
 
-/* ── Header ───────────────────────────────────────────────── */
+/* ── Sidebar header (logo + close) — mobile only ─────────── */
 .sidebar-header {
     padding: 14px 16px;
     background: rgba(0,0,0,0.25);
     border-bottom: 2px solid #6CAE27;
-    display: flex;
+    display: none;          /* hidden on desktop (header bar handles branding) */
     align-items: center;
     justify-content: space-between;
     min-height: 62px;
@@ -513,28 +513,37 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
 @media (max-width: 768px) {
     .sidebar {
         width: 280px;
+        top: 0;
+        height: 100vh;
         transform: translateX(-100%);
+        z-index: 1001;
     }
-    .sidebar.active   { transform: translateX(0); }
-    .sidebar-toggle   { display: block; }
-    .sidebar-backdrop { display: block; }
+    .sidebar.active    { transform: translateX(0); }
+    .sidebar-header    { display: flex; }
+    .sidebar-toggle    { display: block; }
+    .sidebar-backdrop  { display: block; }
 }
 </style>
 
 <script>
-// Sidebar-internal toggle button delegates to the header toggle logic
+// Delegates to the header ☰ toggle so state is always consistent
 function toggleSidebar() {
-    document.getElementById('sidebarToggle') &&
-        document.getElementById('sidebarToggle').click();
+    const toggle = document.getElementById('sidebarToggle');
+    if (toggle) toggle.click();
 }
 function closeSidebar() {
     const sidebar  = document.getElementById('sidebar');
     const backdrop = document.getElementById('sidebarBackdrop');
     const body     = document.body;
-    if (sidebar)  { sidebar.classList.remove('active'); sidebar.classList.add('desktop-hidden'); }
-    if (backdrop) { backdrop.classList.remove('active'); }
-    body.classList.remove('sidebar-open');
-    body.classList.add('sidebar-closed');
-    localStorage.setItem('sidebarState', 'closed');
+    const mobile   = window.innerWidth <= 768;
+    if (mobile) {
+        if (sidebar)  sidebar.classList.remove('active');
+        if (backdrop) backdrop.classList.remove('active');
+    } else {
+        if (sidebar)  { sidebar.classList.remove('active'); sidebar.classList.add('desktop-hidden'); }
+        body.classList.remove('sidebar-open');
+        body.classList.add('sidebar-closed');
+        localStorage.setItem('sidebarState', 'closed');
+    }
 }
 </script>
