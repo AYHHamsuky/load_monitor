@@ -504,30 +504,37 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
 .sidebar::-webkit-scrollbar-thumb { background: rgba(108,174,39,0.35); border-radius: 4px; }
 .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(108,174,39,0.55); }
 
+/* ── Desktop hidden state ─────────────────────────────────── */
+.sidebar.desktop-hidden {
+    transform: translateX(-100%);
+}
+
 /* ── Mobile ───────────────────────────────────────────────── */
 @media (max-width: 768px) {
     .sidebar {
         width: 280px;
         transform: translateX(-100%);
     }
-    .sidebar.active  { transform: translateX(0); }
-    .sidebar-toggle  { display: block; }
+    .sidebar.active   { transform: translateX(0); }
+    .sidebar-toggle   { display: block; }
     .sidebar-backdrop { display: block; }
 }
 </style>
 
 <script>
+// Sidebar-internal toggle button delegates to the header toggle logic
 function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const backdrop = document.getElementById('sidebarBackdrop');
-    sidebar.classList.toggle('active');
-    backdrop.classList.toggle('active');
+    document.getElementById('sidebarToggle') &&
+        document.getElementById('sidebarToggle').click();
 }
-
 function closeSidebar() {
-    const sidebar = document.getElementById('sidebar');
+    const sidebar  = document.getElementById('sidebar');
     const backdrop = document.getElementById('sidebarBackdrop');
-    sidebar.classList.remove('active');
-    backdrop.classList.remove('active');
+    const body     = document.body;
+    if (sidebar)  { sidebar.classList.remove('active'); sidebar.classList.add('desktop-hidden'); }
+    if (backdrop) { backdrop.classList.remove('active'); }
+    body.classList.remove('sidebar-open');
+    body.classList.add('sidebar-closed');
+    localStorage.setItem('sidebarState', 'closed');
 }
 </script>

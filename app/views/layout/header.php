@@ -94,12 +94,20 @@ $basePath = defined('BASE_PATH') ? BASE_PATH : '/load_monitor/public';
     font-size: 22px;
     cursor: pointer;
     color: #d4f0b5;
-    display: none;
-    background: none;
-    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(108,174,39,0.35);
+    border-radius: 8px;
     padding: 0;
     line-height: 1;
+    transition: background 0.2s;
+    flex-shrink: 0;
 }
+#sidebarToggle:hover { background: rgba(108,174,39,0.25); }
 
 .header-center {
     font-size: 14px;
@@ -193,29 +201,25 @@ $basePath = defined('BASE_PATH') ? BASE_PATH : '/load_monitor/public';
 /* ── Mobile ──────────────────────────────────────────────── */
 @media (max-width: 768px) {
     .header-center { display: none; }
-    #sidebarToggle { display: block; }
     .profile-name {
-        max-width: 130px;
+        max-width: 120px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
 }
 
-/* ── Global responsive main-content offset ───────────────── */
-/* Sidebar is 252px on desktop, slides off-screen on mobile.  */
-/* Every view sets margin-left:252px/260px — override on mobile. */
+/* ── Global main-content responsive offset ───────────────── */
+/* Desktop: sidebar open = 252px offset; sidebar closed = 0  */
+body.sidebar-open   .main-content { margin-left: 252px !important; }
+body.sidebar-closed .main-content { margin-left: 0    !important; }
+
 @media (max-width: 768px) {
     .main-content {
         margin-left: 0 !important;
         padding-left: 12px !important;
         padding-right: 12px !important;
         padding-top: 74px !important;
-    }
-}
-@media (min-width: 769px) {
-    .main-content {
-        margin-left: 252px;
     }
 }
 </style>
@@ -254,30 +258,79 @@ $basePath = defined('BASE_PATH') ? BASE_PATH : '/load_monitor/public';
 
 <script>
 (function () {
-    // Sidebar toggle
-    const sidebarToggle = document.getElementById('sidebarToggle');
+    const body    = document.body;
     const sidebar = document.getElementById('sidebar');
-    
-    if (sidebarToggle && sidebar) {
-        sidebarToggle.addEventListener('click', function () {
-            sidebar.classList.toggle('active');
+    const toggle  = document.getElementById('sidebarToggle');
+    const backdrop= document.getElementById('sidebarBackdrop');
+
+    // Restore saved state on desktop; default = open
+    const saved = localStorage.getItem('sidebarState');
+    const isMobile = () => window.innerWidth <= 768;
+
+    function applyState(open) {
+        if (isMobile()) {
+            // Mobile: slide in/out using .active class
+            sidebar  && sidebar.classList.toggle('active', open);
+            backdrop && backdrop.classList.toggle('active', open);
+            body.classList.remove('sidebar-open', 'sidebar-closed');
+        } else {
+            // Desktop: shift main-content via body class
+            body.classList.toggle('sidebar-open',   open);
+            body.classList.toggle('sidebar-closed', !open);
+            sidebar  && sidebar.classList.toggle('desktop-hidden', !open);
+            backdrop && backdrop.classList.remove('active');
+        }
+        if (toggle) toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    // Init
+    if (!isMobile()) {
+        applyState(saved !== 'closed');
+    } else {
+        body.classList.remove('sidebar-open', 'sidebar-closed');
+    }
+
+    // Toggle button click
+    if (toggle) {
+        toggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            if (isMobile()) {
+                const open = !sidebar.classList.contains('active');
+                applyState(open);
+            } else {
+                const open = body.classList.contains('sidebar-closed');
+                applyState(open);
+                localStorage.setItem('sidebarState', open ? 'open' : 'closed');
+            }
         });
     }
-    
+
+    // Backdrop closes on mobile
+    if (backdrop) {
+        backdrop.addEventListener('click', function () { applyState(false); });
+    }
+
+    // Reapply on resize
+    window.addEventListener('resize', function () {
+        if (isMobile()) {
+            body.classList.remove('sidebar-open', 'sidebar-closed');
+        } else {
+            applyState(localStorage.getItem('sidebarState') !== 'closed');
+        }
+    });
+
     // Profile menu
     const profileToggle = document.getElementById('profileToggle');
     const profileMenu   = document.getElementById('profileMenu');
-
-    if (!profileToggle || !profileMenu) return;
-
-    profileToggle.addEventListener('click', function (e) {
-        e.stopPropagation();
-        profileMenu.style.display =
-            profileMenu.style.display === 'block' ? 'none' : 'block';
-    });
-
-    document.addEventListener('click', function () {
-        profileMenu.style.display = 'none';
-    });
+    if (profileToggle && profileMenu) {
+        profileToggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            profileMenu.style.display =
+                profileMenu.style.display === 'block' ? 'none' : 'block';
+        });
+        document.addEventListener('click', function () {
+            profileMenu.style.display = 'none';
+        });
+    }
 })();
 </script>
