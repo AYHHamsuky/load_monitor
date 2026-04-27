@@ -46,7 +46,7 @@ try {
     // Update status
     $new_status = $action === 'activate' ? 'Yes' : 'No';
     
-    $stmt = $db->prepare("UPDATE staff_details SET is_active = ?, updated_at = NOW() WHERE payroll_id = ?");
+    $stmt = $db->prepare("UPDATE staff_details SET is_active = ?, updated_at = CURRENT_TIMESTAMP WHERE payroll_id = ?");
     $stmt->execute([$new_status, $payroll_id]);
     
     $message = $action === 'activate' 

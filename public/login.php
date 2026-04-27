@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kaduna Electric Load Reading Management System – Login</title>
+<title>Kaduna Electric Energy Management System – Login</title>
 <style>
 *, *::before, *::after {
     margin: 0;
@@ -193,7 +193,7 @@ body {
 <div class="login-container">
     <div class="login-box">
         <img src="assets/img/ke_logo.png" alt="Kaduna Electric" class="login-logo">
-        <h2>Load Reading Management System</h2>
+        <h2>Energy Management System</h2>
 
         <?php if ($error): ?>
             <div class="error"><?= htmlspecialchars($error) ?></div>
@@ -235,13 +235,6 @@ body {
         <?php endif; ?>
     </div>
     
-    <?php if (!isset($_GET['debug'])): ?>
-        <div style="text-align: center; margin-top: 12px;">
-            <a href="?debug=1" style="color: rgba(255,255,255,0.6); font-size: 12px; text-decoration: none;">
-                Enable Debug Mode
-            </a>
-        </div>
-    <?php endif; ?>
 </div>
 
 </body>

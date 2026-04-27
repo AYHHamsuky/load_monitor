@@ -37,7 +37,23 @@ class Auth {
         $_SESSION['user'] = $user;
         $_SESSION['user_id'] = $user['payroll_id'];
         $_SESSION['role'] = $user['role'];
-        
+
+        // Record login in staff_sessions
+        try {
+            $db->prepare("
+                INSERT INTO staff_sessions
+                    (payroll_id, login_time, ip_address, user_agent, is_active, created_at)
+                VALUES (?, datetime('now'), ?, ?, 'Yes', datetime('now'))
+            ")->execute([
+                $user['payroll_id'],
+                $_SERVER['REMOTE_ADDR'] ?? '',
+                substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255),
+            ]);
+            $_SESSION['staff_session_id'] = $db->lastInsertId();
+        } catch (Exception $e) {
+            // Non-fatal — session tracking failure should not block login
+        }
+
         return true;
     }
     
@@ -50,6 +66,23 @@ class Auth {
     }
     
     public static function logout() {
+        // Mark session as closed before destroying PHP session
+        if (!empty($_SESSION['staff_session_id'])) {
+            try {
+                $db = Database::connect();
+                $db->prepare("
+                    UPDATE staff_sessions
+                    SET logout_time = datetime('now'),
+                        is_active   = 'No',
+                        session_duration = (
+                            CAST((julianday(datetime('now')) - julianday(login_time)) * 24 AS REAL)
+                        )
+                    WHERE session_id = ?
+                ")->execute([$_SESSION['staff_session_id']]);
+            } catch (Exception $e) {
+                // Non-fatal
+            }
+        }
         session_destroy();
     }
     

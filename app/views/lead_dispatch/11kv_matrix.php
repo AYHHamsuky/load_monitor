@@ -48,14 +48,18 @@ $feeder_summary = [];
 
 foreach ($feeders_11kv as $feeder) {
     $stmt = $db->prepare("
-        SELECT 
-            entry_hour,
-            load_read,
-            fault_code,
-            fault_remark
-        FROM fdr11kv_data
-        WHERE Fdr11kv_code = ? AND entry_date = ?
-        ORDER BY entry_hour
+        SELECT
+            d.entry_hour,
+            d.load_read,
+            d.fault_code,
+            d.fault_remark,
+            d.user_id,
+            d.timestamp,
+            s.staff_name
+        FROM fdr11kv_data d
+        LEFT JOIN staff_details s ON s.payroll_id = d.user_id
+        WHERE d.Fdr11kv_code = ? AND d.entry_date = ?
+        ORDER BY d.entry_hour
     ");
     $stmt->execute([$feeder['fdr11kv_code'], $selected_date]);
     $hours = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -97,7 +101,7 @@ foreach ($feeders_11kv as $feeder) {
     $feeder_summary[$feeder['fdr11kv_code']] = [
         'feeder' => $feeder,
         'total_load' => $total_load,
-        'avg_load' => $valid_readings > 0 ? $total_load / $valid_readings : 0,
+        'avg_load' => $supply_hours > 0 ? $total_load / $supply_hours : 0,
         'peak_load' => $peak_load,
         'supply_hours' => $supply_hours,
         'fault_hours' => $fault_hours,
@@ -409,16 +413,24 @@ require __DIR__ . '/../layout/sidebar.php';
                         <td class="feeder-cell"><?= htmlspecialchars($feeder['fdr11kv_name']) ?></td>
                         <td><?= htmlspecialchars($feeder['iss_name']) ?></td>
                         
-                        <?php for ($h = 1; $h <= 24; $h++): 
+                        <?php for ($h = 1; $h <= 24; $h++):
                             $data = $feeder_data[$feeder['fdr11kv_code']][$h];
+                            if ($data) {
+                                $tip_parts = [];
+                                if (!empty($data['user_id']))    $tip_parts[] = 'ID: '   . $data['user_id'];
+                                if (!empty($data['staff_name'])) $tip_parts[] = 'By: '   . $data['staff_name'];
+                                if (!empty($data['timestamp']))  $tip_parts[] = 'At: '   . date('H:i', strtotime($data['timestamp']));
+                                if (!empty($data['fault_code'])) $tip_parts[] = 'Fault: '. $data['fault_code'];
+                                $tooltip = htmlspecialchars(implode(' | ', $tip_parts));
+                            }
                             if ($data && !empty($data['fault_code'])) {
-                                echo '<td class="load-cell has-fault" title="' . htmlspecialchars($data['fault_code']) . '">';
+                                echo '<td class="load-cell has-fault" title="' . $tooltip . '">';
                                 echo htmlspecialchars($data['fault_code']);
                             } elseif ($data && $data['load_read'] !== null) {
-                                echo '<td class="load-cell has-load">';
+                                echo '<td class="load-cell has-load" title="' . $tooltip . '">';
                                 echo number_format($data['load_read'], 2);
                             } else {
-                                echo '<td class="load-cell no-data">';
+                                echo '<td class="load-cell no-data" title="No data">';
                                 echo '-';
                             }
                             echo '</td>';

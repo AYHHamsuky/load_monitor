@@ -56,8 +56,8 @@ if ($active_tab === '11kv') {
             ao.ao_name,
             ic.interruption_description,
             ic.body_responsible,
-            HOUR(i.datetime_out) as out_hour,
-            HOUR(i.datetime_in) as in_hour
+            CAST(strftime('%H', i.datetime_out) AS INTEGER) as out_hour,
+            CAST(strftime('%H', i.datetime_in)  AS INTEGER) as in_hour
         FROM interruptions_11kv i
         INNER JOIN fdr11kv f ON f.fdr11kv_code = i.fdr11kv_code
         INNER JOIN iss_locations iss ON iss.iss_code = f.iss_code
@@ -166,8 +166,8 @@ if ($active_tab === '33kv') {
             ts.station_name,
             ic.interruption_description,
             ic.body_responsible,
-            HOUR(i.datetime_out) as out_hour,
-            HOUR(i.datetime_in) as in_hour
+            CAST(strftime('%H', i.datetime_out) AS INTEGER) as out_hour,
+            CAST(strftime('%H', i.datetime_in)  AS INTEGER) as in_hour
         FROM interruptions i
         INNER JOIN fdr33kv f ON f.fdr33kv_code = i.fdr33kv_code
         INNER JOIN transmission_stations ts ON ts.ts_code = f.ts_code

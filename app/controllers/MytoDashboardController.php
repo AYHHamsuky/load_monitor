@@ -75,11 +75,8 @@ foreach ($active_formula as $row) {
     $formula_map[$row['ts_code']] = (float)$row['percentage'];
 }
 
-// AJAX endpoint URL — mirrors the pattern used by 11kV/33kV controllers
-$mytoSaveUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http')
-    . '://' . $_SERVER['HTTP_HOST']
-    . $_SERVER['SCRIPT_NAME']
-    . '?page=myto_entry';
+// AJAX endpoint URL — relative, works behind HTTPS proxy
+$mytoSaveUrl = BASE_PATH . '/index.php?page=myto_entry';
 
 // Load the view
 require __DIR__ . '../../views/myto/dashboard.php';

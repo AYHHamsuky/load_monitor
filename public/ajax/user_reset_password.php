@@ -37,7 +37,7 @@ try {
     $password_hash = password_hash($new_password, PASSWORD_BCRYPT);
     
     // Update password
-    $stmt = $db->prepare("UPDATE staff_details SET password_hash = ?, updated_at = NOW() WHERE payroll_id = ?");
+    $stmt = $db->prepare("UPDATE staff_details SET password_hash = ?, updated_at = CURRENT_TIMESTAMP WHERE payroll_id = ?");
     $stmt->execute([$password_hash, $payroll_id]);
     
     echo json_encode([
