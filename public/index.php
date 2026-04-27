@@ -48,6 +48,7 @@ switch ($page) {
                 require __DIR__ . '/../app/controllers/StaffDashboardController.php';
                 break;
             case 'UL6':
+            case 'UL7':
                 require __DIR__ . '/../app/controllers/AdminDashboardController.php';
                 break;
             case 'UL8':
