@@ -286,6 +286,39 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
                     </a>
                 </li>
                 
+            <?php elseif ($role === 'UL7'): ?>
+                <!-- UL7 Menu: System Administrator (Super Admin) -->
+                <li class="<?= $current_page === 'dashboard' ? 'active' : '' ?>">
+                    <a href="?page=dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="<?= $current_page === 'reports' ? 'active' : '' ?>">
+                    <a href="?page=reports">
+                        <i class="fas fa-file-alt"></i>
+                        <span>System Reports</span>
+                    </a>
+                </li>
+                <li class="<?= $current_page === 'users' ? 'active' : '' ?>">
+                    <a href="?page=users">
+                        <i class="fas fa-users"></i>
+                        <span>User Management</span>
+                    </a>
+                </li>
+                <li class="<?= $current_page === 'system-config' ? 'active' : '' ?>">
+                    <a href="?page=system-config">
+                        <i class="fas fa-cog"></i>
+                        <span>System Config</span>
+                    </a>
+                </li>
+                <li class="<?= $current_page === 'analytics' ? 'active' : '' ?>">
+                    <a href="?page=analytics">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Analytics</span>
+                    </a>
+                </li>
+
             <?php elseif ($role === 'UL8'): ?>
                 <!-- UL8 Menu: Lead Dispatch Officer - CORRECTED NAVIGATION -->
                 <li class="<?= $current_page === 'dashboard' && $current_action === '' ? 'active' : '' ?>">

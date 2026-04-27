@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../app/bootstrap.php';
 
 header('Content-Type: application/json');
 
-if (!Guard::hasRole('UL6')) {
+if (!Guard::hasAnyRole(['UL6', 'UL7'])) {
     echo json_encode(['success' => false, 'message' => 'Access denied. Only administrators can update users.']);
     exit;
 }

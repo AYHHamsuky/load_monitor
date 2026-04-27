@@ -5,7 +5,7 @@
  */
 require_once __DIR__ . '/../app/bootstrap.php';
 
-$db = Database::getInstance();
+$db = Database::connect();
 
 $users = [
     [

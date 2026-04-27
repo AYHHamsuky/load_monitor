@@ -82,8 +82,8 @@ class Guard
     
     public static function requireAdmin(): void
     {
-        // UL6 ONLY - System administration
-        self::requireRole(['UL6']);
+        // UL6 (Tech Admin) and UL7 (System Administrator / Super Admin)
+        self::requireRole(['UL6', 'UL7']);
     }
     
     // Combined access for data entry staff

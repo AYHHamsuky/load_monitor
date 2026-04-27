@@ -30,7 +30,8 @@ $roleNames = [
     'UL4' => 'Manager',
     'UL5' => 'Staff View',
     'UL6' => 'Admin',
-    'UL8' => 'Lead Dispatch'
+    'UL7' => 'Super Admin',
+    'UL8' => 'Lead Dispatch',
 ];
 
 $roleDisplay = $roleNames[$user['role']] ?? $user['role'];
@@ -198,6 +199,23 @@ $basePath = defined('BASE_PATH') ? BASE_PATH : '/load_monitor/public';
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+}
+
+/* ── Global responsive main-content offset ───────────────── */
+/* Sidebar is 252px on desktop, slides off-screen on mobile.  */
+/* Every view sets margin-left:252px/260px — override on mobile. */
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0 !important;
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+        padding-top: 74px !important;
+    }
+}
+@media (min-width: 769px) {
+    .main-content {
+        margin-left: 252px;
     }
 }
 </style>
