@@ -43,15 +43,15 @@ class Auth {
             $db->prepare("
                 INSERT INTO staff_sessions
                     (payroll_id, login_time, ip_address, user_agent, is_active, created_at)
-                VALUES (?, datetime('now'), ?, ?, 'Yes', datetime('now'))
+                VALUES (?, CURRENT_TIMESTAMP, ?, ?, 'Yes', CURRENT_TIMESTAMP)
             ")->execute([
                 $user['payroll_id'],
                 $_SERVER['REMOTE_ADDR'] ?? '',
                 substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255),
             ]);
             $_SESSION['staff_session_id'] = $db->lastInsertId();
-        } catch (Exception $e) {
-            // Non-fatal — session tracking failure should not block login
+        } catch (Throwable $e) {
+            error_log('Auth::attempt session-insert failed: ' . $e->getMessage());
         }
 
         return true;
@@ -70,17 +70,27 @@ class Auth {
         if (!empty($_SESSION['staff_session_id'])) {
             try {
                 $db = Database::connect();
-                $db->prepare("
-                    UPDATE staff_sessions
-                    SET logout_time = datetime('now'),
-                        is_active   = 'No',
-                        session_duration = (
-                            CAST((julianday(datetime('now')) - julianday(login_time)) * 24 AS REAL)
-                        )
-                    WHERE session_id = ?
-                ")->execute([$_SESSION['staff_session_id']]);
-            } catch (Exception $e) {
-                // Non-fatal
+                // Use a single portable UPDATE — driver-agnostic. Duration in hours.
+                $driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
+                if ($driver === 'mysql') {
+                    $db->prepare("
+                        UPDATE staff_sessions
+                        SET logout_time      = CURRENT_TIMESTAMP,
+                            is_active        = 'No',
+                            session_duration = TIMESTAMPDIFF(SECOND, login_time, CURRENT_TIMESTAMP) / 3600
+                        WHERE session_id = ?
+                    ")->execute([$_SESSION['staff_session_id']]);
+                } else {
+                    $db->prepare("
+                        UPDATE staff_sessions
+                        SET logout_time      = CURRENT_TIMESTAMP,
+                            is_active        = 'No',
+                            session_duration = CAST((julianday('now') - julianday(login_time)) * 24 AS REAL)
+                        WHERE session_id = ?
+                    ")->execute([$_SESSION['staff_session_id']]);
+                }
+            } catch (Throwable $e) {
+                error_log('Auth::logout session-update failed: ' . $e->getMessage());
             }
         }
         session_destroy();

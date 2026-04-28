@@ -12,6 +12,21 @@ ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/../logs/php_errors.log');
 error_reporting(E_ALL);
 
+// Surface uncaught exceptions / fatals so users don't see a blank white page.
+set_exception_handler(function (Throwable $e) {
+    error_log('UNCAUGHT: ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine());
+    if (!headers_sent()) {
+        http_response_code(500);
+        header('Content-Type: text/html; charset=utf-8');
+    }
+    echo '<!DOCTYPE html><html><body style="font-family:sans-serif;max-width:700px;margin:60px auto;padding:24px;background:#fee2e2;border-radius:8px;border-left:4px solid #dc2626">'
+       . '<h2 style="color:#991b1b;margin:0 0 12px">Application error</h2>'
+       . '<p style="color:#374151">The page could not be loaded. The error has been logged.</p>'
+       . '<p style="color:#6b7280;font-size:13px">Detail: ' . htmlspecialchars($e->getMessage()) . '</p>'
+       . '<p><a href="' . (defined('BASE_PATH') ? BASE_PATH : '') . '/index.php?page=login" style="color:#1e40af">Return to login</a></p>'
+       . '</body></html>';
+});
+
 // Critical: Set session settings BEFORE session_start()
 ini_set('session.cookie_httponly', '1');
 ini_set('session.use_only_cookies', '1');
