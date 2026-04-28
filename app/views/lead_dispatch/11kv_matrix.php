@@ -72,15 +72,15 @@ foreach ($feeders_11kv as $feeder) {
     $supply_hours = 0;
     $fault_hours = 0;
     
-    for ($h = 1; $h <= 24; $h++) {
+    for ($h = 0; $h <= 23; $h++) {
         $hour_entry = null;
         foreach ($hours as $entry) {
-            if ($entry['entry_hour'] == $h) {
+            if ((int)$entry['entry_hour'] === $h) {
                 $hour_entry = $entry;
                 break;
             }
         }
-        
+
         $feeder_data[$feeder['fdr11kv_code']][$h] = $hour_entry;
         
         if ($hour_entry && $hour_entry['load_read'] !== null) {
@@ -397,7 +397,7 @@ require __DIR__ . '/../layout/sidebar.php';
                     <tr>
                         <th>Feeder</th>
                         <th>ISS</th>
-                        <?php for ($h = 1; $h <= 24; $h++): ?>
+                        <?php for ($h = 0; $h <= 23; $h++): ?>
                             <th style="text-align: center;"><?= sprintf('%02d', $h) ?></th>
                         <?php endfor; ?>
                         <th style="text-align: center;">Total</th>
@@ -413,7 +413,7 @@ require __DIR__ . '/../layout/sidebar.php';
                         <td class="feeder-cell"><?= htmlspecialchars($feeder['fdr11kv_name']) ?></td>
                         <td><?= htmlspecialchars($feeder['iss_name']) ?></td>
                         
-                        <?php for ($h = 1; $h <= 24; $h++):
+                        <?php for ($h = 0; $h <= 23; $h++):
                             $data = $feeder_data[$feeder['fdr11kv_code']][$h];
                             if ($data) {
                                 $tip_parts = [];
