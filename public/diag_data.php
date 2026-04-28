@@ -13,12 +13,16 @@ if (!in_array($u['role'], ['UL6', 'UL7', 'UL8'], true)) {
     die('Access denied — requires UL6, UL7 or UL8.');
 }
 
-$db  = Database::connect();
-$err = [];
+$db      = Database::connect();
+$driver  = getenv('DB_DRIVER') ?: 'sqlite';
+$err     = [];
+$cutoff  = date('Y-m-d', strtotime('-10 days')); // PHP-computed, works in both MySQL and SQLite
 
-function safe_query(PDO $db, string $sql, array &$err): array {
+function safe_query(PDO $db, string $sql, array $params, array &$err): array {
     try {
-        return $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        $st = $db->prepare($sql);
+        $st->execute($params);
+        return $st->fetchAll(PDO::FETCH_ASSOC);
     } catch (Throwable $e) {
         $err[] = htmlspecialchars($e->getMessage());
         return [];
@@ -29,55 +33,49 @@ function safe_query(PDO $db, string $sql, array &$err): array {
 $rows_11kv = safe_query($db, "
     SELECT
         entry_date,
-        COUNT(*)                     AS total_rows,
-        COUNT(DISTINCT fdr11kv_code) AS feeders,
-        COUNT(DISTINCT entry_hour)   AS distinct_hours,
-        COALESCE(ROUND(SUM(load_read),2), 0) AS total_load
+        COUNT(*)                              AS total_rows,
+        COUNT(DISTINCT fdr11kv_code)          AS feeders,
+        COUNT(DISTINCT entry_hour)            AS distinct_hours,
+        ROUND(COALESCE(SUM(load_read),0), 2)  AS total_load
     FROM fdr11kv_data
-    WHERE entry_date >= DATE(NOW() - INTERVAL 10 DAY)
+    WHERE entry_date >= ?
     GROUP BY entry_date
     ORDER BY entry_date DESC
-", $err);
+", [$cutoff], $err);
 
 // ── 33kV readings per date (last 10 days) ────────────────────────────────
 $rows_33kv = safe_query($db, "
     SELECT
         entry_date,
-        COUNT(*)                     AS total_rows,
-        COUNT(DISTINCT fdr33kv_code) AS feeders,
-        COUNT(DISTINCT entry_hour)   AS distinct_hours,
-        COALESCE(ROUND(SUM(load_read),2), 0) AS total_load
+        COUNT(*)                              AS total_rows,
+        COUNT(DISTINCT fdr33kv_code)          AS feeders,
+        COUNT(DISTINCT entry_hour)            AS distinct_hours,
+        ROUND(COALESCE(SUM(load_read),0), 2)  AS total_load
     FROM fdr33kv_data
-    WHERE entry_date >= DATE(NOW() - INTERVAL 10 DAY)
+    WHERE entry_date >= ?
     GROUP BY entry_date
     ORDER BY entry_date DESC
-", $err);
+", [$cutoff], $err);
 
 // ── Hourly breakdown for two most recent 11kV dates ──────────────────────
 $recent = safe_query($db, "
     SELECT DISTINCT entry_date FROM fdr11kv_data
     ORDER BY entry_date DESC LIMIT 2
-", $err);
+", [], $err);
 
 $hourly = [];
 foreach ($recent as $row) {
     $d = $row['entry_date'];
-    try {
-        $st = $db->prepare("
-            SELECT
-                entry_hour,
-                COUNT(DISTINCT fdr11kv_code)          AS feeders,
-                COALESCE(ROUND(SUM(load_read),2), 0)  AS total_load
-            FROM fdr11kv_data
-            WHERE entry_date = ?
-            GROUP BY entry_hour
-            ORDER BY entry_hour
-        ");
-        $st->execute([$d]);
-        $hourly[$d] = $st->fetchAll(PDO::FETCH_ASSOC);
-    } catch (Throwable $e) {
-        $err[] = htmlspecialchars($e->getMessage());
-    }
+    $hourly[$d] = safe_query($db, "
+        SELECT
+            entry_hour,
+            COUNT(DISTINCT fdr11kv_code)         AS feeders,
+            ROUND(COALESCE(SUM(load_read),0), 2) AS total_load
+        FROM fdr11kv_data
+        WHERE entry_date = ?
+        GROUP BY entry_hour
+        ORDER BY entry_hour
+    ", [$d], $err);
 }
 
 $server_tz  = date_default_timezone_get();
@@ -103,7 +101,9 @@ tr:last-child td{border:none}
 <div class="info">
     Server timezone: <strong><?= htmlspecialchars($server_tz) ?></strong> &nbsp;|&nbsp;
     Server now: <strong><?= $now_str ?></strong> &nbsp;|&nbsp;
-    Operational date: <strong><?= $op_date ?></strong>
+    Operational date: <strong><?= $op_date ?></strong><br>
+    DB_DRIVER env var: <strong><?= htmlspecialchars(getenv('DB_DRIVER') ?: '(not set — using SQLite!)') ?></strong> &nbsp;|&nbsp;
+    DB_HOST: <strong><?= htmlspecialchars(getenv('DB_HOST') ?: '(not set)') ?></strong>
 </div>
 
 <?php foreach ($err as $e): ?>
