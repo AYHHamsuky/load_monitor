@@ -3,6 +3,9 @@
  * File: app/bootstrap.php
  */
 
+// ── Timezone (must be first — affects every date() / DateTime call) ──────────
+date_default_timezone_set('Africa/Lagos');
+
 // ── Production error handling ──────────────────────────────────────────────
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
