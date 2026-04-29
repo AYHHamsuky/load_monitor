@@ -22,10 +22,15 @@ RUN sed -i 's|AllowOverride None|AllowOverride All|g' /etc/apache2/apache2.conf
 COPY . /var/www/html
 WORKDIR /var/www/html
 
-# Writable dirs (logs + sqlite fallback dir)
+# Writable dirs (logs + sqlite fallback dir).
+# These are declared as volumes so that, in production, Dokploy/Coolify can
+# mount a persistent volume here and survive container rebuilds.  Without a
+# host-mount, the SQLite database is wiped on every redeploy.
 RUN mkdir -p /var/www/html/logs /var/www/html/database && \
     chown -R www-data:www-data /var/www/html/logs /var/www/html/database && \
-    chmod -R 775 /var/www/html/logs
+    chmod -R 775 /var/www/html/logs /var/www/html/database
+
+VOLUME ["/var/www/html/database", "/var/www/html/logs"]
 
 # Default: empty base path (serves from domain root)
 ENV APP_BASE_PATH=

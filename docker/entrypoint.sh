@@ -31,26 +31,29 @@ if [ "$DRIVER" = "mysql" ]; then
     echo "==> MySQL is ready."
 
 else
-    # SQLite: auto-initialize on first start (no tables = empty DB)
+    # SQLite: auto-initialize ONLY when database file is missing.
+    # We never re-seed or re-init an existing database; that would clobber
+    # production data on container rebuild.
     DB=/var/www/html/database/load_monitor.sqlite
 
-    HAS_TABLES=$(php -r "
-    try {
-        \$db = new PDO('sqlite:$DB');
-        echo \$db->query('SELECT COUNT(*) FROM sqlite_master WHERE type=\"table\"')->fetchColumn();
-    } catch (Exception \$e) { echo 0; }
-    ")
+    # Make sure the dir is writable by www-data (volume may be owned by root).
+    mkdir -p /var/www/html/database
+    chown -R www-data:www-data /var/www/html/database
+    chmod 775 /var/www/html/database
 
-    if [ "$HAS_TABLES" = "0" ]; then
-        echo "==> First start: SQLite is empty — initializing schema..."
+    if [ ! -f "$DB" ]; then
+        echo "==> No SQLite file found — first-time init..."
         cd /var/www/html && php sql/init_sqlite.php
         echo "==> Seeding staff with password@123 ..."
         php sql/seed_staff.php
         chown www-data:www-data "$DB"
         chmod 664 "$DB"
-        echo "==> SQLite database ready."
+        echo "==> SQLite database created."
     else
-        echo "==> SQLite already initialized ($HAS_TABLES tables)."
+        SIZE=$(stat -c%s "$DB" 2>/dev/null || echo 0)
+        echo "==> Existing SQLite found (${SIZE} bytes) — preserved as-is."
+        chown www-data:www-data "$DB"
+        chmod 664 "$DB"
     fi
 fi
 

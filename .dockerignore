@@ -3,5 +3,8 @@
 .dockerignore
 logs/
 database/load_monitor.sqlite
+database/load_monitor.sqlite-shm
+database/load_monitor.sqlite-wal
+database/*.sqlite*
 *.md
 .DS_Store
