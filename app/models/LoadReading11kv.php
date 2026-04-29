@@ -114,16 +114,20 @@ class LoadReading11kv
 
     /**
      * Auto-seal an operational day at 01:00.
-     * Writes a NULL-load / BLANK-fault row for every missing hour on every
-     * 11kV feeder under the given 33kV parent.
+     * For every UNFILLED hour on every 11kV feeder under the given 33kV parent,
+     * write a 0-load / OS-fault placeholder so reports show a complete grid.
      *
-     * @param  string $opDate      The operational date being sealed (Y-m-d)
-     * @param  string $fdr33kvCode Parent 33kV feeder code
-     * @return int    Number of blank cells written
+     * Existing readings are NEVER touched — INSERT IGNORE guarantees we only
+     * fill gaps.  Previously this used INSERT (no IGNORE) and wrote NULL into
+     * a NOT-NULL column with a fault_code outside the ENUM, which on MySQL
+     * silently coerced populated cells back to 0.00 with an empty fault and
+     * destroyed real readings.
      */
     public static function sealDay(string $opDate, string $fdr33kvCode): int
     {
-        $db = Database::connect();
+        $db     = Database::connect();
+        $driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
+        $ignore = $driver === 'sqlite' ? 'INSERT OR IGNORE' : 'INSERT IGNORE';
 
         $fs = $db->prepare("SELECT fdr11kv_code FROM fdr11kv WHERE fdr33kv_code = ?");
         $fs->execute([$fdr33kvCode]);
@@ -132,20 +136,21 @@ class LoadReading11kv
         $blanked = 0;
         foreach ($feeders as $code) {
             $ex = $db->prepare(
-                "SELECT entry_hour FROM fdr11kv_data WHERE entry_date = ? AND Fdr11kv_code = ?"
+                "SELECT entry_hour FROM fdr11kv_data WHERE entry_date = ? AND fdr11kv_code = ?"
             );
             $ex->execute([$opDate, $code]);
-            $filled  = array_column($ex->fetchAll(PDO::FETCH_ASSOC), 'entry_hour');
-            $missing = array_diff(range(0, 23), array_map('intval', $filled));
+            $filled  = array_map('intval', array_column($ex->fetchAll(PDO::FETCH_ASSOC), 'entry_hour'));
+            $missing = array_diff(range(0, 23), $filled);
 
             foreach ($missing as $h) {
-                $db->prepare("
-                    INSERT INTO fdr11kv_data
-                        (entry_date, Fdr11kv_code, entry_hour,
+                $stmt = $db->prepare("
+                    $ignore INTO fdr11kv_data
+                        (entry_date, fdr11kv_code, entry_hour,
                          load_read, fault_code, fault_remark, user_id)
-                    VALUES (?, ?, ?, NULL, 'BLANK', 'Auto-sealed at day close', 'SYSTEM')
-                ")->execute([$opDate, $code, $h]);
-                $blanked++;
+                    VALUES (?, ?, ?, 0, 'OS', 'Auto-sealed at day close', 'SYSTEM')
+                ");
+                $stmt->execute([$opDate, $code, $h]);
+                $blanked += $stmt->rowCount();
             }
         }
         return $blanked;

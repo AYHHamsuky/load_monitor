@@ -93,11 +93,17 @@ class LoadReading33kv
     }
 
     /**
-     * Auto-seal all 33kV feeders at 01:00 — write BLANK for every missing hour.
+     * Auto-seal all 33kV feeders at 01:00 — fill UNFILLED hours with a 0/OS
+     * placeholder.  INSERT IGNORE guarantees existing readings are never
+     * overwritten (the previous version used INSERT with NULL load_read +
+     * 'BLANK' fault, which on MySQL silently coerced populated cells to
+     * 0.00/'' and destroyed real data).
      */
     public static function sealDay(string $opDate): int
     {
         $db      = Database::connect();
+        $driver  = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
+        $ignore  = $driver === 'sqlite' ? 'INSERT OR IGNORE' : 'INSERT IGNORE';
         $fs      = $db->query("SELECT fdr33kv_code FROM fdr33kv");
         $feeders = $fs->fetchAll(PDO::FETCH_COLUMN);
         $blanked = 0;
@@ -107,17 +113,18 @@ class LoadReading33kv
                 "SELECT entry_hour FROM fdr33kv_data WHERE entry_date = ? AND fdr33kv_code = ?"
             );
             $ex->execute([$opDate, $code]);
-            $filled  = array_column($ex->fetchAll(PDO::FETCH_ASSOC), 'entry_hour');
-            $missing = array_diff(range(0, 23), array_map('intval', $filled));
+            $filled  = array_map('intval', array_column($ex->fetchAll(PDO::FETCH_ASSOC), 'entry_hour'));
+            $missing = array_diff(range(0, 23), $filled);
 
             foreach ($missing as $h) {
-                $db->prepare("
-                    INSERT INTO fdr33kv_data
+                $stmt = $db->prepare("
+                    $ignore INTO fdr33kv_data
                         (entry_date, fdr33kv_code, entry_hour,
                          load_read, fault_code, fault_remark, user_id, timestamp)
-                    VALUES (?, ?, ?, NULL, 'BLANK', 'Auto-sealed at day close', 'SYSTEM', CURRENT_TIMESTAMP)
-                ")->execute([$opDate, $code, $h]);
-                $blanked++;
+                    VALUES (?, ?, ?, 0, 'OS', 'Auto-sealed at day close', 'SYSTEM', CURRENT_TIMESTAMP)
+                ");
+                $stmt->execute([$opDate, $code, $h]);
+                $blanked += $stmt->rowCount();
             }
         }
         return $blanked;
