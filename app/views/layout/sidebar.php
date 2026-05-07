@@ -285,7 +285,13 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
                         <span>System Config</span>
                     </a>
                 </li>
-                
+                <li>
+                    <a href="<?= $bp ?? (defined('BASE_PATH') ? BASE_PATH : '') ?>/admin_backup.php">
+                        <i class="fas fa-database"></i>
+                        <span>Backups</span>
+                    </a>
+                </li>
+
             <?php elseif ($role === 'UL7'): ?>
                 <!-- UL7 Menu: System Administrator (Super Admin) -->
                 <li class="<?= $current_page === 'dashboard' ? 'active' : '' ?>">
@@ -316,6 +322,12 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
                     <a href="?page=analytics">
                         <i class="fas fa-chart-bar"></i>
                         <span>Analytics</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= $bp ?? (defined('BASE_PATH') ? BASE_PATH : '') ?>/admin_backup.php">
+                        <i class="fas fa-database"></i>
+                        <span>Backups</span>
                     </a>
                 </li>
 
