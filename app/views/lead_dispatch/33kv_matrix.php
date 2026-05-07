@@ -58,9 +58,15 @@ foreach ($feeders_33kv as $feeder) {
             d.fault_remark,
             d.user_id,
             d.timestamp,
-            s.staff_name
+            s.staff_name,
+            le.explanation AS late_explanation,
+            le.logged_at   AS late_logged_at
         FROM fdr33kv_data d
-        LEFT JOIN staff_details s ON s.payroll_id = d.user_id
+        LEFT JOIN staff_details s   ON s.payroll_id = d.user_id
+        LEFT JOIN late_entry_log le ON le.voltage_level = '33kV'
+                                   AND le.user_id       = d.user_id
+                                   AND le.log_date      = d.entry_date
+                                   AND le.specific_hour = d.entry_hour
         WHERE d.Fdr33kv_code = ? AND d.entry_date = ?
         ORDER BY d.entry_hour
     ");
@@ -418,13 +424,17 @@ require __DIR__ . '/../layout/sidebar.php';
                         
                         <?php for ($h = 0; $h <= 23; $h++):
                             $data = $feeder_data[$feeder['fdr33kv_code']][$h];
+                            $tooltip = '';
                             if ($data) {
                                 $tip_parts = [];
                                 if (!empty($data['user_id']))    $tip_parts[] = 'ID: '   . $data['user_id'];
                                 if (!empty($data['staff_name'])) $tip_parts[] = 'By: '   . $data['staff_name'];
                                 if (!empty($data['timestamp']))  $tip_parts[] = 'At: '   . date('H:i', strtotime($data['timestamp']));
                                 if (!empty($data['fault_code'])) $tip_parts[] = 'Fault: '. $data['fault_code'];
-                                $tooltip = htmlspecialchars(implode(' | ', $tip_parts));
+                                if (!empty($data['late_explanation'])) {
+                                    $tip_parts[] = 'LATE ENTRY — Reason: ' . $data['late_explanation'];
+                                }
+                                $tooltip = htmlspecialchars(implode("\n", $tip_parts), ENT_QUOTES);
                             }
                             if ($data && !empty($data['fault_code'])) {
                                 echo '<td class="load-cell has-fault" title="' . $tooltip . '">';

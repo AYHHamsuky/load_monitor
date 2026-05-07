@@ -187,13 +187,19 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
                         <span>Analytics</span>
                     </a>
                 </li>
+                <li class="<?= $current_page === 'late_entries' ? 'active' : '' ?>">
+                    <a href="?page=late_entries">
+                        <i class="fas fa-clock"></i>
+                        <span>Late Entry Log</span>
+                    </a>
+                </li>
                 <li class="<?= $current_page === 'complaints' ? 'active' : '' ?>">
                     <a href="?page=complaints">
                         <i class="fas fa-bullhorn"></i>
                         <span>Complaint View</span>
                     </a>
                 </li>
-                
+
             <?php elseif ($role === 'UL4'): ?>
                 <!-- UL4 Menu: Manager -->
                 <li class="<?= $current_page === 'dashboard' ? 'active' : '' ?>">
@@ -237,7 +243,13 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
                         <span>Analytics</span>
                     </a>
                 </li>
-                
+                <li class="<?= $current_page === 'late_entries' ? 'active' : '' ?>">
+                    <a href="?page=late_entries">
+                        <i class="fas fa-clock"></i>
+                        <span>Late Entry Log</span>
+                    </a>
+                </li>
+
             <?php elseif ($role === 'UL5'): ?>
                 <!-- UL5 Menu: Staff View (Read-only) -->
                 <li class="<?= $current_page === 'dashboard' ? 'active' : '' ?>">
@@ -285,6 +297,12 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
                         <span>System Config</span>
                     </a>
                 </li>
+                <li class="<?= $current_page === 'late_entries' ? 'active' : '' ?>">
+                    <a href="?page=late_entries">
+                        <i class="fas fa-clock"></i>
+                        <span>Late Entry Log</span>
+                    </a>
+                </li>
                 <li>
                     <a href="<?= $bp ?? (defined('BASE_PATH') ? BASE_PATH : '') ?>/admin_backup.php">
                         <i class="fas fa-database"></i>
@@ -322,6 +340,12 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
                     <a href="?page=analytics">
                         <i class="fas fa-chart-bar"></i>
                         <span>Analytics</span>
+                    </a>
+                </li>
+                <li class="<?= $current_page === 'late_entries' ? 'active' : '' ?>">
+                    <a href="?page=late_entries">
+                        <i class="fas fa-clock"></i>
+                        <span>Late Entry Log</span>
                     </a>
                 </li>
                 <li>
@@ -380,6 +404,12 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
                     <a href="?page=reports">
                         <i class="fas fa-file-alt"></i>
                         <span>Reports</span>
+                    </a>
+                </li>
+                <li class="<?= $current_page === 'late_entries' ? 'active' : '' ?>">
+                    <a href="?page=late_entries">
+                        <i class="fas fa-clock"></i>
+                        <span>Late Entry Log</span>
                     </a>
                 </li>
             <?php endif; ?>
