@@ -1,4 +1,3 @@
-
 <?php
 /**
  * File: public/login.php

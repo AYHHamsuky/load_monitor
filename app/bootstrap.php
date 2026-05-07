@@ -3,6 +3,14 @@
  * File: app/bootstrap.php
  */
 
+// Defence-in-depth: start output buffering so that any stray whitespace or
+// BOM before a <?php tag in an included file can't prematurely commit the
+// response and break header() redirects (e.g. the "white screen on first
+// login" symptom).  The buffer is implicitly flushed at script end.
+if (!ob_get_level()) {
+    ob_start();
+}
+
 // ── Timezone (must be first — affects every date() / DateTime call) ──────────
 date_default_timezone_set('Africa/Lagos');
 
