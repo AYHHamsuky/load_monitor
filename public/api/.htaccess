@@ -1,0 +1,12 @@
+# Rewrite /api/v1/<anything> → /api/index.php?_path=<anything>
+# Existing files (e.g. /api/index.php itself) bypass the rewrite.
+RewriteEngine On
+RewriteBase /api/
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^v1/(.*)$ index.php?_path=$1 [QSA,L]
+
+# Bare /api/ → index.php with empty path
+RewriteRule ^v1/?$  index.php [QSA,L]
+RewriteRule ^/?$    index.php [QSA,L]
