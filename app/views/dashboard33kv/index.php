@@ -10,9 +10,14 @@
                 <h1>⚡ 33kV Load Monitoring Dashboard</h1>
                 <p class="subtitle">Real-time monitoring for <span id="opDayLabel"><?= date('l, F j, Y', strtotime($today)) ?></span> <small style="color:#f39c12;font-size:11px;">(operational day — closes 01:00)</small></p>
             </div>
-            <button class="btn-primary" onclick="openLoadEntryModal(null, null, null)">
-                <i class="fas fa-plus"></i> Add Load Entry
-            </button>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn-primary" onclick="openLoadEntryModal(null, null, null)">
+                    <i class="fas fa-plus"></i> Add Load Entry
+                </button>
+                <button type="button" class="btn-primary" style="background:linear-gradient(135deg,#0ea5e9,#0369a1);" onclick="openBulkPasteModal()">
+                    <i class="fas fa-paste"></i> Bulk Paste from Excel
+                </button>
+            </div>
         </div>
 
         <!-- Filters -->
@@ -364,6 +369,93 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     MODAL 4 — Bulk Paste from Excel
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<div id="bulkPasteModal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width: 900px;">
+        <div class="modal-header" style="background:linear-gradient(135deg,#0ea5e9,#0369a1);">
+            <h2>📋 Bulk Paste 33kV Readings</h2>
+            <span class="close" onclick="closeBulkPasteModal()">&times;</span>
+        </div>
+
+        <div style="padding: 22px 26px;">
+
+            <div class="bulk-help" style="background:#eff6ff;border-left:4px solid #0ea5e9;padding:14px 16px;border-radius:6px;margin-bottom:18px;font-size:13px;color:#1e3a8a;">
+                <strong>Supported formats — auto-detected:</strong>
+                <ul style="margin:8px 0 4px 18px;padding:0;">
+                    <li><strong>Long format</strong> — 3 or 4 tab-separated columns per row:<br>
+                        <code style="background:#fff;padding:2px 6px;border-radius:3px;">FdrCode &nbsp;&nbsp; HourOrHH:MM &nbsp;&nbsp; Load &nbsp;&nbsp; [FaultCode]</code><br>
+                        Example: <code style="background:#fff;padding:2px 6px;border-radius:3px;">F33-001 &nbsp; 14 &nbsp; 5.20</code>
+                    </li>
+                    <li><strong>Matrix format</strong> — feeder in column 1, 24 hourly readings in columns 2–25:<br>
+                        <code style="background:#fff;padding:2px 6px;border-radius:3px;">F33-001 &nbsp; 5.2 &nbsp; 4.8 &nbsp; 4.9 &nbsp; ... &nbsp; 6.1</code> (24 values)
+                    </li>
+                </ul>
+                <div style="margin-top:8px;">
+                    Feeders can be referenced by <strong>code</strong> or <strong>name</strong> (case-insensitive).
+                    Fault codes (FO, BF, OS, DOff, MVR) in the load column → load=0 with that fault.
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom:14px;">
+                <label for="bulkPasteArea" style="font-weight:700;font-size:13px;color:#0369a1;">
+                    <i class="fas fa-keyboard"></i> Paste data below (from Excel / Google Sheets)
+                </label>
+                <textarea id="bulkPasteArea" class="form-control" rows="10"
+                          style="font-family:'Courier New',monospace;font-size:13px;white-space:pre;"
+                          placeholder="F33-001	14	5.20&#10;F33-002	14	7.15&#10;F33-003	14	0	FO"></textarea>
+            </div>
+
+            <div class="form-group" style="margin-bottom:14px;">
+                <label for="bulkExplanation" style="font-weight:700;font-size:13px;color:#0369a1;">
+                    <i class="fas fa-comment"></i> Shared late-entry explanation <small style="color:#64748b;font-weight:400;">(optional — auto-used for past hours that need one)</small>
+                </label>
+                <textarea id="bulkExplanation" class="form-control" rows="2"
+                          placeholder="Optional reason if some rows are past-hour entries needing explanation..."></textarea>
+            </div>
+
+            <div class="form-actions" style="display:flex;gap:10px;justify-content:space-between;">
+                <button type="button" class="btn-secondary" onclick="closeBulkPasteModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <div style="display:flex;gap:10px;">
+                    <button type="button" class="btn-secondary" onclick="bulkParse()">
+                        <i class="fas fa-eye"></i> Parse / Preview
+                    </button>
+                    <button type="button" class="btn-primary" id="bulkSubmitBtn"
+                            style="background:linear-gradient(135deg,#0ea5e9,#0369a1);"
+                            onclick="bulkSubmit()" disabled>
+                        <i class="fas fa-save"></i> Save All Valid Rows
+                    </button>
+                </div>
+            </div>
+
+            <div id="bulkPreview" style="margin-top:18px;display:none;">
+                <h4 style="margin:0 0 10px;color:#1e293b;font-size:14px;">
+                    <span id="bulkPreviewStatus"></span>
+                </h4>
+                <div style="max-height:280px;overflow:auto;border:1px solid #e5e7eb;border-radius:6px;">
+                    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                        <thead style="background:#f1f5f9;position:sticky;top:0;">
+                            <tr>
+                                <th style="padding:6px 8px;text-align:left;">#</th>
+                                <th style="padding:6px 8px;text-align:left;">Feeder</th>
+                                <th style="padding:6px 8px;text-align:left;">Hour</th>
+                                <th style="padding:6px 8px;text-align:right;">Load (MW)</th>
+                                <th style="padding:6px 8px;text-align:left;">Fault</th>
+                                <th style="padding:6px 8px;text-align:left;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bulkPreviewBody"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -1052,6 +1144,250 @@ if (tsPieCtx) {
         setTimeout(function () { window.location.reload(); }, 1200);
     }, msUntil);
 })();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Bulk Paste from Excel — parser + submitter
+// ─────────────────────────────────────────────────────────────────────────────
+let bulkParsedRows = [];
+
+function openBulkPasteModal() {
+    document.getElementById('bulkPasteArea').value = '';
+    document.getElementById('bulkExplanation').value = '';
+    document.getElementById('bulkPreview').style.display = 'none';
+    document.getElementById('bulkSubmitBtn').disabled = true;
+    bulkParsedRows = [];
+    document.getElementById('bulkPasteModal').style.display = 'block';
+}
+function closeBulkPasteModal() {
+    document.getElementById('bulkPasteModal').style.display = 'none';
+}
+
+// Lookup feeder by code OR name (case-insensitive, trimmed).
+const _bulkFeederIndex = (function () {
+    const idx = {};
+    (allFeeders || []).forEach(f => {
+        if (f.fdr33kv_code) idx[String(f.fdr33kv_code).trim().toLowerCase()] = f;
+        if (f.fdr33kv_name) idx[String(f.fdr33kv_name).trim().toLowerCase()] = f;
+    });
+    return idx;
+})();
+function _findFeeder(token) {
+    const t = String(token || '').trim().toLowerCase();
+    return _bulkFeederIndex[t] || null;
+}
+
+const FAULT_CODES = ['FO', 'BF', 'OS', 'DOFF', 'MVR', 'OT', 'MS', 'LS', 'TF'];
+
+function _parseHourToken(tok) {
+    if (tok === null || tok === undefined) return -1;
+    const s = String(tok).trim();
+    // Accept "14", "14:00", "14h", "1400"
+    let m = s.match(/^(\d{1,2})(?::?\d{0,2})?h?$/i);
+    if (!m) return -1;
+    const h = parseInt(m[1], 10);
+    return (h >= 0 && h <= 23) ? h : -1;
+}
+
+function _parseLoadOrFault(tok) {
+    const s = String(tok || '').trim();
+    if (s === '' || s === '-' || s === '–') return { load: null, fault: null, skip: true };
+    const upper = s.toUpperCase();
+    if (FAULT_CODES.includes(upper)) return { load: 0, fault: upper, skip: false };
+    // Strip thousands separator, currency-like chars
+    const cleaned = s.replace(/[,\s]/g, '');
+    const n = parseFloat(cleaned);
+    if (isNaN(n) || n < 0) return { load: null, fault: null, skip: false, error: 'Invalid load value: "' + s + '"' };
+    return { load: n, fault: null, skip: false };
+}
+
+function bulkParse() {
+    const raw = document.getElementById('bulkPasteArea').value || '';
+    const lines = raw.split(/\r?\n/).map(l => l.replace(/^\s+|\s+$/g, '')).filter(Boolean);
+    const rows = [];
+
+    lines.forEach((line, lineIdx) => {
+        // Split on tab if present, else fall back to multi-space
+        const cols = line.includes('\t')
+            ? line.split('\t').map(c => c.trim())
+            : line.split(/\s{2,}|,/).map(c => c.trim()).filter(s => s.length);
+
+        if (cols.length === 0) return;
+
+        // Skip header row (first cell looks non-feeder + second is "00"/"01"/etc)
+        if (lineIdx === 0) {
+            const looksLikeHeader = (cols[1] && /^h?\d{1,2}(:?\d{0,2})?$/i.test(cols[1]) && !_findFeeder(cols[0]));
+            if (looksLikeHeader) return;
+        }
+
+        const feederToken = cols[0];
+        const feeder = _findFeeder(feederToken);
+
+        // Matrix format: 25 columns total (1 feeder + 24 hours)
+        if (cols.length >= 24 && cols.length <= 27) {
+            for (let h = 0; h <= 23; h++) {
+                const tok = cols[h + 1];
+                if (tok === undefined) continue;
+                const parsed = _parseLoadOrFault(tok);
+                if (parsed.skip) continue;
+                rows.push(_buildRow(feeder, feederToken, h, parsed, lineIdx + 1));
+            }
+            return;
+        }
+
+        // Long format: feeder | hour | load | [fault] | [remark]
+        if (cols.length >= 3) {
+            const hour   = _parseHourToken(cols[1]);
+            const parsed = _parseLoadOrFault(cols[2]);
+            const fault  = (cols[3] || '').trim().toUpperCase();
+            const remark = (cols[4] || '').trim();
+            if (parsed.skip && !fault) return;
+            const row = _buildRow(feeder, feederToken, hour, parsed, lineIdx + 1);
+            if (fault && FAULT_CODES.includes(fault)) {
+                row.fault_code = fault; row.load_read = 0;
+                if (row.error && row.error.includes('Invalid load')) row.error = null;
+            }
+            if (remark) row.fault_remark = remark;
+            // Re-validate
+            if (hour < 0) row.error = 'Invalid hour: "' + cols[1] + '"';
+            rows.push(row);
+            return;
+        }
+
+        // 2-column (feeder + single load) — assume current hour
+        if (cols.length === 2) {
+            const parsed = _parseLoadOrFault(cols[1]);
+            if (parsed.skip) return;
+            const h = new Date().getHours();
+            rows.push(_buildRow(feeder, feederToken, h, parsed, lineIdx + 1));
+        }
+    });
+
+    bulkParsedRows = rows;
+    _renderBulkPreview(rows);
+}
+
+function _buildRow(feeder, feederToken, hour, parsed, srcLine) {
+    return {
+        src_line:     srcLine,
+        feeder_token: feederToken,
+        fdr33kv_code: feeder ? feeder.fdr33kv_code : '',
+        feeder_name:  feeder ? feeder.fdr33kv_name : '(unknown)',
+        entry_hour:   hour,
+        load_read:    parsed.load !== null ? parsed.load : 0,
+        fault_code:   parsed.fault || '',
+        fault_remark: parsed.fault ? 'Bulk paste — auto fault' : '',
+        error:        !feeder        ? 'Unknown feeder: "' + feederToken + '"'
+                     : (hour < 0)    ? 'Invalid hour'
+                     : parsed.error  ? parsed.error
+                     : null,
+    };
+}
+
+function _renderBulkPreview(rows) {
+    const tbody = document.getElementById('bulkPreviewBody');
+    tbody.innerHTML = '';
+    if (rows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="padding:18px;text-align:center;color:#94a3b8;">No rows parsed. Check format.</td></tr>';
+        document.getElementById('bulkPreview').style.display = 'block';
+        document.getElementById('bulkPreviewStatus').textContent = '0 rows';
+        document.getElementById('bulkSubmitBtn').disabled = true;
+        return;
+    }
+    let okCount = 0, badCount = 0;
+    rows.forEach((r, i) => {
+        const tr = document.createElement('tr');
+        const status = r.error
+            ? '<span style="color:#dc2626;font-weight:700;">✗ ' + _esc(r.error) + '</span>'
+            : '<span style="color:#16a34a;font-weight:700;">✓ Ready</span>';
+        if (r.error) badCount++; else okCount++;
+        tr.style.background = r.error ? '#fef2f2' : '#f0fdf4';
+        tr.innerHTML =
+            '<td style="padding:5px 8px;color:#64748b;">' + (i+1) + '</td>' +
+            '<td style="padding:5px 8px;">' + _esc(r.feeder_name) + '<br><small style="color:#64748b;">' + _esc(r.fdr33kv_code || r.feeder_token) + '</small></td>' +
+            '<td style="padding:5px 8px;">' + (r.entry_hour >= 0 ? String(r.entry_hour).padStart(2,'0') + ':00' : '—') + '</td>' +
+            '<td style="padding:5px 8px;text-align:right;font-family:monospace;">' + (r.fault_code ? '0.00' : Number(r.load_read).toFixed(2)) + '</td>' +
+            '<td style="padding:5px 8px;font-weight:700;color:#dc2626;">' + _esc(r.fault_code || '') + '</td>' +
+            '<td style="padding:5px 8px;">' + status + '</td>';
+        tbody.appendChild(tr);
+    });
+    document.getElementById('bulkPreview').style.display = 'block';
+    document.getElementById('bulkPreviewStatus').innerHTML =
+        '<span style="color:#16a34a;">✓ ' + okCount + ' ready</span>' +
+        (badCount ? ' &nbsp;|&nbsp; <span style="color:#dc2626;">✗ ' + badCount + ' problems</span>' : '');
+    document.getElementById('bulkSubmitBtn').disabled = (okCount === 0);
+}
+
+function _esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function bulkSubmit() {
+    const valid = bulkParsedRows.filter(r => !r.error);
+    if (valid.length === 0) {
+        showToast('No valid rows to save.', 'error');
+        return;
+    }
+    const btn = document.getElementById('bulkSubmitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving ' + valid.length + ' rows…';
+
+    const payload = valid.map(r => ({
+        fdr33kv_code: r.fdr33kv_code,
+        entry_hour:   r.entry_hour,
+        load_read:    r.load_read,
+        fault_code:   r.fault_code,
+        fault_remark: r.fault_remark,
+    }));
+
+    const fd = new FormData();
+    fd.append('action', 'save_bulk');
+    fd.append('rows', JSON.stringify(payload));
+    fd.append('bulk_explanation', document.getElementById('bulkExplanation').value || '');
+
+    try {
+        const resp = await fetch((window.__BASE_PATH || '') + '/index.php?page=load_33kv', {
+            method: 'POST', body: fd,
+        });
+        const data = await resp.json();
+        _renderBulkServerResults(data);
+        if (data.ok_count > 0) {
+            showToast(`Saved ${data.ok_count} of ${data.total} rows. Reloading…`, 'success');
+            setTimeout(() => window.location.reload(), 1800);
+        } else {
+            showToast('No rows saved — check the status column for reasons.', 'error');
+        }
+    } catch (e) {
+        showToast('Network error: ' + e.message, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-save"></i> Save All Valid Rows';
+    }
+}
+
+function _renderBulkServerResults(data) {
+    // Map server results back to preview rows by index
+    if (!data || !Array.isArray(data.results)) return;
+    const tbody = document.getElementById('bulkPreviewBody');
+    const trs = tbody.querySelectorAll('tr');
+    let serverIdx = 0;
+    for (let i = 0; i < bulkParsedRows.length && serverIdx < data.results.length; i++) {
+        if (bulkParsedRows[i].error) continue;
+        const res = data.results[serverIdx++];
+        const tr = trs[i];
+        if (!tr) continue;
+        const statusCell = tr.children[5];
+        if (res.success) {
+            statusCell.innerHTML = '<span style="color:#16a34a;font-weight:700;">✓ Saved</span>';
+            tr.style.background = '#dcfce7';
+        } else {
+            statusCell.innerHTML = '<span style="color:#dc2626;font-weight:700;">✗ ' + _esc(res.message) + '</span>';
+            tr.style.background = '#fef2f2';
+        }
+    }
+    document.getElementById('bulkPreviewStatus').innerHTML =
+        '<span style="color:#16a34a;">✓ ' + (data.ok_count || 0) + ' saved</span>' +
+        (data.fail_count ? ' &nbsp;|&nbsp; <span style="color:#dc2626;">✗ ' + data.fail_count + ' failed</span>' : '');
+}
 
 </script>
 
