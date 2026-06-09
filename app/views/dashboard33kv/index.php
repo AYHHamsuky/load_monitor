@@ -335,14 +335,14 @@
             <div class="paste-instructions">
                 <strong>📋 How to use:</strong>
                 <ol>
-                    <li>In Excel, select a <strong>single row of up to 24 cells</strong> — each cell is one hour's load value (left to right = Hour 00 → Hour 23, or choose a start hour below).</li>
-                    <li>Values should be numbers (MW). Use <strong>0</strong> for a fault hour — you can set the fault code below.</li>
-                    <li>Select the feeder and the starting hour, then paste (Ctrl+V) into the text area.</li>
-                    <li>A preview table will appear — review it and click <strong>Save All</strong>.</li>
+                    <li>Select the <strong>Transmission Station</strong> — the modal shows all feeders under it.</li>
+                    <li>In your Excel sheet, select rows where <strong>column 1</strong> is the feeder name/code and <strong>columns 2-25</strong> are the 24 hourly values (00:00 → 23:00, or set a Starting Hour below).</li>
+                    <li>Click in the paste area and press <strong>Ctrl+V</strong>. Header rows (with hour labels) are auto-detected and skipped.</li>
+                    <li>Review the preview grid — each cell is colour-coded — then click <strong>Save All</strong>.</li>
                 </ol>
             </div>
 
-            <!-- Feeder selector -->
+            <!-- TS selector -->
             <div class="form-group" style="margin-top:15px;">
                 <label><i class="fas fa-building"></i> Transmission Station *</label>
                 <select id="paste_ts_code" class="form-control" onchange="loadFeedersForPasteTs(this.value)">
@@ -354,36 +354,35 @@
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="form-group">
-                <label><i class="fas fa-bolt"></i> 33kV Feeder *</label>
-                <select id="paste_feeder_code" class="form-control" disabled onchange="updatePasteFeederInfo()">
-                    <option value="">-- Select Station First --</option>
-                </select>
-                <small id="paste_max_load_info" style="display:none;" class="max-load-hint"></small>
+
+            <!-- Reference list of feeders under selected TS -->
+            <div id="pasteFeederListWrap" class="form-group" style="display:none;">
+                <label><i class="fas fa-list"></i> Feeders under this station <small id="pasteFeederCount" style="color:#7f8c8d;font-weight:400;margin-left:8px;"></small></label>
+                <div id="pasteFeederList" class="feeder-chips"></div>
+                <small>Match these names/codes in your spreadsheet's first column.</small>
             </div>
 
-            <!-- Start hour -->
-            <div class="form-group">
-                <label><i class="fas fa-clock"></i> Starting Hour *
-                    <small style="font-weight:400;color:#7f8c8d;margin-left:8px;">First pasted value maps to this hour</small>
-                </label>
-                <select id="paste_start_hour" class="form-control" onchange="reparsePreview()">
-                    <?php for ($h = 0; $h <= 23; $h++): ?>
-                        <option value="<?= $h ?>"><?= str_pad($h, 2, '0', STR_PAD_LEFT) ?>:00</option>
-                    <?php endfor; ?>
-                </select>
-            </div>
-
-            <!-- Default fault code for zero values -->
-            <div class="form-group">
-                <label><i class="fas fa-exclamation-triangle"></i> Default Fault Code for Zero-Load Hours</label>
-                <select id="paste_default_fault" class="form-control">
-                    <option value="">-- Skip zero-load hours (don't save them) --</option>
-                    <?php foreach ($fault_codes as $fc => $desc): ?>
-                        <option value="<?= $fc ?>"><?= $fc ?> – <?= htmlspecialchars($desc) ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <small>If you choose a fault code, zero values will be saved with that code. Otherwise zero-load hours are skipped.</small>
+            <!-- Start hour + Default fault -->
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                <div class="form-group" style="flex:1;min-width:200px;">
+                    <label><i class="fas fa-clock"></i> Starting Hour *
+                        <small style="font-weight:400;color:#7f8c8d;margin-left:8px;">First value in each row</small>
+                    </label>
+                    <select id="paste_start_hour" class="form-control" onchange="reparsePreview()">
+                        <?php for ($h = 0; $h <= 23; $h++): ?>
+                            <option value="<?= $h ?>"><?= str_pad($h, 2, '0', STR_PAD_LEFT) ?>:00</option>
+                        <?php endfor; ?>
+                    </select>
+                </div>
+                <div class="form-group" style="flex:1;min-width:240px;">
+                    <label><i class="fas fa-exclamation-triangle"></i> Default Fault Code for Zero-Load Hours</label>
+                    <select id="paste_default_fault" class="form-control" onchange="reparsePreview()">
+                        <option value="">-- Skip zero-load hours --</option>
+                        <?php foreach ($fault_codes as $fc => $desc): ?>
+                            <option value="<?= $fc ?>"><?= $fc ?> – <?= htmlspecialchars($desc) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
             </div>
 
             <!-- Paste area -->
@@ -391,11 +390,11 @@
                 <label><i class="fas fa-clipboard"></i> Paste Excel Data Here *</label>
                 <textarea id="pasteInput"
                           class="form-control paste-textarea"
-                          placeholder="Click here and press Ctrl+V to paste a row from Excel…"
+                          placeholder="Click here, then Ctrl+V — paste one or more rows from Excel, each row = one feeder…"
                           oninput="parsePasteInput()"
                           onpaste="handlePasteEvent(event)"
-                          rows="3"></textarea>
-                <small>Accepts tab-separated values (copied from Excel). One row = one feeder's hourly readings.</small>
+                          rows="6"></textarea>
+                <small>One row per feeder. Column 1 = feeder name or code, columns 2-25 = 24 hourly values.</small>
             </div>
 
             <!-- Preview table -->
@@ -406,14 +405,10 @@
                         <i class="fas fa-times"></i> Clear
                     </button>
                 </div>
-                <div class="paste-preview-scroll">
+                <div class="paste-preview-scroll" style="max-height:340px;">
                     <table id="pastePreviewTable" class="paste-preview-table">
-                        <thead>
-                            <tr id="pastePreviewHeadRow"></tr>
-                        </thead>
-                        <tbody>
-                            <tr id="pastePreviewDataRow"></tr>
-                        </tbody>
+                        <thead><tr id="pastePreviewHeadRow"></tr></thead>
+                        <tbody id="pastePreviewBody"></tbody>
                     </table>
                 </div>
                 <div id="pasteWarnings" class="paste-warnings" style="display:none;"></div>
@@ -629,6 +624,15 @@ form { padding:25px; }
 .paste-cell-err   { background:#fde8ea; color:#721c24; border:2px solid #f5c6cb !important; }
 .paste-warnings { background:#fff3cd; border:1px solid #ffc107; border-radius:8px;
     padding:12px 15px; margin-top:10px; font-size:13px; color:#856404; line-height:1.7; }
+.feeder-chips { display:flex; flex-wrap:wrap; gap:6px; max-height:90px; overflow-y:auto;
+    padding:8px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; }
+.feeder-chips .chip { background:#fff; border:1px solid #cbd5e1; color:#334155;
+    padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; }
+.paste-feeder-cell { text-align:left !important; padding:6px 10px !important;
+    background:#f8fafc; font-weight:700; min-width:160px; max-width:200px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.paste-row-err .paste-feeder-cell { background:#fde8ea; color:#721c24; }
+.paste-row-ok  .paste-feeder-cell { background:#e8f5e9; color:#1b5e20; }
 
 /* Responsive */
 @media(max-width:768px){
@@ -921,12 +925,21 @@ function updateMatrixCell(feederCode, hour, load, fault) {
 
 
 // ────────────────────────────────────────────────────────────────────────────
-// PASTE / BATCH ENTRY ENGINE
+// PASTE / BATCH ENTRY ENGINE — MULTI-FEEDER
+// ────────────────────────────────────────────────────────────────────────────
+//
+// Workflow: user picks TS, the modal shows all feeders under that TS. The
+// user pastes ALL their rows from Excel (one row per feeder, column 1 =
+// feeder identifier, columns 2-25 = 24 hourly values). The parser matches
+// each row's column 1 against the TS's feeders (by code or by name,
+// case-insensitive) and renders a grid preview. Save All sends every valid
+// (feeder, hour, load) cell to /ajax/33kv_save.php in a single request.
 // ────────────────────────────────────────────────────────────────────────────
 
-let pasteEntries = []; // parsed, validated entries ready to submit
+let pasteEntries = [];      // flat array of {fdr33kv_code, hour, load_read, fault_code, fault_remark, skip}
+let pasteRowSummary = [];   // [{feederToken, fdr33kv_code, feeder_name, status, validCount, errors[]}]
+let pasteTsFeederIndex = {};
 
-// Open paste modal (from button or right-click on feeder row)
 function openPasteModal() {
     resetPasteModal();
     document.getElementById('pasteModal').style.display = 'block';
@@ -935,17 +948,13 @@ function openPasteModal() {
 }
 
 function openPasteModalForFeeder(event, feederCode, feederName) {
-    event.preventDefault(); // suppress browser context menu
+    event.preventDefault();
     resetPasteModal();
-
-    // Pre-select feeder
     const feederObj = allFeeders.find(f => f.fdr33kv_code === feederCode);
     if (feederObj) {
-        const tsSel = document.getElementById('paste_ts_code');
-        tsSel.value = feederObj.ts_code;
-        loadFeedersForPasteTs(feederObj.ts_code, feederCode);
+        document.getElementById('paste_ts_code').value = feederObj.ts_code;
+        loadFeedersForPasteTs(feederObj.ts_code);
     }
-
     document.getElementById('pasteModal').style.display = 'block';
     document.body.style.overflow = 'hidden';
     setTimeout(() => document.getElementById('pasteInput').focus(), 200);
@@ -957,52 +966,53 @@ function closePasteModal() {
 }
 
 function resetPasteModal() {
-    document.getElementById('paste_ts_code').value   = '';
-    const feederSel = document.getElementById('paste_feeder_code');
-    feederSel.innerHTML = '<option value="">-- Select Station First --</option>';
-    feederSel.disabled  = true;
+    document.getElementById('paste_ts_code').value       = '';
     document.getElementById('paste_start_hour').value    = '0';
     document.getElementById('paste_default_fault').value = '';
-    document.getElementById('paste_max_load_info').style.display = 'none';
+    document.getElementById('pasteFeederListWrap').style.display = 'none';
+    pasteTsFeederIndex = {};
     clearPasteInput();
 }
 
-// TS → Feeder cascade for paste modal
-function loadFeedersForPasteTs(tsCode, preselect) {
-    const sel = document.getElementById('paste_feeder_code');
+// When TS changes, build the chip list AND the feeder lookup index
+function loadFeedersForPasteTs(tsCode) {
+    const wrap = document.getElementById('pasteFeederListWrap');
+    const list = document.getElementById('pasteFeederList');
+    const cnt  = document.getElementById('pasteFeederCount');
+
+    pasteTsFeederIndex = {};
+    list.innerHTML = '';
+
     if (!tsCode) {
-        sel.innerHTML = '<option value="">-- Select Station First --</option>';
-        sel.disabled  = true;
+        wrap.style.display = 'none';
+        clearPasteInput();
         return;
     }
-    const filtered = allFeeders.filter(f => f.ts_code === tsCode);
-    sel.innerHTML = '<option value="">-- Select Feeder --</option>';
-    filtered.forEach(f => {
-        const o = document.createElement('option');
-        o.value = f.fdr33kv_code;
-        o.textContent = f.fdr33kv_name;
-        if (f.fdr33kv_code === preselect) o.selected = true;
-        sel.appendChild(o);
+    const feeders = allFeeders.filter(f => f.ts_code === tsCode);
+    feeders.forEach(f => {
+        // Index by code and by name (lower-cased + collapsed whitespace) for matching
+        const codeKey = String(f.fdr33kv_code).trim().toLowerCase();
+        const nameKey = String(f.fdr33kv_name).trim().toLowerCase().replace(/\s+/g, ' ');
+        pasteTsFeederIndex[codeKey] = f;
+        pasteTsFeederIndex[nameKey] = f;
+
+        const chip = document.createElement('span');
+        chip.className   = 'chip';
+        chip.textContent = f.fdr33kv_name;
+        chip.title       = 'Code: ' + f.fdr33kv_code + ' • Max: ' + (f.max_load || '—') + ' MW';
+        list.appendChild(chip);
     });
-    sel.disabled = filtered.length === 0;
-    updatePasteFeederInfo();
+    cnt.textContent = '(' + feeders.length + ')';
+    wrap.style.display = feeders.length ? 'block' : 'none';
+
     reparsePreview();
 }
 
-function updatePasteFeederInfo() {
-    const code    = document.getElementById('paste_feeder_code').value;
-    const maxLoad = feederMaxLoad[code];
-    const hint    = document.getElementById('paste_max_load_info');
-    if (code && maxLoad !== undefined) {
-        hint.textContent   = 'Max allowed load: ' + maxLoad.toFixed(2) + ' MW';
-        hint.style.display = 'block';
-    } else {
-        hint.style.display = 'none';
-    }
-    reparsePreview();
+function _lookupFeederInTs(token) {
+    const t = String(token || '').trim().toLowerCase().replace(/\s+/g, ' ');
+    return pasteTsFeederIndex[t] || null;
 }
 
-// Handle Ctrl+V paste event (captures from clipboard before textarea gets it)
 function handlePasteEvent(event) {
     event.preventDefault();
     const text = (event.clipboardData || window.clipboardData).getData('text');
@@ -1015,175 +1025,230 @@ function clearPasteInput() {
     document.getElementById('pastePreviewWrap').style.display = 'none';
     document.getElementById('pasteSaveBtn').disabled = true;
     pasteEntries = [];
+    pasteRowSummary = [];
 }
 
 function reparsePreview() {
-    const text = document.getElementById('pasteInput').value;
-    if (text.trim()) parsePasteInput();
+    if (document.getElementById('pasteInput').value.trim()) parsePasteInput();
 }
 
 /**
- * Parse tab-separated paste input from Excel.
- * Supports multi-row paste — uses only the FIRST non-empty row found.
- * Maps values starting at paste_start_hour.
+ * Multi-row Excel paste parser.
+ * Each input row: col 1 = feeder identifier, cols 2-25 = 24 hour values.
+ * Header rows (e.g. "Feeder | 00:00 | 01:00 | ...") are auto-detected and skipped.
  */
 function parsePasteInput() {
     const raw       = document.getElementById('pasteInput').value;
+    const tsCode    = document.getElementById('paste_ts_code').value;
     const startHour = parseInt(document.getElementById('paste_start_hour').value) || 0;
     const defFault  = document.getElementById('paste_default_fault').value;
-    const feederCode= document.getElementById('paste_feeder_code').value;
-    const maxLoad   = feederCode ? (feederMaxLoad[feederCode] || null) : null;
     const clockSlot = getCurrentSlot();
 
-    // Split into rows, find first non-empty row
-    const rows = raw.split(/\r?\n/).map(r => r.trim()).filter(r => r.length > 0);
-    if (rows.length === 0) {
+    pasteEntries     = [];
+    pasteRowSummary  = [];
+    const warnings   = [];
+
+    if (!tsCode) {
+        document.getElementById('pastePreviewWrap').style.display = 'none';
+        document.getElementById('pasteSaveBtn').disabled = true;
+        if (raw.trim()) showToast('⚠️ Select a Transmission Station first.', 'error');
+        return;
+    }
+
+    const lines = raw.split(/\r?\n/).map(r => r.replace(/\s+$/,'')).filter(r => r.trim().length > 0);
+    if (lines.length === 0) {
         clearPasteInput();
         return;
     }
 
-    // Use first row only
-    const cells = rows[0].split('\t').map(c => c.trim().replace(',', '.')); // handle comma decimals
+    lines.forEach((line, lineIdx) => {
+        const cells = line.split('\t').map(c => c.trim());
+        if (cells.length < 2) return;   // not a usable row
 
-    if (cells.length === 0 || (cells.length === 1 && cells[0] === '')) {
-        clearPasteInput();
-        return;
-    }
-
-    // Build entries
-    pasteEntries = [];
-    const warnings = [];
-    const headCells = [];
-    const dataCells = [];
-    let validCount  = 0;
-
-    for (let i = 0; i < cells.length; i++) {
-        const hour  = startHour + i;
-        const rawVal= cells[i];
-
-        if (hour > 23) {
-            warnings.push('Column ' + (i + 1) + ': exceeds hour 23 — ignored.');
-            break;
+        // Header-row autodetect: skip rows where col 1 doesn't look like a feeder
+        // AND col 2 looks like an hour label (e.g. "00:00", "0", "Hour 0")
+        if (lineIdx === 0 && !_lookupFeederInTs(cells[0])) {
+            const c2 = (cells[1] || '').toLowerCase();
+            const looksLikeHour = /^h?\d{1,2}([:.]?\d{0,2})?(:00|h|hour)?$/i.test(cells[1]) || c2.includes('hour') || c2.includes(':00');
+            if (looksLikeHour) return;  // skip header
         }
 
-        // Future hour
-        if (clockSlot >= 1 && hour > clockSlot) {
-            headCells.push({ hour, label: String(hour).padStart(2,'0')+':00', cls: 'paste-cell-future' });
-            dataCells.push({ display: rawVal + ' ⏳', cls: 'paste-cell-future' });
-            warnings.push('Hour ' + String(hour).padStart(2,'0') + ':00 — future hour, will be skipped.');
-            pasteEntries.push({ hour, skip: true });
-            continue;
+        const feederToken = cells[0];
+        const feeder      = _lookupFeederInTs(feederToken);
+        const summary = {
+            line:          lineIdx + 1,
+            feederToken,
+            fdr33kv_code:  feeder ? feeder.fdr33kv_code : '',
+            feeder_name:   feeder ? feeder.fdr33kv_name : '(not in this TS)',
+            max_load:      feeder ? (feeder.max_load || null) : null,
+            cells:         [],
+            validCount:    0,
+            errors:        [],
+        };
+
+        if (!feeder) {
+            summary.errors.push('Feeder "' + feederToken + '" is not under the selected TS.');
+            warnings.push('Row ' + (lineIdx + 1) + ': feeder "' + feederToken + '" not in this TS — entire row skipped.');
         }
 
-        // Parse value
-        const num = parseFloat(rawVal);
-        const isNumeric = !isNaN(num) && rawVal !== '';
+        const valueCells = cells.slice(1).map(c => c.replace(',', '.'));   // comma-decimal -> dot
+        for (let i = 0; i < valueCells.length; i++) {
+            const hour   = startHour + i;
+            const rawVal = valueCells[i];
 
-        if (!isNumeric) {
-            headCells.push({ hour, label: String(hour).padStart(2,'0')+':00', cls: 'paste-cell-err' });
-            dataCells.push({ display: '"' + rawVal + '" ✗', cls: 'paste-cell-err' });
-            warnings.push('Hour ' + String(hour).padStart(2,'0') + ':00 — non-numeric value "' + rawVal + '" will be skipped.');
-            pasteEntries.push({ hour, skip: true });
-            continue;
-        }
-
-        if (num < 0) {
-            headCells.push({ hour, label: String(hour).padStart(2,'0')+':00', cls: 'paste-cell-err' });
-            dataCells.push({ display: num + ' ✗', cls: 'paste-cell-err' });
-            warnings.push('Hour ' + String(hour).padStart(2,'0') + ':00 — negative value ignored.');
-            pasteEntries.push({ hour, skip: true });
-            continue;
-        }
-
-        // Zero load — need fault code
-        if (num === 0) {
-            if (!defFault) {
-                headCells.push({ hour, label: String(hour).padStart(2,'0')+':00', cls: 'paste-cell-skip' });
-                dataCells.push({ display: '0 (skipped)', cls: 'paste-cell-skip' });
-                pasteEntries.push({ hour, skip: true });
+            if (hour > 23) break;
+            if (rawVal === '') {
+                summary.cells.push({ hour, display: '', cls: 'paste-cell-skip', skip: true });
                 continue;
             }
-            headCells.push({ hour, label: String(hour).padStart(2,'0')+':00', cls: 'paste-cell-fault' });
-            dataCells.push({ display: defFault, cls: 'paste-cell-fault' });
-            pasteEntries.push({ hour, load_read: 0, fault_code: defFault, fault_remark: 'Batch paste', skip: false });
-            validCount++;
-            continue;
+
+            // Future hour
+            if (clockSlot >= 1 && hour > clockSlot) {
+                summary.cells.push({ hour, display: rawVal + ' ⏳', cls: 'paste-cell-future', skip: true });
+                continue;
+            }
+
+            const num = parseFloat(rawVal);
+            const isNumeric = !isNaN(num) && rawVal !== '';
+
+            if (!isNumeric) {
+                summary.cells.push({ hour, display: '"' + rawVal + '"', cls: 'paste-cell-err', skip: true });
+                summary.errors.push(String(hour).padStart(2,'0') + ':00 → non-numeric "' + rawVal + '"');
+                continue;
+            }
+            if (num < 0) {
+                summary.cells.push({ hour, display: num + ' ✗', cls: 'paste-cell-err', skip: true });
+                summary.errors.push(String(hour).padStart(2,'0') + ':00 → negative');
+                continue;
+            }
+
+            // Zero load — need fault code
+            if (num === 0) {
+                if (!defFault) {
+                    summary.cells.push({ hour, display: '0', cls: 'paste-cell-skip', skip: true });
+                    continue;
+                }
+                summary.cells.push({ hour, display: defFault, cls: 'paste-cell-fault', skip: false });
+                if (feeder) {
+                    pasteEntries.push({
+                        fdr33kv_code: feeder.fdr33kv_code, hour,
+                        load_read: 0, fault_code: defFault, fault_remark: 'Batch paste',
+                    });
+                    summary.validCount++;
+                }
+                continue;
+            }
+
+            // max_load check
+            if (summary.max_load !== null && num > summary.max_load) {
+                summary.cells.push({ hour, display: num.toFixed(2) + ' ⚠️', cls: 'paste-cell-err', skip: true });
+                summary.errors.push(String(hour).padStart(2,'0') + ':00 → ' + num.toFixed(2) + ' MW > max ' + summary.max_load + ' MW');
+                continue;
+            }
+
+            // Good value
+            summary.cells.push({ hour, display: num.toFixed(2), cls: 'paste-cell-ok', skip: false });
+            if (feeder) {
+                pasteEntries.push({
+                    fdr33kv_code: feeder.fdr33kv_code, hour,
+                    load_read: num, fault_code: '', fault_remark: '',
+                });
+                summary.validCount++;
+            }
         }
 
-        // max_load check
-        if (maxLoad !== null && num > maxLoad) {
-            headCells.push({ hour, label: String(hour).padStart(2,'0')+':00', cls: 'paste-cell-err' });
-            dataCells.push({ display: num.toFixed(2) + ' ⚠️', cls: 'paste-cell-err' });
-            warnings.push('Hour ' + String(hour).padStart(2,'0') + ':00 — ' + num.toFixed(2) + ' MW exceeds max load (' + maxLoad + ' MW), will be skipped.');
-            pasteEntries.push({ hour, skip: true });
-            continue;
-        }
-
-        // Good value
-        headCells.push({ hour, label: String(hour).padStart(2,'0')+':00', cls: 'paste-cell-ok' });
-        dataCells.push({ display: num.toFixed(2), cls: 'paste-cell-ok' });
-        pasteEntries.push({ hour, load_read: num, fault_code: '', fault_remark: '', skip: false });
-        validCount++;
-    }
-
-    // Render preview table
-    const headRow = document.getElementById('pastePreviewHeadRow');
-    const dataRow = document.getElementById('pastePreviewDataRow');
-    headRow.innerHTML = '';
-    dataRow.innerHTML = '';
-
-    headCells.forEach((h, i) => {
-        const th = document.createElement('th');
-        th.className = h.cls;
-        th.textContent = h.label;
-        headRow.appendChild(th);
-        const td = document.createElement('td');
-        td.className = dataCells[i].cls;
-        td.textContent = dataCells[i].display;
-        dataRow.appendChild(td);
+        pasteRowSummary.push(summary);
     });
 
-    // Warnings
-    const warnBox = document.getElementById('pasteWarnings');
-    if (warnings.length > 0) {
-        warnBox.innerHTML = '<strong>⚠️ Notes:</strong><br>' + warnings.join('<br>');
-        warnBox.style.display = 'block';
+    _renderPastePreviewGrid(pasteRowSummary, startHour);
+
+    if (warnings.length) {
+        const wb = document.getElementById('pasteWarnings');
+        wb.innerHTML = '<strong>⚠️ Notes:</strong><br>' + warnings.join('<br>');
+        wb.style.display = 'block';
     } else {
-        warnBox.style.display = 'none';
+        document.getElementById('pasteWarnings').style.display = 'none';
     }
 
+    const totalValid = pasteEntries.length;
+    const totalCells = pasteRowSummary.reduce((s, r) => s + r.cells.length, 0);
     document.getElementById('pastePreviewTitle').textContent =
-        'Preview — ' + validCount + ' of ' + cells.length + ' values will be saved';
-
+        'Preview — ' + pasteRowSummary.length + ' row(s) parsed, ' +
+        totalValid + ' / ' + totalCells + ' cells will be saved';
     document.getElementById('pastePreviewWrap').style.display = 'block';
+    document.getElementById('pasteSaveBtn').disabled = (totalValid === 0);
+}
 
-    // Enable save only if feeder selected and there's something to save
-    const canSave = !!feederCode && validCount > 0;
-    document.getElementById('pasteSaveBtn').disabled = !canSave;
-    if (!feederCode && validCount > 0) {
-        showToast('⚠️ Select a feeder before saving.', 'error');
+function _renderPastePreviewGrid(rows, startHour) {
+    const head = document.getElementById('pastePreviewHeadRow');
+    const body = document.getElementById('pastePreviewBody');
+    head.innerHTML = '';
+    body.innerHTML = '';
+
+    // Determine max columns across rows
+    const maxCells = rows.reduce((m, r) => Math.max(m, r.cells.length), 0);
+
+    // Header
+    const thFeeder = document.createElement('th');
+    thFeeder.textContent = 'Feeder';
+    thFeeder.className   = 'paste-feeder-cell';
+    head.appendChild(thFeeder);
+    for (let i = 0; i < maxCells; i++) {
+        const h = startHour + i;
+        const th = document.createElement('th');
+        th.textContent = String(h).padStart(2,'0') + ':00';
+        head.appendChild(th);
     }
+    const thStat = document.createElement('th');
+    thStat.textContent = 'Status';
+    head.appendChild(thStat);
+
+    // Body
+    rows.forEach(r => {
+        const tr = document.createElement('tr');
+        const isErr = !r.fdr33kv_code;
+        tr.className = isErr ? 'paste-row-err' : (r.validCount > 0 ? 'paste-row-ok' : '');
+
+        const tdF = document.createElement('td');
+        tdF.className   = 'paste-feeder-cell';
+        tdF.textContent = r.feederToken + (r.feeder_name && r.feeder_name !== r.feederToken ? ' (' + r.feeder_name + ')' : '');
+        tdF.title       = r.fdr33kv_code ? ('Code: ' + r.fdr33kv_code) : r.errors.join(' | ');
+        tr.appendChild(tdF);
+
+        for (let i = 0; i < maxCells; i++) {
+            const c = r.cells[i];
+            const td = document.createElement('td');
+            if (!c) { td.className = 'paste-cell-skip'; td.textContent = ''; }
+            else    { td.className = c.cls;             td.textContent = c.display; }
+            tr.appendChild(td);
+        }
+
+        const tdS = document.createElement('td');
+        tdS.style.fontSize  = '11px';
+        tdS.style.textAlign = 'left';
+        if (!r.fdr33kv_code) {
+            tdS.innerHTML = '<span style="color:#c0392b;font-weight:700;">✗ Unknown feeder</span>';
+        } else if (r.validCount === 0) {
+            tdS.innerHTML = '<span style="color:#856404;font-weight:700;">— No valid cells</span>';
+        } else {
+            tdS.innerHTML = '<span style="color:#1b5e20;font-weight:700;">✓ ' + r.validCount + ' to save</span>';
+        }
+        tr.appendChild(tdS);
+        body.appendChild(tr);
+    });
 }
 
 // ── Submit batch ────────────────────────────────────────────────────────────
 function submitPasteBatch() {
-    const feederCode = document.getElementById('paste_feeder_code').value;
-    const feederSel  = document.getElementById('paste_feeder_code');
-    const feederName = feederSel.options[feederSel.selectedIndex]?.text || feederCode;
-
-    if (!feederCode) { showToast('⚠️ Please select a feeder.', 'error'); return; }
-
-    const toSave = pasteEntries.filter(e => !e.skip);
-    if (toSave.length === 0) { showToast('⚠️ No valid entries to save.', 'error'); return; }
+    if (pasteEntries.length === 0) { showToast('⚠️ Nothing to save.', 'error'); return; }
 
     const btn = document.getElementById('pasteSaveBtn');
     btn.disabled  = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving ' + toSave.length + ' entries…';
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving ' + pasteEntries.length + ' entries…';
 
     const formData = new FormData();
-    formData.set('action',       'save_batch');
-    formData.set('fdr33kv_code', feederCode);
-    formData.set('entries',      JSON.stringify(toSave));
+    formData.set('action',  'save_batch');
+    formData.set('entries', JSON.stringify(pasteEntries));
 
     fetch(saveUrl, { method: 'POST', body: formData })
         .then(r => r.json())
@@ -1192,22 +1257,19 @@ function submitPasteBatch() {
             btn.innerHTML = '<i class="fas fa-save"></i> Save All';
 
             if (data.success) {
-                showToast('✓ ' + data.message, 'success');
-
+                showToast('✓ ' + (data.message || (data.saved + ' saved')), 'success');
                 // Refresh saved cells in the matrix DOM
-                toSave.forEach(entry => {
-                    updateMatrixCell(feederCode, entry.hour, entry.load_read || 0, entry.fault_code || '');
+                pasteEntries.forEach(e => {
+                    updateMatrixCell(e.fdr33kv_code, e.hour, e.load_read || 0, e.fault_code || '');
                 });
-
                 closePasteModal();
-
                 if (data.skipped > 0 && data.errors && data.errors.length > 0) {
                     setTimeout(() => {
                         showToast('⚠️ ' + data.skipped + ' skipped:<br><small>' + data.errors.slice(0,3).join('<br>') + '</small>', 'error');
                     }, 1500);
                 }
             } else {
-                showToast('✗ ' + data.message, 'error');
+                showToast('✗ ' + (data.message || 'Save failed'), 'error');
             }
         })
         .catch(() => {

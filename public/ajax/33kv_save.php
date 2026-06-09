@@ -182,28 +182,23 @@ if ($action === 'save_load') {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// ACTION: save_batch — paste/bulk entry (array of readings for one feeder)
+// ACTION: save_batch — multi-feeder paste from Excel
 //
-// POST body (JSON-encoded string in 'entries' field):
-//   entries = JSON array of { hour, load_read, fault_code, fault_remark }
-//   fdr33kv_code = feeder code
+// POST body:
+//   entries        = JSON array of { fdr33kv_code, hour, load_read, fault_code, fault_remark }
+//   fdr33kv_code   = OPTIONAL batch-level fallback feeder code (used when an
+//                    entry omits its own fdr33kv_code — backward compatible
+//                    with the older single-feeder format)
 //
-// Response:
-//   { success: true, saved: N, skipped: N, errors: [...] }
+// Response: { success, saved, skipped, errors[], message }
 // ────────────────────────────────────────────────────────────────────────────
 if ($action === 'save_batch') {
 
-    $feederCode  = trim($_POST['fdr33kv_code'] ?? '');
-    $entriesJson = $_POST['entries'] ?? '[]';
-    $today       = getOperationalDate();
-    $now         = new DateTime();
-    $clockHour   = (int)$now->format('G');
-
-    if (!$feederCode) {
-        ob_end_clean();
-        echo json_encode(['success' => false, 'message' => 'Feeder code is required for batch save.']);
-        exit;
-    }
+    $defaultFeederCode = trim($_POST['fdr33kv_code'] ?? '');
+    $entriesJson       = $_POST['entries'] ?? '[]';
+    $today             = getOperationalDate();
+    $now               = new DateTime();
+    $clockHour         = (int)$now->format('G');
 
     $entries = json_decode($entriesJson, true);
     if (!is_array($entries) || empty($entries)) {
@@ -217,45 +212,54 @@ if ($action === 'save_batch') {
         $saved   = 0;
         $skipped = 0;
         $errors  = [];
+        $feederCounts = [];   // per-feeder save count for the response message
 
         foreach ($entries as $entry) {
-            $hour        = isset($entry['hour'])       ? (int)$entry['hour']              : -1;
-            $loadRead    = isset($entry['load_read'])  ? (float)$entry['load_read']        : 0.0;
+            $feederCode  = trim($entry['fdr33kv_code'] ?? '') ?: $defaultFeederCode;
+            $hour        = isset($entry['hour'])      ? (int)$entry['hour']      : -1;
+            $loadRead    = isset($entry['load_read']) ? (float)$entry['load_read'] : 0.0;
             $faultCode   = trim($entry['fault_code']   ?? '');
             $faultRemark = trim($entry['fault_remark'] ?? '');
 
-            if ($hour < 0 || $hour > 23) {
-                $errors[] = "Hour {$hour}: invalid hour value — skipped.";
-                $skipped++;
-                continue;
+            if ($feederCode === '') {
+                $errors[] = "Hour {$hour}: missing feeder code — skipped.";
+                $skipped++; continue;
             }
-
-            // Future hour block
+            if ($hour < 0 || $hour > 23) {
+                $errors[] = "Feeder {$feederCode} hour {$hour}: invalid hour — skipped.";
+                $skipped++; continue;
+            }
             if ($clockHour >= 1 && $hour > $clockHour) {
-                $errors[] = sprintf('Hour %02d:00 has not yet occurred — skipped.', $hour);
-                $skipped++;
-                continue;
+                $errors[] = sprintf('Feeder %s %02d:00 has not yet occurred — skipped.', $feederCode, $hour);
+                $skipped++; continue;
             }
 
             $result = saveOneReading($db, $user['payroll_id'], $feederCode, $hour, $loadRead, $faultCode, $faultRemark, $today);
 
             if ($result['success']) {
                 $saved++;
+                $feederCounts[$feederCode] = ($feederCounts[$feederCode] ?? 0) + 1;
             } else {
-                $errors[] = "Hour {$hour}: " . $result['message'];
+                $errors[] = "Feeder {$feederCode} hour {$hour}: " . $result['message'];
                 $skipped++;
             }
         }
 
+        $feederCount = count($feederCounts);
+        $message = $saved > 0
+            ? sprintf('%d reading(s) saved across %d feeder(s)%s',
+                $saved, $feederCount,
+                $skipped > 0 ? sprintf(', %d skipped.', $skipped) : '.')
+            : 'No entries were saved. Check the errors.';
+
         ob_end_clean();
         echo json_encode([
-            'success' => $saved > 0,
-            'saved'   => $saved,
-            'skipped' => $skipped,
-            'errors'  => $errors,
-            'message' => $saved > 0
-                ? "{$saved} hour(s) saved successfully" . ($skipped > 0 ? ", {$skipped} skipped." : '.')
-                : 'No entries were saved. Check errors.',
+            'success'       => $saved > 0,
+            'saved'         => $saved,
+            'skipped'       => $skipped,
+            'feeders_saved' => $feederCount,
+            'errors'        => $errors,
+            'message'       => $message,
         ]);
 
     } catch (PDOException $e) {
