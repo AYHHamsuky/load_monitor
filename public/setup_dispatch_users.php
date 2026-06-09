@@ -29,6 +29,12 @@ if (!in_array($me['role'], ['UL6', 'UL7'], true)) {
 
 $db = Database::connect();
 
+// ── One-time cleanup: the previous run inserted Waziri with email='' and
+//    phone=''.  Convert those to NULL so subsequent inserts don't clash
+//    against the UNIQUE constraint.
+$db->exec("UPDATE staff_details SET email = NULL WHERE email = ''");
+$db->exec("UPDATE staff_details SET phone = NULL WHERE phone = ''");
+
 // ── Staff list (verbatim from ICT) ─────────────────────────────────────────
 $staff = [
     ['sn'=>1,  'payroll'=>'705075', 'name'=>'Waziri Elisha Emishe',     'level'=>'Team Member',  'role'=>'UL2'],
@@ -76,11 +82,14 @@ foreach ($staff as $s) {
             $updated[] = sprintf('%s (%s) — was %s/%s, now %s/%s',
                 $s['payroll'], $s['name'], $existing['staff_name'], $existing['role'], $s['name'], $s['role']);
         } else {
+            // NOTE: phone and email are NULL (not '') because the UNIQUE
+            // constraint on email rejects duplicate empty strings — only one
+            // row can have '' but multiple rows can have NULL.
             $db->prepare("
                 INSERT INTO staff_details
                     (payroll_id, staff_name, role, staff_level, iss_code, assigned_33kv_code,
                      sv_code, phone, email, password_hash, is_active, created_at, updated_at)
-                VALUES (?, ?, ?, ?, '0', '0', '100000', '', '', ?, 'Yes', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+                VALUES (?, ?, ?, ?, '0', '0', '100000', NULL, NULL, ?, 'Yes', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
             ")->execute([$s['payroll'], $s['name'], $s['role'], $s['level'], $passwordHash]);
             $inserted[] = sprintf('%s — %s (%s)', $s['payroll'], $s['name'], $s['role']);
         }
