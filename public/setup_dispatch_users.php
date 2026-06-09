@@ -29,11 +29,12 @@ if (!in_array($me['role'], ['UL6', 'UL7'], true)) {
 
 $db = Database::connect();
 
-// ── One-time cleanup: the previous run inserted Waziri with email='' and
-//    phone=''.  Convert those to NULL so subsequent inserts don't clash
-//    against the UNIQUE constraint.
-$db->exec("UPDATE staff_details SET email = NULL WHERE email = ''");
-$db->exec("UPDATE staff_details SET phone = NULL WHERE phone = ''");
+// staff_details.email is NOT NULL + UNIQUE — '' fails uniqueness on the second
+// row, NULL fails NOT NULL.  We use a deterministic per-payroll placeholder
+// (e.g. 'dispatch.705075@placeholder.kadunaelectric.local') so every row has
+// a unique non-null value.  Ops can edit real emails later via User Management.
+$placeholderEmail = fn (string $payroll): string => "dispatch.{$payroll}@placeholder.kadunaelectric.local";
+$placeholderPhone = fn (string $payroll): string => $payroll;   // payroll ID as phone
 
 // ── Staff list (verbatim from ICT) ─────────────────────────────────────────
 $staff = [
@@ -69,28 +70,39 @@ foreach ($staff as $s) {
         $chk->execute([$s['payroll']]);
         $existing = $chk->fetch(PDO::FETCH_ASSOC);
 
+        $email = $placeholderEmail($s['payroll']);
+        $phone = $placeholderPhone($s['payroll']);
+
         if ($existing) {
-            $db->prepare("
-                UPDATE staff_details
-                   SET staff_name  = ?,
-                       role        = ?,
-                       staff_level = ?,
-                       is_active   = 'Yes',
-                       updated_at  = CURRENT_TIMESTAMP
-                 WHERE payroll_id  = ?
-            ")->execute([$s['name'], $s['role'], $s['level'], $s['payroll']]);
+            // Also repair email if it's still empty-string from a previous run
+            $chkEmail = $db->prepare('SELECT email FROM staff_details WHERE payroll_id = ?');
+            $chkEmail->execute([$s['payroll']]);
+            $currentEmail = $chkEmail->fetchColumn();
+
+            if ($currentEmail === '' || $currentEmail === null) {
+                $db->prepare("
+                    UPDATE staff_details
+                       SET staff_name  = ?, role = ?, staff_level = ?, email = ?, phone = ?,
+                           is_active   = 'Yes', updated_at = CURRENT_TIMESTAMP
+                     WHERE payroll_id  = ?
+                ")->execute([$s['name'], $s['role'], $s['level'], $email, $phone, $s['payroll']]);
+            } else {
+                $db->prepare("
+                    UPDATE staff_details
+                       SET staff_name  = ?, role = ?, staff_level = ?,
+                           is_active   = 'Yes', updated_at = CURRENT_TIMESTAMP
+                     WHERE payroll_id  = ?
+                ")->execute([$s['name'], $s['role'], $s['level'], $s['payroll']]);
+            }
             $updated[] = sprintf('%s (%s) — was %s/%s, now %s/%s',
                 $s['payroll'], $s['name'], $existing['staff_name'], $existing['role'], $s['name'], $s['role']);
         } else {
-            // NOTE: phone and email are NULL (not '') because the UNIQUE
-            // constraint on email rejects duplicate empty strings — only one
-            // row can have '' but multiple rows can have NULL.
             $db->prepare("
                 INSERT INTO staff_details
                     (payroll_id, staff_name, role, staff_level, iss_code, assigned_33kv_code,
                      sv_code, phone, email, password_hash, is_active, created_at, updated_at)
-                VALUES (?, ?, ?, ?, '0', '0', '100000', NULL, NULL, ?, 'Yes', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-            ")->execute([$s['payroll'], $s['name'], $s['role'], $s['level'], $passwordHash]);
+                VALUES (?, ?, ?, ?, '0', '0', '100000', ?, ?, ?, 'Yes', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+            ")->execute([$s['payroll'], $s['name'], $s['role'], $s['level'], $phone, $email, $passwordHash]);
             $inserted[] = sprintf('%s — %s (%s)', $s['payroll'], $s['name'], $s['role']);
         }
     } catch (Throwable $e) {
