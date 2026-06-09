@@ -10,12 +10,12 @@
                 <h1>⚡ 33kV Load Monitoring Dashboard</h1>
                 <p class="subtitle">Real-time monitoring for <span id="opDayLabel"><?= date('l, F j, Y', strtotime($today)) ?></span> <small style="color:#f39c12;font-size:11px;">(operational day — closes 01:00)</small></p>
             </div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <div style="display:flex;gap:10px;align-items:center;">
+                <button class="btn-paste" onclick="openPasteModal()">
+                    <i class="fas fa-paste"></i> Paste from Excel
+                </button>
                 <button class="btn-primary" onclick="openLoadEntryModal(null, null, null)">
                     <i class="fas fa-plus"></i> Add Load Entry
-                </button>
-                <button type="button" class="btn-primary" style="background:linear-gradient(135deg,#0ea5e9,#0369a1);" onclick="openBulkPasteModal()">
-                    <i class="fas fa-paste"></i> Bulk Paste from Excel
                 </button>
             </div>
         </div>
@@ -86,7 +86,7 @@
         <div class="matrix-card">
             <div class="matrix-header">
                 <h3>📊 24-Hour Load Matrix</h3>
-                <span class="matrix-info"><?= count($feeders) ?> feeders × 24 hours &nbsp;|&nbsp; Click any cell to enter / edit</span>
+                <span class="matrix-info"><?= count($feeders) ?> feeders × 24 hours &nbsp;|&nbsp; Click any cell to enter / edit &nbsp;|&nbsp; Right-click feeder row to paste</span>
             </div>
             <div class="matrix-scroll">
                 <table class="load-matrix-table">
@@ -104,14 +104,16 @@
                     </thead>
                     <tbody>
                         <?php foreach ($matrix as $code => $feeder): ?>
-                        <tr>
+                        <tr data-feeder-code="<?= htmlspecialchars($code) ?>"
+                            data-feeder-name="<?= htmlspecialchars($feeder['fdr33kv_name']) ?>"
+                            oncontextmenu="openPasteModalForFeeder(event, '<?= htmlspecialchars($code, ENT_QUOTES) ?>', '<?= htmlspecialchars($feeder['fdr33kv_name'], ENT_QUOTES) ?>')">
                             <td class="sticky-col feeder-name"><?= htmlspecialchars($feeder['fdr33kv_name']) ?></td>
                             <td class="sticky-col2 location-name"><?= htmlspecialchars($feeder['station_name']) ?></td>
                             <?php for ($h = 0; $h <= 23; $h++):
                                 $hour_data = $feeder['hours'][$h];
                                 $has_data  = !is_null($hour_data);
-                                $load      = $has_data ? floatval($hour_data['load'])              : null;
-                                $fault     = $has_data ? trim($hour_data['fault'] ?? '')           : '';
+                                $load      = $has_data ? floatval($hour_data['load'])    : null;
+                                $fault     = $has_data ? trim($hour_data['fault'] ?? '') : '';
 
                                 if ($has_data && $load > 0) {
                                     $class   = 'has-load';
@@ -187,7 +189,7 @@
                 <canvas id="hourlyTrendChart"></canvas>
             </div>
             <div class="chart-card modern-chart">
-                <h3>📊 Load Distribution by Feeder</h3>
+                <h3>🥧 Load Distribution by Feeder</h3>
                 <canvas id="feederPieChart"></canvas>
             </div>
             <div class="chart-card modern-chart">
@@ -209,7 +211,7 @@
 
 
 <!-- ═══════════════════════════════════════════════════════════════════════════
-     MODAL 1 — Load Entry / Edit
+     MODAL 1 — Load Entry / Edit (single cell)
      ═══════════════════════════════════════════════════════════════════════════ -->
 <div id="loadEntryModal" class="modal" style="display:none;">
     <div class="modal-content">
@@ -223,7 +225,6 @@
             <input type="hidden" name="entry_date" value="<?= $today ?>">
             <input type="hidden" name="is_edit"    id="is_edit" value="0">
 
-            <!-- Transmission Station (grayed when pre-filled from cell click) -->
             <div class="form-group">
                 <label for="modal_ts_code"><i class="fas fa-building"></i> Transmission Station *</label>
                 <select id="modal_ts_code" class="form-control" required>
@@ -237,7 +238,6 @@
                 </select>
             </div>
 
-            <!-- 33kV Feeder (grayed when pre-filled from cell click) -->
             <div class="form-group">
                 <label for="fdr33kv_code"><i class="fas fa-bolt"></i> 33kV Feeder *</label>
                 <select name="fdr33kv_code" id="fdr33kv_code" required class="form-control" disabled>
@@ -246,7 +246,6 @@
                 <small id="maxLoadInfo" class="max-load-hint" style="display:none;"></small>
             </div>
 
-            <!-- Hour (grayed when pre-filled from cell click) -->
             <div class="form-group">
                 <label for="entry_hour"><i class="fas fa-clock"></i> Hour *</label>
                 <select name="entry_hour" id="entry_hour" required class="form-control">
@@ -257,7 +256,6 @@
                 </select>
             </div>
 
-            <!-- Load Reading -->
             <div class="form-group">
                 <label for="load_read"><i class="fas fa-tachometer-alt"></i> Load Reading (MW) *</label>
                 <input type="number" step="0.01" id="load_read" name="load_read"
@@ -269,7 +267,6 @@
                 </div>
             </div>
 
-            <!-- Fault section (shown only when load = 0) -->
             <div id="faultSection">
                 <div class="form-group">
                     <label for="fault_code"><i class="fas fa-exclamation-triangle"></i> Fault Code *</label>
@@ -306,7 +303,7 @@
 <div id="confirmModal" class="modal" style="display:none;">
     <div class="modal-content modal-sm">
         <div class="modal-header confirm-header">
-            <h2>🔒 Confirm Entry</h2>
+            <h2>🔔 Confirm Entry</h2>
         </div>
         <div class="confirm-body">
             <p id="confirmText"></p>
@@ -324,137 +321,111 @@
 
 
 <!-- ═══════════════════════════════════════════════════════════════════════════
-     MODAL 3 — Late-Entry Explanation
+     MODAL 3 — Paste from Excel
      ═══════════════════════════════════════════════════════════════════════════ -->
-<div id="lateEntryModal" class="modal" style="display:none;">
-    <div class="modal-content">
-        <div class="modal-header late-header">
-            <h2>⏰ Late Entry — Explanation Required</h2>
-            <span class="close" onclick="closeLateEntryModal()">&times;</span>
+<div id="pasteModal" class="modal" style="display:none;">
+    <div class="modal-content modal-paste">
+        <div class="modal-header paste-header">
+            <h2><i class="fas fa-paste"></i> Paste Load Data from Excel</h2>
+            <span class="close" onclick="closePasteModal()">&times;</span>
         </div>
         <div style="padding:25px;">
-            <div class="late-notice" id="lateNoticeText"></div>
 
-            <form id="lateEntryForm" onsubmit="return submitLateExplanation(event)">
-                <input type="hidden" name="action"        value="log_late">
-                <input type="hidden" name="specific_hour" id="lateSpecificHourHidden">
-
-                <div class="form-group">
-                    <label>Batch Period</label>
-                    <input type="text" id="lateBatchPeriodDisplay" class="form-control" readonly
-                           style="background:#f0f2f5; cursor:default; font-weight:600; color:#2c3e50;">
-                </div>
-
-                <div class="form-group">
-                    <label for="lateSpecificHour">Hour being entered late *</label>
-                    <select id="lateSpecificHour" class="form-control" required
-                            onchange="document.getElementById('lateSpecificHourHidden').value = this.value">
-                        <option value="">-- Select the specific hour --</option>
-                    </select>
-                    <small>Select the exact hour slot you are submitting a late entry for</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="lateExplanation">Reason for late submission *</label>
-                    <textarea id="lateExplanation" name="explanation" class="form-control" rows="4" required
-                              placeholder="Please explain why this entry was not submitted within the required time window…"></textarea>
-                </div>
-
-                <div class="form-actions">
-                    <button type="button" class="btn-secondary" onclick="closeLateEntryModal()">
-                        <i class="fas fa-times"></i> Cancel
-                    </button>
-                    <button type="submit" id="lateSubmitBtn" class="btn-primary">
-                        <i class="fas fa-paper-plane"></i> Submit Explanation & Proceed
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-<!-- ═══════════════════════════════════════════════════════════════════════════
-     MODAL 4 — Bulk Paste from Excel
-     ═══════════════════════════════════════════════════════════════════════════ -->
-<div id="bulkPasteModal" class="modal" style="display:none;">
-    <div class="modal-content" style="max-width: 900px;">
-        <div class="modal-header" style="background:linear-gradient(135deg,#0ea5e9,#0369a1);">
-            <h2>📋 Bulk Paste 33kV Readings</h2>
-            <span class="close" onclick="closeBulkPasteModal()">&times;</span>
-        </div>
-
-        <div style="padding: 22px 26px;">
-
-            <div class="bulk-help" style="background:#eff6ff;border-left:4px solid #0ea5e9;padding:14px 16px;border-radius:6px;margin-bottom:18px;font-size:13px;color:#1e3a8a;">
-                <strong>Supported formats — auto-detected:</strong>
-                <ul style="margin:8px 0 4px 18px;padding:0;">
-                    <li><strong>Long format</strong> — 3 or 4 tab-separated columns per row:<br>
-                        <code style="background:#fff;padding:2px 6px;border-radius:3px;">FdrCode &nbsp;&nbsp; HourOrHH:MM &nbsp;&nbsp; Load &nbsp;&nbsp; [FaultCode]</code><br>
-                        Example: <code style="background:#fff;padding:2px 6px;border-radius:3px;">F33-001 &nbsp; 14 &nbsp; 5.20</code>
-                    </li>
-                    <li><strong>Matrix format</strong> — feeder in column 1, 24 hourly readings in columns 2–25:<br>
-                        <code style="background:#fff;padding:2px 6px;border-radius:3px;">F33-001 &nbsp; 5.2 &nbsp; 4.8 &nbsp; 4.9 &nbsp; ... &nbsp; 6.1</code> (24 values)
-                    </li>
-                </ul>
-                <div style="margin-top:8px;">
-                    Feeders can be referenced by <strong>code</strong> or <strong>name</strong> (case-insensitive).
-                    Fault codes (FO, BF, OS, DOff, MVR) in the load column → load=0 with that fault.
-                </div>
+            <!-- Instructions -->
+            <div class="paste-instructions">
+                <strong>📋 How to use:</strong>
+                <ol>
+                    <li>In Excel, select a <strong>single row of up to 24 cells</strong> — each cell is one hour's load value (left to right = Hour 00 → Hour 23, or choose a start hour below).</li>
+                    <li>Values should be numbers (MW). Use <strong>0</strong> for a fault hour — you can set the fault code below.</li>
+                    <li>Select the feeder and the starting hour, then paste (Ctrl+V) into the text area.</li>
+                    <li>A preview table will appear — review it and click <strong>Save All</strong>.</li>
+                </ol>
             </div>
 
-            <div class="form-group" style="margin-bottom:14px;">
-                <label for="bulkPasteArea" style="font-weight:700;font-size:13px;color:#0369a1;">
-                    <i class="fas fa-keyboard"></i> Paste data below (from Excel / Google Sheets)
+            <!-- Feeder selector -->
+            <div class="form-group" style="margin-top:15px;">
+                <label><i class="fas fa-building"></i> Transmission Station *</label>
+                <select id="paste_ts_code" class="form-control" onchange="loadFeedersForPasteTs(this.value)">
+                    <option value="">-- Select Transmission Station --</option>
+                    <?php foreach ($transmission_stations as $ts): ?>
+                        <option value="<?= htmlspecialchars($ts['ts_code']) ?>">
+                            <?= htmlspecialchars($ts['station_name']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-bolt"></i> 33kV Feeder *</label>
+                <select id="paste_feeder_code" class="form-control" disabled onchange="updatePasteFeederInfo()">
+                    <option value="">-- Select Station First --</option>
+                </select>
+                <small id="paste_max_load_info" style="display:none;" class="max-load-hint"></small>
+            </div>
+
+            <!-- Start hour -->
+            <div class="form-group">
+                <label><i class="fas fa-clock"></i> Starting Hour *
+                    <small style="font-weight:400;color:#7f8c8d;margin-left:8px;">First pasted value maps to this hour</small>
                 </label>
-                <textarea id="bulkPasteArea" class="form-control" rows="10"
-                          style="font-family:'Courier New',monospace;font-size:13px;white-space:pre;"
-                          placeholder="F33-001	14	5.20&#10;F33-002	14	7.15&#10;F33-003	14	0	FO"></textarea>
+                <select id="paste_start_hour" class="form-control" onchange="reparsePreview()">
+                    <?php for ($h = 0; $h <= 23; $h++): ?>
+                        <option value="<?= $h ?>"><?= str_pad($h, 2, '0', STR_PAD_LEFT) ?>:00</option>
+                    <?php endfor; ?>
+                </select>
             </div>
 
-            <div class="form-group" style="margin-bottom:14px;">
-                <label for="bulkExplanation" style="font-weight:700;font-size:13px;color:#0369a1;">
-                    <i class="fas fa-comment"></i> Shared late-entry explanation <small style="color:#64748b;font-weight:400;">(optional — auto-used for past hours that need one)</small>
-                </label>
-                <textarea id="bulkExplanation" class="form-control" rows="2"
-                          placeholder="Optional reason if some rows are past-hour entries needing explanation..."></textarea>
+            <!-- Default fault code for zero values -->
+            <div class="form-group">
+                <label><i class="fas fa-exclamation-triangle"></i> Default Fault Code for Zero-Load Hours</label>
+                <select id="paste_default_fault" class="form-control">
+                    <option value="">-- Skip zero-load hours (don't save them) --</option>
+                    <?php foreach ($fault_codes as $fc => $desc): ?>
+                        <option value="<?= $fc ?>"><?= $fc ?> – <?= htmlspecialchars($desc) ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <small>If you choose a fault code, zero values will be saved with that code. Otherwise zero-load hours are skipped.</small>
             </div>
 
-            <div class="form-actions" style="display:flex;gap:10px;justify-content:space-between;">
-                <button type="button" class="btn-secondary" onclick="closeBulkPasteModal()">
-                    <i class="fas fa-times"></i> Cancel
-                </button>
-                <div style="display:flex;gap:10px;">
-                    <button type="button" class="btn-secondary" onclick="bulkParse()">
-                        <i class="fas fa-eye"></i> Parse / Preview
-                    </button>
-                    <button type="button" class="btn-primary" id="bulkSubmitBtn"
-                            style="background:linear-gradient(135deg,#0ea5e9,#0369a1);"
-                            onclick="bulkSubmit()" disabled>
-                        <i class="fas fa-save"></i> Save All Valid Rows
+            <!-- Paste area -->
+            <div class="form-group">
+                <label><i class="fas fa-clipboard"></i> Paste Excel Data Here *</label>
+                <textarea id="pasteInput"
+                          class="form-control paste-textarea"
+                          placeholder="Click here and press Ctrl+V to paste a row from Excel…"
+                          oninput="parsePasteInput()"
+                          onpaste="handlePasteEvent(event)"
+                          rows="3"></textarea>
+                <small>Accepts tab-separated values (copied from Excel). One row = one feeder's hourly readings.</small>
+            </div>
+
+            <!-- Preview table -->
+            <div id="pastePreviewWrap" style="display:none;">
+                <div class="paste-preview-header">
+                    <span id="pastePreviewTitle">Preview</span>
+                    <button type="button" class="btn-clear-preview" onclick="clearPasteInput()">
+                        <i class="fas fa-times"></i> Clear
                     </button>
                 </div>
-            </div>
-
-            <div id="bulkPreview" style="margin-top:18px;display:none;">
-                <h4 style="margin:0 0 10px;color:#1e293b;font-size:14px;">
-                    <span id="bulkPreviewStatus"></span>
-                </h4>
-                <div style="max-height:280px;overflow:auto;border:1px solid #e5e7eb;border-radius:6px;">
-                    <table style="width:100%;border-collapse:collapse;font-size:12px;">
-                        <thead style="background:#f1f5f9;position:sticky;top:0;">
-                            <tr>
-                                <th style="padding:6px 8px;text-align:left;">#</th>
-                                <th style="padding:6px 8px;text-align:left;">Feeder</th>
-                                <th style="padding:6px 8px;text-align:left;">Hour</th>
-                                <th style="padding:6px 8px;text-align:right;">Load (MW)</th>
-                                <th style="padding:6px 8px;text-align:left;">Fault</th>
-                                <th style="padding:6px 8px;text-align:left;">Status</th>
-                            </tr>
+                <div class="paste-preview-scroll">
+                    <table id="pastePreviewTable" class="paste-preview-table">
+                        <thead>
+                            <tr id="pastePreviewHeadRow"></tr>
                         </thead>
-                        <tbody id="bulkPreviewBody"></tbody>
+                        <tbody>
+                            <tr id="pastePreviewDataRow"></tr>
+                        </tbody>
                     </table>
                 </div>
+                <div id="pasteWarnings" class="paste-warnings" style="display:none;"></div>
+            </div>
+
+            <div class="form-actions" style="margin-top:20px;">
+                <button type="button" class="btn-secondary" onclick="closePasteModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button type="button" id="pasteSaveBtn" class="btn-primary" onclick="submitPasteBatch()" disabled>
+                    <i class="fas fa-save"></i> Save All
+                </button>
             </div>
         </div>
     </div>
@@ -464,15 +435,13 @@
 <!-- Toast notification -->
 <div id="toast" class="toast" style="display:none;"></div>
 
+
 <!-- ═══════════════════════════════════════════════════════════════════════════
      STYLES
      ═══════════════════════════════════════════════════════════════════════════ -->
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:#f0f2f5; color:#333; }
-
-.main-content { margin-left:260px; padding:22px; padding-top:90px; min-height:calc(100vh - 64px); background:#f0f2f5; }
-.dashboard-container-33kv { max-width:100%; }
 
 /* Page Header */
 .page-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;
@@ -489,6 +458,10 @@ body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:#f0f2
 .btn-secondary { background:#e9ecef; color:#495057; border:none; padding:12px 24px; border-radius:8px;
     cursor:pointer; font-size:14px; font-weight:600; display:inline-flex; align-items:center; gap:8px; transition:all .3s; }
 .btn-secondary:hover { background:#dee2e6; }
+.btn-paste { background:linear-gradient(135deg,#11998e,#38ef7d); color:white; border:none;
+    padding:12px 24px; border-radius:8px; cursor:pointer; font-size:14px; font-weight:600;
+    display:inline-flex; align-items:center; gap:8px; transition:all .3s; }
+.btn-paste:hover { transform:translateY(-2px); box-shadow:0 5px 15px rgba(17,153,142,.4); }
 .btn-filter { background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; padding:10px 20px;
     border-radius:8px; cursor:pointer; font-size:14px; font-weight:600; display:flex; align-items:center; gap:8px; }
 .btn-clear { background:#e74c3c; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer;
@@ -529,7 +502,6 @@ body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:#f0f2
 .load-matrix-table thead { position:sticky; top:0; z-index:10; }
 .load-matrix-table th { background:linear-gradient(135deg,#667eea,#764ba2); color:white;
     padding:10px 8px; text-align:center; font-weight:600; border:1px solid rgba(255,255,255,.2); white-space:nowrap; }
-/* Two-line hour header: top=HH:00, bottom=HH:59 */
 th.hour-col { padding:5px 3px; min-width:52px; }
 th.hour-col .hour-top { display:block; font-size:11px; font-weight:700; line-height:1.3; }
 th.hour-col .hour-bot { display:block; font-size:9px;  font-weight:400; opacity:.75;    line-height:1.2; }
@@ -550,6 +522,9 @@ th.hour-col .hour-bot { display:block; font-size:9px;  font-weight:400; opacity:
 .no-data:hover { background:#e9ecef; color:#7f8c8d; }
 .feeder-name { font-weight:600; color:#2c3e50; }
 .location-name { color:#7f8c8d; font-size:12px; }
+.load-matrix-table tr:hover .sticky-col,
+.load-matrix-table tr:hover .sticky-col2 { background:#e8f4fd; }
+.load-matrix-table tbody tr:hover { background:#e8f4fd; }
 
 /* Metrics table */
 .feeder-metrics-card .metrics-scroll { overflow-x:auto; max-height:350px; overflow-y:auto; }
@@ -582,14 +557,15 @@ th.hour-col .hour-bot { display:block; font-size:9px;  font-weight:400; opacity:
 .modal { display:none; position:fixed; z-index:2000; left:0; top:0; width:100%; height:100%;
     background:rgba(0,0,0,.6); backdrop-filter:blur(4px); }
 .modal-content { background:white; margin:5% auto; border-radius:12px; width:90%; max-width:580px;
-    box-shadow:0 10px 40px rgba(0,0,0,.3); animation:slideIn .3s ease; max-height:90vh; overflow-y:auto; }
+    box-shadow:0 10px 40px rgba(0,0,0,.3); animation:slideIn .3s ease; }
+.modal-paste { max-width:820px; max-height:88vh; overflow-y:auto; }
 .modal-sm { max-width:460px; }
 @keyframes slideIn { from{transform:translateY(-40px);opacity:0} to{transform:translateY(0);opacity:1} }
 .modal-header { background:linear-gradient(135deg,#667eea,#764ba2); color:white; padding:20px 25px;
     border-radius:12px 12px 0 0; display:flex; justify-content:space-between; align-items:center; }
 .modal-header h2 { font-size:18px; font-weight:600; }
 .confirm-header { background:linear-gradient(135deg,#2c3e50,#34495e); }
-.late-header { background:linear-gradient(135deg,#e74c3c,#c0392b) !important; }
+.paste-header  { background:linear-gradient(135deg,#11998e,#38ef7d); }
 .close { color:white; font-size:28px; font-weight:300; cursor:pointer; line-height:1; transition:transform .2s; }
 .close:hover { transform:rotate(90deg); }
 form { padding:25px; }
@@ -611,16 +587,13 @@ form { padding:25px; }
 #faultSection.disabled { opacity:.35; pointer-events:none; }
 #faultSection.disabled .form-control { background:#f0f2f5; }
 
-/* Late-entry notice */
-.late-notice { background:#fff3cd; border:1px solid #ffc107; border-radius:8px;
-    padding:14px 16px; margin-bottom:20px; color:#856404; font-size:14px; line-height:1.6; }
-
 /* Toast */
 .toast { position:fixed; bottom:30px; right:30px; z-index:9999; background:#2c3e50; color:white;
     padding:14px 22px; border-radius:10px; font-size:14px; font-weight:600;
-    box-shadow:0 4px 20px rgba(0,0,0,.3); animation:toastIn .3s ease; max-width:400px; }
+    box-shadow:0 4px 20px rgba(0,0,0,.3); animation:toastIn .3s ease; max-width:420px; }
 .toast.success { background:linear-gradient(135deg,#27ae60,#2ecc71); }
 .toast.error   { background:linear-gradient(135deg,#e74c3c,#c0392b); }
+.toast.info    { background:linear-gradient(135deg,#667eea,#764ba2); }
 @keyframes toastIn { from{transform:translateX(120%)} to{transform:translateX(0)} }
 
 /* Empty state */
@@ -628,15 +601,45 @@ form { padding:25px; }
 .empty-state i { color:#dee2e6; margin-bottom:20px; }
 .empty-state h2 { font-size:24px; margin-bottom:10px; color:#2c3e50; }
 
+/* Paste modal specifics */
+.paste-instructions { background:#e8f4fd; border:1px solid #bee3f8; border-radius:8px;
+    padding:15px 18px; font-size:13px; color:#2c5282; line-height:1.7; }
+.paste-instructions ol { margin:8px 0 0 18px; }
+.paste-textarea { font-family:monospace; font-size:13px; resize:vertical; min-height:60px;
+    border:2px dashed #667eea; background:#fafbff; }
+.paste-textarea:focus { border-style:solid; }
+.paste-preview-header { display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:8px; }
+.paste-preview-header span { font-weight:700; color:#2c3e50; font-size:14px; }
+.btn-clear-preview { background:none; border:none; color:#e74c3c; cursor:pointer; font-size:13px;
+    font-weight:600; display:flex; align-items:center; gap:5px; padding:4px 8px;
+    border-radius:6px; transition:background .2s; }
+.btn-clear-preview:hover { background:#fde8ea; }
+.paste-preview-scroll { overflow-x:auto; }
+.paste-preview-table { width:100%; border-collapse:collapse; font-size:12px; }
+.paste-preview-table th { background:linear-gradient(135deg,#667eea,#764ba2); color:white;
+    padding:7px 10px; text-align:center; font-weight:600; border:1px solid rgba(255,255,255,.2);
+    white-space:nowrap; min-width:50px; }
+.paste-preview-table td { padding:7px 10px; border:1px solid #e9ecef; text-align:center;
+    font-weight:600; font-family:monospace; }
+.paste-cell-ok    { background:#d4edda; color:#155724; }
+.paste-cell-fault { background:#fde8ea; color:#c0392b; }
+.paste-cell-skip  { background:#f8f9fa; color:#bdc3c7; }
+.paste-cell-future { background:#fff3cd; color:#856404; }
+.paste-cell-err   { background:#fde8ea; color:#721c24; border:2px solid #f5c6cb !important; }
+.paste-warnings { background:#fff3cd; border:1px solid #ffc107; border-radius:8px;
+    padding:12px 15px; margin-top:10px; font-size:13px; color:#856404; line-height:1.7; }
+
 /* Responsive */
 @media(max-width:768px){
     .main-content { margin-left:0; padding-top:70px; padding:10px; }
     .stats-grid { grid-template-columns:1fr; }
     .charts-row { grid-template-columns:1fr; }
-    .modal-content { width:95%; margin:5% auto; max-height:95vh; }
+    .modal-content { width:95%; margin:10% auto; }
     .page-header { flex-direction:column; text-align:center; gap:15px; }
 }
 </style>
+
 
 <!-- ═══════════════════════════════════════════════════════════════════════════
      SCRIPTS
@@ -644,20 +647,15 @@ form { padding:25px; }
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-// ── Config ────────────────────────────────────────────────────────────────────
-// Build save URL relative to current page — works on any server/path (Laragon, Apache, etc.)
+// ── Config ──────────────────────────────────────────────────────────────────
 const saveUrl = (function() {
-    // Points to the same ajax file the 33kV dashboard already uses
     const parts = window.location.pathname.split('/');
-    // Remove last segment (e.g. index.php) and append ajax path
     parts.pop();
     return window.location.protocol + '//' + window.location.host + parts.join('/') + '/ajax/33kv_save.php';
 })();
 
-// All feeders array (for TS→feeder cascade in manual modal)
 const allFeeders = <?= json_encode(array_values($all_feeders)) ?>;
 
-// Feeder max-load map built from PHP
 const feederMaxLoad = {};
 <?php foreach ($all_feeders as $f): ?>
 <?php if (isset($f['max_load']) && $f['max_load'] !== null): ?>
@@ -665,14 +663,9 @@ feederMaxLoad[<?= json_encode($f['fdr33kv_code']) ?>] = <?= (float)$f['max_load'
 <?php endif; ?>
 <?php endforeach; ?>
 
-// ── 33kV time helpers ─────────────────────────────────────────────────────────
-/** Current clock hour slot 0-23.  Matches PHP date('G'). */
-function getCurrentSlot() {
-    return new Date().getHours(); // 0-23 directly
-}
+// ── Time helpers ────────────────────────────────────────────────────────────
+function getCurrentSlot() { return new Date().getHours(); }
 
-/** Operational date string (YYYY-MM-DD) as seen by JS.
- *  During 00:xx we are still in yesterday's op-date. */
 function getOpDate() {
     const now = new Date();
     if (now.getHours() === 0) {
@@ -682,34 +675,19 @@ function getOpDate() {
     return now.toISOString().slice(0,10);
 }
 
-/** 33kV Batch window info for an hour slot (0-23).
- *  Batch A: 00-11 → free until 15:00, entry until 01:00 next
- *  Batch B: 12-19 → free until 20:00, entry until 01:00 next
- *  Batch C: 20-23 → free until 01:00 next                    */
-function getBatchInfo(hour) {
-    const now     = new Date();
-    const opDate  = getOpDate();
-    const nextDay = new Date(opDate); nextDay.setDate(nextDay.getDate()+1);
-    const nextStr = nextDay.toISOString().slice(0,10);
-    function dl(ds,hh,mm){ return new Date(ds+'T'+String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0')+':00'); }
-    if (hour>=0  && hour<=11) { const free=dl(opDate,15,0); const entry=dl(nextStr,1,0); return {label:'00:00–11:59',freeDeadline:'15:00',entryDeadline:'01:00 next day',isFree:now<=free,isOpen:now<entry,hourFrom:0, hourTo:11}; }
-    if (hour>=12 && hour<=19) { const free=dl(opDate,20,0); const entry=dl(nextStr,1,0); return {label:'12:00–19:59',freeDeadline:'20:00',entryDeadline:'01:00 next day',isFree:now<=free,isOpen:now<entry,hourFrom:12,hourTo:19}; }
-    /* Batch C: 20-23 */       { const entry=dl(nextStr,1,0); return {label:'20:00–23:59',freeDeadline:'01:00 next day',entryDeadline:'01:00 next day',isFree:now<entry,isOpen:now<entry,hourFrom:20,hourTo:23}; }
-}
-
-// ── State ─────────────────────────────────────────────────────────────────────
+// ── State ───────────────────────────────────────────────────────────────────
 let pendingFormData = null;
 
-// ── Toast ─────────────────────────────────────────────────────────────────────
+// ── Toast ───────────────────────────────────────────────────────────────────
 function showToast(msg, type='') {
     const t = document.getElementById('toast');
-    t.textContent   = msg;
-    t.className     = 'toast '+type;
+    t.innerHTML     = msg;
+    t.className     = 'toast ' + type;
     t.style.display = 'block';
-    setTimeout(()=>{ t.style.display='none'; }, 5000);
+    setTimeout(() => { t.style.display = 'none'; }, 6000);
 }
 
-// ── TS → Feeder cascade (manual entry only) ───────────────────────────────────
+// ── TS → Feeder cascade (single-entry modal) ────────────────────────────────
 function loadFeedersForTs(tsCode, selectedCode) {
     const sel = document.getElementById('fdr33kv_code');
     if (!tsCode) {
@@ -730,92 +708,85 @@ function loadFeedersForTs(tsCode, selectedCode) {
     handleFeederChange();
 }
 
-// ── Load/fault section toggle ─────────────────────────────────────────────────
+// ── Load/fault section toggle (single-entry modal) ──────────────────────────
 function handleLoadChange() {
-    const loadVal = parseFloat(document.getElementById('load_read').value)||0;
+    const loadVal = parseFloat(document.getElementById('load_read').value) || 0;
     const fSec    = document.getElementById('faultSection');
     const fc      = document.getElementById('fault_code');
     const fr      = document.getElementById('fault_remark');
     const err     = document.getElementById('maxLoadError');
-    if (loadVal < 0) { document.getElementById('load_read').value=0; return; }
+    if (loadVal < 0) { document.getElementById('load_read').value = 0; return; }
     if (loadVal === 0) {
         fSec.classList.remove('disabled');
-        fc.required=true;  fc.disabled=false;
-        fr.required=true;  fr.disabled=false;
+        fc.required = true;  fc.disabled = false;
+        fr.required = true;  fr.disabled = false;
     } else {
         fSec.classList.add('disabled');
-        fc.required=false; fc.disabled=true; fc.value='';
-        fr.required=false; fr.disabled=true; fr.value='';
+        fc.required = false; fc.disabled = true; fc.value = '';
+        fr.required = false; fr.disabled = true; fr.value = '';
     }
     const code    = document.getElementById('fdr33kv_code').value;
     const maxLoad = feederMaxLoad[code];
-    err.style.display = (maxLoad!==undefined && loadVal>0 && loadVal>maxLoad) ? 'block' : 'none';
+    err.style.display = (maxLoad !== undefined && loadVal > 0 && loadVal > maxLoad) ? 'block' : 'none';
 }
 
 function handleFeederChange() {
     const code    = document.getElementById('fdr33kv_code').value;
     const maxLoad = feederMaxLoad[code];
     const hint    = document.getElementById('maxLoadInfo');
-    if (maxLoad!==undefined) { hint.textContent='Max allowed load: '+maxLoad.toFixed(2)+' MW'; hint.style.display='block'; }
-    else { hint.style.display='none'; }
+    if (maxLoad !== undefined) {
+        hint.textContent = 'Max allowed load: ' + maxLoad.toFixed(2) + ' MW';
+        hint.style.display = 'block';
+    } else {
+        hint.style.display = 'none';
+    }
     handleLoadChange();
 }
 
-// ── Open entry modal ──────────────────────────────────────────────────────────
-// Called from cell click: openLoadEntryModal(feederCode, hour, cellElement)
-// Called from button:     openLoadEntryModal(null, null, null)
+// ── Open single-cell entry modal ────────────────────────────────────────────
 function openLoadEntryModal(feederCode, hour, cell) {
     const form = document.getElementById('loadEntryForm');
     form.reset();
-    document.getElementById('load_read').value            = 0;
-    document.getElementById('maxLoadError').style.display = 'none';
-    document.getElementById('maxLoadInfo').style.display  = 'none';
-    document.getElementById('is_edit').value              = '0';
+    document.getElementById('load_read').value             = 0;
+    document.getElementById('maxLoadError').style.display  = 'none';
+    document.getElementById('maxLoadInfo').style.display   = 'none';
+    document.getElementById('is_edit').value               = '0';
 
     const tsSel     = document.getElementById('modal_ts_code');
     const feederSel = document.getElementById('fdr33kv_code');
     const hourSel   = document.getElementById('entry_hour');
 
-    // hour can be 0 (midnight slot) — do NOT use truthy check on hour
     if (feederCode !== null && feederCode !== undefined && hour !== null && hour !== undefined && !isNaN(parseInt(hour))) {
-        // ── Cell click: pre-fill and lock TS, feeder, hour ────────────────────
-        // Find the TS for this feeder
         const feederObj = allFeeders.find(f => f.fdr33kv_code === feederCode);
         if (feederObj) {
-            // Set TS dropdown value and disable
             tsSel.value    = feederObj.ts_code;
             tsSel.disabled = true;
-            // Populate feeder dropdown with just this feeder
-            feederSel.innerHTML = '<option value="'+feederCode+'">'+feederObj.fdr33kv_name+'</option>';
+            feederSel.innerHTML = '<option value="' + feederCode + '">' + feederObj.fdr33kv_name + '</option>';
             feederSel.value    = feederCode;
             feederSel.disabled = true;
         }
-
         hourSel.value    = hour;
         hourSel.disabled = true;
 
-        // Detect edit (cell already has data)
         const hasData = cell && (cell.dataset.load !== '' || cell.dataset.fault !== '');
         document.getElementById('is_edit').value = hasData ? '1' : '0';
 
         if (hasData) {
             if (cell.dataset.load !== '') document.getElementById('load_read').value = cell.dataset.load;
-            if (cell.dataset.fault) setTimeout(()=>{ document.getElementById('fault_code').value = cell.dataset.fault; }, 50);
+            if (cell.dataset.fault) setTimeout(() => { document.getElementById('fault_code').value = cell.dataset.fault; }, 50);
         }
 
         const feederName = cell ? cell.dataset.feederName : feederCode;
-        const hourLabel  = String(hour).padStart(2,'0')+':00';
+        const hourLabel  = String(hour).padStart(2, '0') + ':00';
         const editBadge  = hasData ? ' (Editing)' : '';
-        document.getElementById('modalTitle').textContent = '⚡ Load Entry — '+feederName+' — Hour '+hourLabel+editBadge;
+        document.getElementById('modalTitle').textContent = '⚡ Load Entry — ' + feederName + ' — Hour ' + hourLabel + editBadge;
     } else {
-        // ── Manual button: free selection ─────────────────────────────────────
-        tsSel.disabled    = false;
-        feederSel.disabled= true;
+        tsSel.disabled     = false;
+        feederSel.disabled = true;
         feederSel.innerHTML = '<option value="">-- Select Transmission Station First --</option>';
-        hourSel.disabled  = false;
+        hourSel.disabled   = false;
         document.getElementById('modalTitle').textContent = '⚡ Add 33kV Load Entry — <?= date('F j, Y', strtotime($today)) ?>';
 
-        // Pre-select current filter TS if active
         const tsFilter = new URLSearchParams(window.location.search).get('ts_code');
         if (tsFilter && tsFilter !== 'all') {
             tsSel.value = tsFilter;
@@ -831,57 +802,52 @@ function openLoadEntryModal(feederCode, hour, cell) {
 
 function closeLoadEntryModal() {
     document.getElementById('loadEntryModal').style.display = 'none';
-    document.getElementById('modal_ts_code').disabled   = false;
-    document.getElementById('fdr33kv_code').disabled     = false;
-    document.getElementById('entry_hour').disabled       = false;
+    document.getElementById('modal_ts_code').disabled  = false;
+    document.getElementById('fdr33kv_code').disabled   = false;
+    document.getElementById('entry_hour').disabled     = false;
     document.body.style.overflow = 'auto';
 }
 
-// ── TS change event (manual entry only) ──────────────────────────────────────
 document.getElementById('modal_ts_code').addEventListener('change', function() {
-    // Only run cascade when TS is not locked (i.e. manual entry mode)
     if (!this.disabled) loadFeedersForTs(this.value, null);
 });
 
-// ── Form submit: validate → future check → confirm ───────────────────────────
+// ── Single-entry form submit ────────────────────────────────────────────────
 function handleFormSubmit(e) {
     e.preventDefault();
 
-    const loadVal     = parseFloat(document.getElementById('load_read').value)||0;
+    const loadVal     = parseFloat(document.getElementById('load_read').value) || 0;
     const faultCode   = document.getElementById('fault_code').value;
     const faultRemark = document.getElementById('fault_remark').value.trim();
     const feederSel   = document.getElementById('fdr33kv_code');
     const feederCode  = feederSel.value;
     const feederName  = feederSel.options[feederSel.selectedIndex]?.text || feederCode;
     const hour        = parseInt(document.getElementById('entry_hour').value);
-    const hourLabel   = String(hour).padStart(2,'0')+':00';
+    const hourLabel   = String(hour).padStart(2, '0') + ':00';
     const isEdit      = document.getElementById('is_edit').value === '1';
 
-    // Required field checks
-    if (!feederCode) { showToast('⚠️ Please select a feeder.','error');  return false; }
-    if (hour === null || isNaN(hour) || document.getElementById('entry_hour').value === '') { showToast('⚠️ Please select an hour.','error');   return false; }
-    if (loadVal===0 && (!faultCode||!faultRemark)) {
-        showToast('⚠️ Fault code and remark are required when load is 0.','error'); return false;
+    if (!feederCode) { showToast('⚠️ Please select a feeder.', 'error'); return false; }
+    if (isNaN(hour) || document.getElementById('entry_hour').value === '') {
+        showToast('⚠️ Please select an hour.', 'error'); return false;
+    }
+    if (loadVal === 0 && (!faultCode || !faultRemark)) {
+        showToast('⚠️ Fault code and remark are required when load is 0.', 'error'); return false;
     }
 
-    // max_load check
     const maxLoad = feederMaxLoad[feederCode];
-    if (maxLoad!==undefined && loadVal>0 && loadVal>maxLoad) {
-        showToast('⚠️ Value exceeds maximum allowed for this feeder ('+maxLoad.toFixed(2)+' MW).','error'); return false;
+    if (maxLoad !== undefined && loadVal > 0 && loadVal > maxLoad) {
+        showToast('⚠️ Value exceeds maximum allowed for this feeder (' + maxLoad.toFixed(2) + ' MW).', 'error'); return false;
     }
 
-    // ── Future hour: hard client-side block ───────────────────────────────────
-    // During 00:xx (slot=0) we're in yesterday's op-date — all slots are past/current
+    // Future hour block
     const slot = getCurrentSlot();
     if (slot >= 1 && hour > slot) {
-        showToast('🚫 Hour '+hourLabel+' has not yet occurred. Only current or past hours can be entered.','error');
-        return false;
+        showToast('🚫 Hour ' + hourLabel + ' has not yet occurred.', 'error'); return false;
     }
 
-    // Past hours and closed windows handled server-side after confirm.
     const confirmLoad = loadVal > 0
-        ? `Confirm you want to ${isEdit?'<strong>update</strong>':'insert'} <strong>${loadVal.toFixed(2)} MW</strong> into Hour <strong>${hourLabel}</strong> for feeder <strong>${feederName}</strong>.`
-        : `Confirm you want to ${isEdit?'<strong>update</strong>':'record'} fault <strong>${faultCode}</strong> for Hour <strong>${hourLabel}</strong> on feeder <strong>${feederName}</strong>.<br>Remark: <em>${faultRemark}</em>`;
+        ? `Confirm ${isEdit ? '<strong>update</strong>' : 'insert'} <strong>${loadVal.toFixed(2)} MW</strong> into Hour <strong>${hourLabel}</strong> for feeder <strong>${feederName}</strong>.`
+        : `Confirm ${isEdit ? '<strong>update</strong>' : 'record'} fault <strong>${faultCode}</strong> for Hour <strong>${hourLabel}</strong> on feeder <strong>${feederName}</strong>.<br>Remark: <em>${faultRemark}</em>`;
 
     document.getElementById('confirmText').innerHTML = confirmLoad;
 
@@ -894,153 +860,391 @@ function handleFormSubmit(e) {
     return false;
 }
 
-function closeConfirmModal() {
-    document.getElementById('confirmModal').style.display = 'none';
-}
+function closeConfirmModal() { document.getElementById('confirmModal').style.display = 'none'; }
 
-// ── AJAX save ─────────────────────────────────────────────────────────────────
+// ── AJAX single save ────────────────────────────────────────────────────────
 function doSave() {
     closeConfirmModal();
     const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
+    btn.disabled  = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
 
-    fetch(saveUrl, {method:'POST', body:pendingFormData})
+    fetch(saveUrl, { method: 'POST', body: pendingFormData })
         .then(r => r.json())
         .then(data => {
             btn.disabled  = false;
             btn.innerHTML = '<i class="fas fa-save"></i> Save Entry';
 
             if (data.success) {
-                showToast('✅ '+data.message,'success');
+                showToast('✓ ' + data.message, 'success');
                 closeLoadEntryModal();
                 updateMatrixCell(
                     pendingFormData.get('fdr33kv_code'),
                     parseInt(pendingFormData.get('entry_hour')),
-                    parseFloat(pendingFormData.get('load_read')||0),
-                    pendingFormData.get('fault_code')||''
+                    parseFloat(pendingFormData.get('load_read') || 0),
+                    pendingFormData.get('fault_code') || ''
                 );
                 pendingFormData = null;
             } else if (data.future) {
-                showToast('🚫 '+data.message,'error');
-            } else if (data.late_entry) {
-                // Server requires explanation — open late-entry modal.
-                // pendingFormData is preserved for automatic re-submit after explanation.
-                openLateEntryModal(data);
+                showToast('🚫 ' + data.message, 'error');
             } else {
-                showToast('❌ '+data.message,'error');
+                showToast('✗ ' + data.message, 'error');
             }
         })
-        .catch(()=>{
+        .catch(() => {
             btn.disabled  = false;
             btn.innerHTML = '<i class="fas fa-save"></i> Save Entry';
-            showToast('❌ Network error. Please try again.','error');
+            showToast('✗ Network error. Please try again.', 'error');
         });
 }
 
-// ── Matrix cell update ────────────────────────────────────────────────────────
+// ── Matrix cell DOM update ──────────────────────────────────────────────────
 function updateMatrixCell(feederCode, hour, load, fault) {
     const cell = document.querySelector(`.matrix-cell[data-feeder-code="${feederCode}"][data-hour="${hour}"]`);
     if (!cell) return;
     cell.dataset.load  = load;
     cell.dataset.fault = fault;
-    if (load>0) {
-        cell.className='matrix-cell has-load'; cell.textContent=load.toFixed(2); cell.title='';
+    if (load > 0) {
+        cell.className = 'matrix-cell has-load';
+        cell.textContent = load.toFixed(2);
+        cell.title = '';
     } else if (fault) {
-        cell.className='matrix-cell has-fault'; cell.textContent=fault.substring(0,8).toUpperCase(); cell.title='Fault: '+fault;
+        cell.className = 'matrix-cell has-fault';
+        cell.textContent = fault.substring(0, 8).toUpperCase();
+        cell.title = 'Fault: ' + fault;
     } else {
-        cell.className='matrix-cell no-data'; cell.textContent='–'; cell.title='Click to enter / edit';
+        cell.className = 'matrix-cell no-data';
+        cell.textContent = '–';
+        cell.title = 'Click to enter / edit';
     }
 }
 
-// ── Late-entry explanation modal ──────────────────────────────────────────────
-function openLateEntryModal(serverData) {
-    document.getElementById('lateNoticeText').innerHTML =
-        '⚠️ Batch: <strong>' + serverData.batch_label + '</strong> &nbsp;|&nbsp; '
-        + 'Free entry closed: <strong>' + serverData.deadline + '</strong><br>'
-        + 'Select the specific hour you are entering late and provide a reason. '
-        + 'Once submitted the entry will be processed automatically.';
 
-    document.getElementById('lateBatchPeriodDisplay').value =
-        serverData.batch_label + '  (free deadline: ' + serverData.deadline + ')';
+// ────────────────────────────────────────────────────────────────────────────
+// PASTE / BATCH ENTRY ENGINE
+// ────────────────────────────────────────────────────────────────────────────
 
-    const hourSel  = document.getElementById('lateSpecificHour');
-    const hiddenHr = document.getElementById('lateSpecificHourHidden');
-    hourSel.innerHTML = '<option value="">-- Select the specific hour --</option>';
-    hiddenHr.value    = '';
+let pasteEntries = []; // parsed, validated entries ready to submit
 
-    const currentSlot = getCurrentSlot();
+// Open paste modal (from button or right-click on feeder row)
+function openPasteModal() {
+    resetPasteModal();
+    document.getElementById('pasteModal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('pasteInput').focus(), 200);
+}
 
-    for (let h = serverData.hour_from; h <= serverData.hour_to; h++) {
-        // During midnight window (currentSlot=0) every hour in the batch is past — include all
-        if (currentSlot >= 1 && h >= currentSlot) continue;
+function openPasteModalForFeeder(event, feederCode, feederName) {
+    event.preventDefault(); // suppress browser context menu
+    resetPasteModal();
 
-        const opt = document.createElement('option');
-        opt.value       = h;
-        opt.textContent = String(h).padStart(2, '0') + ':00';
+    // Pre-select feeder
+    const feederObj = allFeeders.find(f => f.fdr33kv_code === feederCode);
+    if (feederObj) {
+        const tsSel = document.getElementById('paste_ts_code');
+        tsSel.value = feederObj.ts_code;
+        loadFeedersForPasteTs(feederObj.ts_code, feederCode);
+    }
 
-        // Pre-select the hour that was being entered
-        if (pendingFormData && parseInt(pendingFormData.get('entry_hour')) === h) {
-            opt.selected   = true;
-            hiddenHr.value = h;
+    document.getElementById('pasteModal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('pasteInput').focus(), 200);
+}
+
+function closePasteModal() {
+    document.getElementById('pasteModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+function resetPasteModal() {
+    document.getElementById('paste_ts_code').value   = '';
+    const feederSel = document.getElementById('paste_feeder_code');
+    feederSel.innerHTML = '<option value="">-- Select Station First --</option>';
+    feederSel.disabled  = true;
+    document.getElementById('paste_start_hour').value    = '0';
+    document.getElementById('paste_default_fault').value = '';
+    document.getElementById('paste_max_load_info').style.display = 'none';
+    clearPasteInput();
+}
+
+// TS → Feeder cascade for paste modal
+function loadFeedersForPasteTs(tsCode, preselect) {
+    const sel = document.getElementById('paste_feeder_code');
+    if (!tsCode) {
+        sel.innerHTML = '<option value="">-- Select Station First --</option>';
+        sel.disabled  = true;
+        return;
+    }
+    const filtered = allFeeders.filter(f => f.ts_code === tsCode);
+    sel.innerHTML = '<option value="">-- Select Feeder --</option>';
+    filtered.forEach(f => {
+        const o = document.createElement('option');
+        o.value = f.fdr33kv_code;
+        o.textContent = f.fdr33kv_name;
+        if (f.fdr33kv_code === preselect) o.selected = true;
+        sel.appendChild(o);
+    });
+    sel.disabled = filtered.length === 0;
+    updatePasteFeederInfo();
+    reparsePreview();
+}
+
+function updatePasteFeederInfo() {
+    const code    = document.getElementById('paste_feeder_code').value;
+    const maxLoad = feederMaxLoad[code];
+    const hint    = document.getElementById('paste_max_load_info');
+    if (code && maxLoad !== undefined) {
+        hint.textContent   = 'Max allowed load: ' + maxLoad.toFixed(2) + ' MW';
+        hint.style.display = 'block';
+    } else {
+        hint.style.display = 'none';
+    }
+    reparsePreview();
+}
+
+// Handle Ctrl+V paste event (captures from clipboard before textarea gets it)
+function handlePasteEvent(event) {
+    event.preventDefault();
+    const text = (event.clipboardData || window.clipboardData).getData('text');
+    document.getElementById('pasteInput').value = text;
+    parsePasteInput();
+}
+
+function clearPasteInput() {
+    document.getElementById('pasteInput').value = '';
+    document.getElementById('pastePreviewWrap').style.display = 'none';
+    document.getElementById('pasteSaveBtn').disabled = true;
+    pasteEntries = [];
+}
+
+function reparsePreview() {
+    const text = document.getElementById('pasteInput').value;
+    if (text.trim()) parsePasteInput();
+}
+
+/**
+ * Parse tab-separated paste input from Excel.
+ * Supports multi-row paste — uses only the FIRST non-empty row found.
+ * Maps values starting at paste_start_hour.
+ */
+function parsePasteInput() {
+    const raw       = document.getElementById('pasteInput').value;
+    const startHour = parseInt(document.getElementById('paste_start_hour').value) || 0;
+    const defFault  = document.getElementById('paste_default_fault').value;
+    const feederCode= document.getElementById('paste_feeder_code').value;
+    const maxLoad   = feederCode ? (feederMaxLoad[feederCode] || null) : null;
+    const clockSlot = getCurrentSlot();
+
+    // Split into rows, find first non-empty row
+    const rows = raw.split(/\r?\n/).map(r => r.trim()).filter(r => r.length > 0);
+    if (rows.length === 0) {
+        clearPasteInput();
+        return;
+    }
+
+    // Use first row only
+    const cells = rows[0].split('\t').map(c => c.trim().replace(',', '.')); // handle comma decimals
+
+    if (cells.length === 0 || (cells.length === 1 && cells[0] === '')) {
+        clearPasteInput();
+        return;
+    }
+
+    // Build entries
+    pasteEntries = [];
+    const warnings = [];
+    const headCells = [];
+    const dataCells = [];
+    let validCount  = 0;
+
+    for (let i = 0; i < cells.length; i++) {
+        const hour  = startHour + i;
+        const rawVal= cells[i];
+
+        if (hour > 23) {
+            warnings.push('Column ' + (i + 1) + ': exceeds hour 23 — ignored.');
+            break;
         }
-        hourSel.appendChild(opt);
+
+        // Future hour
+        if (clockSlot >= 1 && hour > clockSlot) {
+            headCells.push({ hour, label: String(hour).padStart(2,'0')+':00', cls: 'paste-cell-future' });
+            dataCells.push({ display: rawVal + ' ⏳', cls: 'paste-cell-future' });
+            warnings.push('Hour ' + String(hour).padStart(2,'0') + ':00 — future hour, will be skipped.');
+            pasteEntries.push({ hour, skip: true });
+            continue;
+        }
+
+        // Parse value
+        const num = parseFloat(rawVal);
+        const isNumeric = !isNaN(num) && rawVal !== '';
+
+        if (!isNumeric) {
+            headCells.push({ hour, label: String(hour).padStart(2,'0')+':00', cls: 'paste-cell-err' });
+            dataCells.push({ display: '"' + rawVal + '" ✗', cls: 'paste-cell-err' });
+            warnings.push('Hour ' + String(hour).padStart(2,'0') + ':00 — non-numeric value "' + rawVal + '" will be skipped.');
+            pasteEntries.push({ hour, skip: true });
+            continue;
+        }
+
+        if (num < 0) {
+            headCells.push({ hour, label: String(hour).padStart(2,'0')+':00', cls: 'paste-cell-err' });
+            dataCells.push({ display: num + ' ✗', cls: 'paste-cell-err' });
+            warnings.push('Hour ' + String(hour).padStart(2,'0') + ':00 — negative value ignored.');
+            pasteEntries.push({ hour, skip: true });
+            continue;
+        }
+
+        // Zero load — need fault code
+        if (num === 0) {
+            if (!defFault) {
+                headCells.push({ hour, label: String(hour).padStart(2,'0')+':00', cls: 'paste-cell-skip' });
+                dataCells.push({ display: '0 (skipped)', cls: 'paste-cell-skip' });
+                pasteEntries.push({ hour, skip: true });
+                continue;
+            }
+            headCells.push({ hour, label: String(hour).padStart(2,'0')+':00', cls: 'paste-cell-fault' });
+            dataCells.push({ display: defFault, cls: 'paste-cell-fault' });
+            pasteEntries.push({ hour, load_read: 0, fault_code: defFault, fault_remark: 'Batch paste', skip: false });
+            validCount++;
+            continue;
+        }
+
+        // max_load check
+        if (maxLoad !== null && num > maxLoad) {
+            headCells.push({ hour, label: String(hour).padStart(2,'0')+':00', cls: 'paste-cell-err' });
+            dataCells.push({ display: num.toFixed(2) + ' ⚠️', cls: 'paste-cell-err' });
+            warnings.push('Hour ' + String(hour).padStart(2,'0') + ':00 — ' + num.toFixed(2) + ' MW exceeds max load (' + maxLoad + ' MW), will be skipped.');
+            pasteEntries.push({ hour, skip: true });
+            continue;
+        }
+
+        // Good value
+        headCells.push({ hour, label: String(hour).padStart(2,'0')+':00', cls: 'paste-cell-ok' });
+        dataCells.push({ display: num.toFixed(2), cls: 'paste-cell-ok' });
+        pasteEntries.push({ hour, load_read: num, fault_code: '', fault_remark: '', skip: false });
+        validCount++;
     }
 
-    document.getElementById('lateExplanation').value = '';
-    document.getElementById('lateEntryModal').style.display = 'block';
+    // Render preview table
+    const headRow = document.getElementById('pastePreviewHeadRow');
+    const dataRow = document.getElementById('pastePreviewDataRow');
+    headRow.innerHTML = '';
+    dataRow.innerHTML = '';
+
+    headCells.forEach((h, i) => {
+        const th = document.createElement('th');
+        th.className = h.cls;
+        th.textContent = h.label;
+        headRow.appendChild(th);
+        const td = document.createElement('td');
+        td.className = dataCells[i].cls;
+        td.textContent = dataCells[i].display;
+        dataRow.appendChild(td);
+    });
+
+    // Warnings
+    const warnBox = document.getElementById('pasteWarnings');
+    if (warnings.length > 0) {
+        warnBox.innerHTML = '<strong>⚠️ Notes:</strong><br>' + warnings.join('<br>');
+        warnBox.style.display = 'block';
+    } else {
+        warnBox.style.display = 'none';
+    }
+
+    document.getElementById('pastePreviewTitle').textContent =
+        'Preview — ' + validCount + ' of ' + cells.length + ' values will be saved';
+
+    document.getElementById('pastePreviewWrap').style.display = 'block';
+
+    // Enable save only if feeder selected and there's something to save
+    const canSave = !!feederCode && validCount > 0;
+    document.getElementById('pasteSaveBtn').disabled = !canSave;
+    if (!feederCode && validCount > 0) {
+        showToast('⚠️ Select a feeder before saving.', 'error');
+    }
 }
 
-function closeLateEntryModal() {
-    document.getElementById('lateEntryModal').style.display = 'none';
-}
+// ── Submit batch ────────────────────────────────────────────────────────────
+function submitPasteBatch() {
+    const feederCode = document.getElementById('paste_feeder_code').value;
+    const feederSel  = document.getElementById('paste_feeder_code');
+    const feederName = feederSel.options[feederSel.selectedIndex]?.text || feederCode;
 
-// After explanation logged → automatically re-submit the original save
-function submitLateExplanation(e) {
-    e.preventDefault();
-    const btn = document.getElementById('lateSubmitBtn');
+    if (!feederCode) { showToast('⚠️ Please select a feeder.', 'error'); return; }
+
+    const toSave = pasteEntries.filter(e => !e.skip);
+    if (toSave.length === 0) { showToast('⚠️ No valid entries to save.', 'error'); return; }
+
+    const btn = document.getElementById('pasteSaveBtn');
     btn.disabled  = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging…';
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving ' + toSave.length + ' entries…';
 
-    fetch(saveUrl, {method:'POST', body: new FormData(document.getElementById('lateEntryForm'))})
+    const formData = new FormData();
+    formData.set('action',       'save_batch');
+    formData.set('fdr33kv_code', feederCode);
+    formData.set('entries',      JSON.stringify(toSave));
+
+    fetch(saveUrl, { method: 'POST', body: formData })
         .then(r => r.json())
         .then(data => {
             btn.disabled  = false;
-            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Explanation & Proceed';
+            btn.innerHTML = '<i class="fas fa-save"></i> Save All';
+
             if (data.success) {
-                closeLateEntryModal();
-                showToast('📋 Explanation logged — re-submitting entry…','success');
-                if (pendingFormData) setTimeout(()=>doSave(), 700);
+                showToast('✓ ' + data.message, 'success');
+
+                // Refresh saved cells in the matrix DOM
+                toSave.forEach(entry => {
+                    updateMatrixCell(feederCode, entry.hour, entry.load_read || 0, entry.fault_code || '');
+                });
+
+                closePasteModal();
+
+                if (data.skipped > 0 && data.errors && data.errors.length > 0) {
+                    setTimeout(() => {
+                        showToast('⚠️ ' + data.skipped + ' skipped:<br><small>' + data.errors.slice(0,3).join('<br>') + '</small>', 'error');
+                    }, 1500);
+                }
             } else {
-                showToast('❌ '+data.message,'error');
+                showToast('✗ ' + data.message, 'error');
             }
         })
-        .catch(()=>{
+        .catch(() => {
             btn.disabled  = false;
-            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Explanation & Proceed';
-            showToast('❌ Network error. Please try again.','error');
+            btn.innerHTML = '<i class="fas fa-save"></i> Save All';
+            showToast('✗ Network error. Please try again.', 'error');
         });
-    return false;
 }
 
-// ── Keyboard / backdrop close ─────────────────────────────────────────────────
+// ── Right-click → paste modal: suppress default context menu on matrix rows ─
+document.addEventListener('contextmenu', function(e) {
+    const row = e.target.closest('tr[data-feeder-code]');
+    if (row) e.preventDefault();
+});
+
+// ── Keyboard / backdrop close ───────────────────────────────────────────────
 window.onclick = function(e) {
-    ['loadEntryModal','confirmModal','lateEntryModal'].forEach(id => {
-        if (e.target===document.getElementById(id)) {
-            document.getElementById(id).style.display='none';
-            document.body.style.overflow='auto';
+    ['loadEntryModal', 'confirmModal', 'pasteModal'].forEach(id => {
+        if (e.target === document.getElementById(id)) {
+            document.getElementById(id).style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
     });
 };
 document.addEventListener('keydown', e => {
-    if (e.key==='Escape') { closeLoadEntryModal(); closeConfirmModal(); closeLateEntryModal(); }
+    if (e.key === 'Escape') {
+        closeLoadEntryModal();
+        closeConfirmModal();
+        closePasteModal();
+    }
 });
-document.addEventListener('DOMContentLoaded', ()=>{
+document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('fdr33kv_code').addEventListener('change', handleFeederChange);
     handleLoadChange();
 });
 
-// ── Charts ────────────────────────────────────────────────────────────────────
+// ── Charts ──────────────────────────────────────────────────────────────────
 <?php if (!empty($feeders)): ?>
 const hourlyCtx = document.getElementById('hourlyTrendChart');
 if (hourlyCtx) {
@@ -1081,8 +1285,7 @@ if (pieCtx) {
                     text:l+': '+((chart.data.datasets[0].data[i]/gt)*100).toFixed(1)+'%',
                     fillStyle:chart.data.datasets[0].backgroundColor[i],hidden:false,index:i}))}},
                 title:{display:true,text:'Top 10 Feeders (% of Total)',font:{size:13,weight:'bold'}},
-                tooltip:{callbacks:{label:ctx=>[ctx.label,'Load: '+ctx.parsed.toFixed(2)+' MW','Share: '+((ctx.parsed/gt)*100).toFixed(1)+'%']}}}
-        }
+                tooltip:{callbacks:{label:ctx=>[ctx.label,'Load: '+ctx.parsed.toFixed(2)+' MW','Share: '+((ctx.parsed/gt)*100).toFixed(1)+'%']}}}}
     });
 }
 <?php endif; ?>
@@ -1097,297 +1300,39 @@ if (tsPieCtx) {
         options:{responsive:true,maintainAspectRatio:true,
             plugins:{legend:{position:'bottom',labels:{boxWidth:15,padding:12,font:{size:11}}},
                 title:{display:true,text:'All Transmission Stations — Load Distribution %',font:{size:13,weight:'bold'}},
-                tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.parsed.toFixed(2)+' MW ('+((ctx.parsed/tt)*100).toFixed(1)+'%)'}}}
-        }
-    });
+                tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.parsed.toFixed(2)+' MW ('+((ctx.parsed/tt)*100).toFixed(1)+'%)'}}}}}
+    );
 }
 
-// ── Operational day auto-reset at exactly 01:00 ──────────────────────────────
-// At 01:00 the PHP backend flips to the new operational date.
-// This JS schedules a soft blank + page reload to match.
+// ── Operational day auto-reset at exactly 01:00 ─────────────────────────────
 (function scheduleOpDayReset() {
     const now = new Date();
     const h   = now.getHours();
     const m   = now.getMinutes();
-
-    // Target: today at 01:00:05 if we haven't passed it, else tomorrow 01:00:05
     const target = new Date(now);
     target.setSeconds(5, 0);
     target.setMinutes(0);
     target.setHours(1);
-    if (h > 1 || (h === 1 && m >= 1)) {
-        // Already past 01:00 today — schedule for tomorrow
-        target.setDate(target.getDate() + 1);
-    }
-
+    if (h > 1 || (h === 1 && m >= 1)) { target.setDate(target.getDate() + 1); }
     const msUntil = target - now;
-    if (msUntil <= 0) return;  // safety
-
+    if (msUntil <= 0) return;
     setTimeout(function () {
-        // Update header date label immediately
         const lbl = document.getElementById('opDayLabel');
         if (lbl) {
-            const d = new Date();
-            lbl.textContent = d.toLocaleDateString('en-GB', {
-                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            lbl.textContent = new Date().toLocaleDateString('en-GB', {
+                weekday:'long', year:'numeric', month:'long', day:'numeric'
             });
         }
-        // Blank every matrix cell visually
         document.querySelectorAll('.matrix-cell').forEach(function (cell) {
             cell.className   = 'matrix-cell no-data';
-            cell.textContent = '\u2013';          // –
+            cell.textContent = '–';
             cell.dataset.load  = '';
             cell.dataset.fault = '';
             cell.title = 'Click to enter / edit';
         });
-        // Reload after brief pause so user sees the blank flash
         setTimeout(function () { window.location.reload(); }, 1200);
     }, msUntil);
 })();
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Bulk Paste from Excel — parser + submitter
-// ─────────────────────────────────────────────────────────────────────────────
-let bulkParsedRows = [];
-
-function openBulkPasteModal() {
-    document.getElementById('bulkPasteArea').value = '';
-    document.getElementById('bulkExplanation').value = '';
-    document.getElementById('bulkPreview').style.display = 'none';
-    document.getElementById('bulkSubmitBtn').disabled = true;
-    bulkParsedRows = [];
-    document.getElementById('bulkPasteModal').style.display = 'block';
-}
-function closeBulkPasteModal() {
-    document.getElementById('bulkPasteModal').style.display = 'none';
-}
-
-// Lookup feeder by code OR name (case-insensitive, trimmed).
-const _bulkFeederIndex = (function () {
-    const idx = {};
-    (allFeeders || []).forEach(f => {
-        if (f.fdr33kv_code) idx[String(f.fdr33kv_code).trim().toLowerCase()] = f;
-        if (f.fdr33kv_name) idx[String(f.fdr33kv_name).trim().toLowerCase()] = f;
-    });
-    return idx;
-})();
-function _findFeeder(token) {
-    const t = String(token || '').trim().toLowerCase();
-    return _bulkFeederIndex[t] || null;
-}
-
-const FAULT_CODES = ['FO', 'BF', 'OS', 'DOFF', 'MVR', 'OT', 'MS', 'LS', 'TF'];
-
-function _parseHourToken(tok) {
-    if (tok === null || tok === undefined) return -1;
-    const s = String(tok).trim();
-    // Accept "14", "14:00", "14h", "1400"
-    let m = s.match(/^(\d{1,2})(?::?\d{0,2})?h?$/i);
-    if (!m) return -1;
-    const h = parseInt(m[1], 10);
-    return (h >= 0 && h <= 23) ? h : -1;
-}
-
-function _parseLoadOrFault(tok) {
-    const s = String(tok || '').trim();
-    if (s === '' || s === '-' || s === '–') return { load: null, fault: null, skip: true };
-    const upper = s.toUpperCase();
-    if (FAULT_CODES.includes(upper)) return { load: 0, fault: upper, skip: false };
-    // Strip thousands separator, currency-like chars
-    const cleaned = s.replace(/[,\s]/g, '');
-    const n = parseFloat(cleaned);
-    if (isNaN(n) || n < 0) return { load: null, fault: null, skip: false, error: 'Invalid load value: "' + s + '"' };
-    return { load: n, fault: null, skip: false };
-}
-
-function bulkParse() {
-    const raw = document.getElementById('bulkPasteArea').value || '';
-    const lines = raw.split(/\r?\n/).map(l => l.replace(/^\s+|\s+$/g, '')).filter(Boolean);
-    const rows = [];
-
-    lines.forEach((line, lineIdx) => {
-        // Split on tab if present, else fall back to multi-space
-        const cols = line.includes('\t')
-            ? line.split('\t').map(c => c.trim())
-            : line.split(/\s{2,}|,/).map(c => c.trim()).filter(s => s.length);
-
-        if (cols.length === 0) return;
-
-        // Skip header row (first cell looks non-feeder + second is "00"/"01"/etc)
-        if (lineIdx === 0) {
-            const looksLikeHeader = (cols[1] && /^h?\d{1,2}(:?\d{0,2})?$/i.test(cols[1]) && !_findFeeder(cols[0]));
-            if (looksLikeHeader) return;
-        }
-
-        const feederToken = cols[0];
-        const feeder = _findFeeder(feederToken);
-
-        // Matrix format: 25 columns total (1 feeder + 24 hours)
-        if (cols.length >= 24 && cols.length <= 27) {
-            for (let h = 0; h <= 23; h++) {
-                const tok = cols[h + 1];
-                if (tok === undefined) continue;
-                const parsed = _parseLoadOrFault(tok);
-                if (parsed.skip) continue;
-                rows.push(_buildRow(feeder, feederToken, h, parsed, lineIdx + 1));
-            }
-            return;
-        }
-
-        // Long format: feeder | hour | load | [fault] | [remark]
-        if (cols.length >= 3) {
-            const hour   = _parseHourToken(cols[1]);
-            const parsed = _parseLoadOrFault(cols[2]);
-            const fault  = (cols[3] || '').trim().toUpperCase();
-            const remark = (cols[4] || '').trim();
-            if (parsed.skip && !fault) return;
-            const row = _buildRow(feeder, feederToken, hour, parsed, lineIdx + 1);
-            if (fault && FAULT_CODES.includes(fault)) {
-                row.fault_code = fault; row.load_read = 0;
-                if (row.error && row.error.includes('Invalid load')) row.error = null;
-            }
-            if (remark) row.fault_remark = remark;
-            // Re-validate
-            if (hour < 0) row.error = 'Invalid hour: "' + cols[1] + '"';
-            rows.push(row);
-            return;
-        }
-
-        // 2-column (feeder + single load) — assume current hour
-        if (cols.length === 2) {
-            const parsed = _parseLoadOrFault(cols[1]);
-            if (parsed.skip) return;
-            const h = new Date().getHours();
-            rows.push(_buildRow(feeder, feederToken, h, parsed, lineIdx + 1));
-        }
-    });
-
-    bulkParsedRows = rows;
-    _renderBulkPreview(rows);
-}
-
-function _buildRow(feeder, feederToken, hour, parsed, srcLine) {
-    return {
-        src_line:     srcLine,
-        feeder_token: feederToken,
-        fdr33kv_code: feeder ? feeder.fdr33kv_code : '',
-        feeder_name:  feeder ? feeder.fdr33kv_name : '(unknown)',
-        entry_hour:   hour,
-        load_read:    parsed.load !== null ? parsed.load : 0,
-        fault_code:   parsed.fault || '',
-        fault_remark: parsed.fault ? 'Bulk paste — auto fault' : '',
-        error:        !feeder        ? 'Unknown feeder: "' + feederToken + '"'
-                     : (hour < 0)    ? 'Invalid hour'
-                     : parsed.error  ? parsed.error
-                     : null,
-    };
-}
-
-function _renderBulkPreview(rows) {
-    const tbody = document.getElementById('bulkPreviewBody');
-    tbody.innerHTML = '';
-    if (rows.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="padding:18px;text-align:center;color:#94a3b8;">No rows parsed. Check format.</td></tr>';
-        document.getElementById('bulkPreview').style.display = 'block';
-        document.getElementById('bulkPreviewStatus').textContent = '0 rows';
-        document.getElementById('bulkSubmitBtn').disabled = true;
-        return;
-    }
-    let okCount = 0, badCount = 0;
-    rows.forEach((r, i) => {
-        const tr = document.createElement('tr');
-        const status = r.error
-            ? '<span style="color:#dc2626;font-weight:700;">✗ ' + _esc(r.error) + '</span>'
-            : '<span style="color:#16a34a;font-weight:700;">✓ Ready</span>';
-        if (r.error) badCount++; else okCount++;
-        tr.style.background = r.error ? '#fef2f2' : '#f0fdf4';
-        tr.innerHTML =
-            '<td style="padding:5px 8px;color:#64748b;">' + (i+1) + '</td>' +
-            '<td style="padding:5px 8px;">' + _esc(r.feeder_name) + '<br><small style="color:#64748b;">' + _esc(r.fdr33kv_code || r.feeder_token) + '</small></td>' +
-            '<td style="padding:5px 8px;">' + (r.entry_hour >= 0 ? String(r.entry_hour).padStart(2,'0') + ':00' : '—') + '</td>' +
-            '<td style="padding:5px 8px;text-align:right;font-family:monospace;">' + (r.fault_code ? '0.00' : Number(r.load_read).toFixed(2)) + '</td>' +
-            '<td style="padding:5px 8px;font-weight:700;color:#dc2626;">' + _esc(r.fault_code || '') + '</td>' +
-            '<td style="padding:5px 8px;">' + status + '</td>';
-        tbody.appendChild(tr);
-    });
-    document.getElementById('bulkPreview').style.display = 'block';
-    document.getElementById('bulkPreviewStatus').innerHTML =
-        '<span style="color:#16a34a;">✓ ' + okCount + ' ready</span>' +
-        (badCount ? ' &nbsp;|&nbsp; <span style="color:#dc2626;">✗ ' + badCount + ' problems</span>' : '');
-    document.getElementById('bulkSubmitBtn').disabled = (okCount === 0);
-}
-
-function _esc(s) {
-    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-async function bulkSubmit() {
-    const valid = bulkParsedRows.filter(r => !r.error);
-    if (valid.length === 0) {
-        showToast('No valid rows to save.', 'error');
-        return;
-    }
-    const btn = document.getElementById('bulkSubmitBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving ' + valid.length + ' rows…';
-
-    const payload = valid.map(r => ({
-        fdr33kv_code: r.fdr33kv_code,
-        entry_hour:   r.entry_hour,
-        load_read:    r.load_read,
-        fault_code:   r.fault_code,
-        fault_remark: r.fault_remark,
-    }));
-
-    const fd = new FormData();
-    fd.append('action', 'save_bulk');
-    fd.append('rows', JSON.stringify(payload));
-    fd.append('bulk_explanation', document.getElementById('bulkExplanation').value || '');
-
-    try {
-        const resp = await fetch((window.__BASE_PATH || '') + '/index.php?page=load_33kv', {
-            method: 'POST', body: fd,
-        });
-        const data = await resp.json();
-        _renderBulkServerResults(data);
-        if (data.ok_count > 0) {
-            showToast(`Saved ${data.ok_count} of ${data.total} rows. Reloading…`, 'success');
-            setTimeout(() => window.location.reload(), 1800);
-        } else {
-            showToast('No rows saved — check the status column for reasons.', 'error');
-        }
-    } catch (e) {
-        showToast('Network error: ' + e.message, 'error');
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-save"></i> Save All Valid Rows';
-    }
-}
-
-function _renderBulkServerResults(data) {
-    // Map server results back to preview rows by index
-    if (!data || !Array.isArray(data.results)) return;
-    const tbody = document.getElementById('bulkPreviewBody');
-    const trs = tbody.querySelectorAll('tr');
-    let serverIdx = 0;
-    for (let i = 0; i < bulkParsedRows.length && serverIdx < data.results.length; i++) {
-        if (bulkParsedRows[i].error) continue;
-        const res = data.results[serverIdx++];
-        const tr = trs[i];
-        if (!tr) continue;
-        const statusCell = tr.children[5];
-        if (res.success) {
-            statusCell.innerHTML = '<span style="color:#16a34a;font-weight:700;">✓ Saved</span>';
-            tr.style.background = '#dcfce7';
-        } else {
-            statusCell.innerHTML = '<span style="color:#dc2626;font-weight:700;">✗ ' + _esc(res.message) + '</span>';
-            tr.style.background = '#fef2f2';
-        }
-    }
-    document.getElementById('bulkPreviewStatus').innerHTML =
-        '<span style="color:#16a34a;">✓ ' + (data.ok_count || 0) + ' saved</span>' +
-        (data.fail_count ? ' &nbsp;|&nbsp; <span style="color:#dc2626;">✗ ' + data.fail_count + ' failed</span>' : '');
-}
 
 </script>
 
