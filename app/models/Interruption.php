@@ -234,6 +234,134 @@ class Interruption {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
+    // SINGLE-FORM LOG — saves the entire interruption (out + in + reason +
+    // resolution + weather) in one shot.  Used by the simplified UL2 form
+    // that matches the dispatch team's Excel layout.
+    //
+    // Rules:
+    //   • datetime_out must be today; otherwise the caller MUST supply an
+    //     `approval_note` and the record is saved with form_status =
+    //     AWAITING_APPROVAL (an approval row is created on the side).
+    //   • Same-day entries skip approval and go straight to COMPLETED.
+    //   • Ticket number uses the existing generateTicket() format.
+    //   • interruption_type is auto-derived from interruption_code via
+    //     the interruption_codes table.
+    // ─────────────────────────────────────────────────────────────────────────
+    public static function logSingle(array $data): array {
+        $db = Database::connect();
+
+        foreach (['fdr33kv_code','interruption_code','datetime_out','datetime_in','load_loss','reason_for_interruption','user_id'] as $f) {
+            if (!isset($data[$f]) || $data[$f] === '' || $data[$f] === null) {
+                return ['success' => false, 'message' => "Missing required field: {$f}"];
+            }
+        }
+
+        if (strtotime($data['datetime_in']) <= strtotime($data['datetime_out'])) {
+            return ['success' => false, 'message' => 'Date/Time In must be after Date/Time Out.'];
+        }
+        if ((float)$data['load_loss'] < 0) {
+            return ['success' => false, 'message' => 'Load loss cannot be negative.'];
+        }
+
+        // Auto-resolve interruption_type from the code
+        $cs = $db->prepare("SELECT interruption_type, approval_requirement FROM interruption_codes WHERE interruption_code = ?");
+        $cs->execute([$data['interruption_code']]);
+        $cinfo = $cs->fetch(PDO::FETCH_ASSOC);
+        if (!$cinfo) {
+            return ['success' => false, 'message' => 'Unknown interruption code: ' . $data['interruption_code']];
+        }
+        $interruptionType = $cinfo['interruption_type'];
+
+        // Backdate check
+        $outDate   = date('Y-m-d', strtotime($data['datetime_out']));
+        $today     = date('Y-m-d');
+        $isPastDay = $outDate < $today;
+
+        if ($isPastDay && empty(trim($data['approval_note'] ?? ''))) {
+            return [
+                'success' => false,
+                'needs_approval_note' => true,
+                'message' => 'This interruption is dated before today. Provide an "Approval reason for past-date logging" before saving.',
+            ];
+        }
+
+        $ticket = self::generateTicket($data['fdr33kv_code'], $db);
+
+        $formStatus     = $isPastDay ? 'AWAITING_APPROVAL'      : 'COMPLETED';
+        $approvalStatus = $isPastDay ? 'PENDING'                : 'NOT_REQUIRED';
+        $reqApproval    = $isPastDay ? 'YES'                    : 'NO';
+
+        try {
+            // datetime_in / load_loss / reason / resolution all saved upfront so
+            // when an approver approves, no Stage-2 follow-up is needed — they
+            // see the full ticket and can just approve.
+            $stmt = $db->prepare("
+                INSERT INTO interruptions
+                    (ticket_number, fdr33kv_code, interruption_type, interruption_code,
+                     datetime_out, datetime_in, load_loss,
+                     reason_for_interruption, resolution, weather_condition,
+                     approval_note, requires_approval, approval_status, form_status,
+                     started_by, started_at, completed_by, completed_at,
+                     user_id, timestamp)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, NOW(), ?, NOW())
+            ");
+            $stmt->execute([
+                $ticket,
+                $data['fdr33kv_code'],
+                $interruptionType,
+                $data['interruption_code'],
+                $data['datetime_out'],
+                $data['datetime_in'],
+                (float)$data['load_loss'],
+                $data['reason_for_interruption'],
+                $data['resolution']         ?? null,
+                $data['weather_condition']  ?? null,
+                $data['approval_note']      ?? null,
+                $reqApproval,
+                $approvalStatus,
+                $formStatus,
+                $data['user_id'],
+                $isPastDay ? null : $data['user_id'],
+                $data['user_id'],
+            ]);
+
+            $interruptionId = (int)$db->lastInsertId();
+
+            // For backdated entries, create the approval row so UL3/UL4 see it
+            if ($isPastDay) {
+                if (!class_exists('InterruptionApproval')) {
+                    @include_once __DIR__ . '/InterruptionApproval.php';
+                }
+                if (class_exists('InterruptionApproval')) {
+                    $ar = InterruptionApproval::createApprovalRequest([
+                        'interruption_id'   => $interruptionId,
+                        'interruption_type' => '33kV',
+                        'requester_id'      => $data['user_id'],
+                        'requester_name'    => $data['user_name'] ?? $data['user_id'],
+                    ]);
+                    if (!empty($ar['success'])) {
+                        $db->prepare("UPDATE interruptions SET approval_id = ? WHERE id = ?")
+                           ->execute([$ar['approval_id'], $interruptionId]);
+                    }
+                }
+            }
+
+            return [
+                'success'         => true,
+                'message'         => $isPastDay
+                    ? "Saved as ticket {$ticket}. Past-date entry sent for UL3/UL4 approval."
+                    : "Saved and completed as ticket {$ticket}.",
+                'interruption_id' => $interruptionId,
+                'ticket_number'   => $ticket,
+                'form_status'     => $formStatus,
+                'needs_approval'  => $isPastDay,
+            ];
+        } catch (Throwable $e) {
+            return ['success' => false, 'message' => 'Database error: ' . $e->getMessage()];
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
     // STAGE 2 — complete the record after the event ends
     // ─────────────────────────────────────────────────────────────────────────
     public static function stage2(int $id, array $data): array {

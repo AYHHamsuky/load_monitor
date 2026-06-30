@@ -94,13 +94,19 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="<?= $current_page === 'interruptions' ? 'active' : '' ?>">
+                <li class="<?= $current_page === 'interruptions' && $current_action !== 'simple-log' ? 'active' : '' ?>">
                     <a href="?page=interruptions">
                         <i class="fas fa-exclamation-triangle"></i>
                         <span>Interruptions</span>
                     </a>
                 </li>
-                <li class="<?= $current_page === 'interruptions' ? 'active' : '' ?>">
+                <li class="<?= ($current_page === 'interruptions' && $current_action === 'simple-log') ? 'active' : '' ?>">
+                    <a href="?page=interruptions&action=simple-log">
+                        <i class="fas fa-bolt"></i>
+                        <span>Quick Log (Single Form)</span>
+                    </a>
+                </li>
+                <li class="<?= $current_page === 'interruptions' && $current_action === 'my-requests' ? 'active' : '' ?>">
                     <a href="?page=interruptions&action=my-requests">
                         <i class="fas fa-clock"></i>
                         <span>Interruption Portal</span>

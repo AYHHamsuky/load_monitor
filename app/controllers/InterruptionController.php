@@ -33,6 +33,19 @@ switch ($action) {
         require __DIR__ . '/../views/interruptions/log_form.php';
         break;
 
+    /* ── SIMPLE LOG (single combined form — matches dispatch Excel sheet) ─ */
+    case 'simple-log':
+        if (empty($feeders_33kv)) die('No 33kV feeders configured. Contact administrator.');
+        // Codes list for the Interruption Type dropdown
+        $codesStmt = $db->query("
+            SELECT interruption_code, interruption_description, interruption_type
+              FROM interruption_codes
+          ORDER BY interruption_type, interruption_description
+        ");
+        $interruptionCodes = $codesStmt->fetchAll(PDO::FETCH_ASSOC);
+        require __DIR__ . '/../views/interruptions/single_form.php';
+        break;
+
     /* ── VIEW (ticket view — all locked, Complete button if pending) ───── */
     case 'view':
         require_once __DIR__ . '/../models/Interruption.php';
