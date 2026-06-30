@@ -72,3 +72,4 @@ require_once __DIR__ . '/core/Auth.php';
 require_once __DIR__ . '/core/Guard.php';
 require_once __DIR__ . '/models/LateEntryLog.php';
 require_once __DIR__ . '/models/MytoAllocation.php';
+require_once __DIR__ . '/models/FaultCodes.php';

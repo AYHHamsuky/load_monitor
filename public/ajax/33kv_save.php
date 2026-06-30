@@ -87,9 +87,8 @@ function saveOneReading(
         }
     }
 
-    // ── Validate fault code ─────────────────────────────────────────────────
-    $allowedFaults = ['FO', 'BF', 'OS', 'DOff', 'MVR'];
-    if (!empty($faultCode) && !in_array($faultCode, $allowedFaults)) {
+    // ── Validate fault code against the master interruption_codes list ──────
+    if (!empty($faultCode) && !FaultCodes::isValid($faultCode)) {
         return ['success' => false, 'message' => "Invalid fault code: {$faultCode}"];
     }
 

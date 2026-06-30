@@ -186,10 +186,12 @@ foreach ($ts_all_stmt->fetchAll(PDO::FETCH_ASSOC) as $ts) {
     if ($ts['total_load'] > 0) $ts_totals[$ts['station_name']] = (float)$ts['total_load'];
 }
 
-// Fault codes
-$fault_codes = [
-    'FO' => 'Feeder Off', 'BF' => 'Breaker Fault',
-    'OS' => 'Out of Service', 'DOff' => 'Deliberately Off', 'MVR' => 'Maintenance/Repair',
-];
+// Fault codes — single source of truth: interruption_codes table.
+// Built as an associative [code => description] map so the existing view
+// loops (foreach ($fault_codes as $fc => $desc)) keep working.
+$fault_codes = [];
+foreach (FaultCodes::all() as $row) {
+    $fault_codes[$row['code']] = $row['description'];
+}
 
 require __DIR__ . '/../views/dashboard33kv/index.php';

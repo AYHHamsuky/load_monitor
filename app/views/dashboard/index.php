@@ -299,16 +299,10 @@
             <div id="faultSection">
                 <div class="form-group">
                     <label for="fault_code">Fault Code *</label>
-                    <select name="fault_code" id="fault_code" class="form-control" required>
-                        <option value="">-- Select Fault Code --</option>
-                        <option value="FO">FO – Feeder Off</option>
-                        <option value="BF">BF – Breaker Fault</option>
-                        <option value="LF">LF – Line Fault</option>
-                        <option value="TF">TF – Transformer Fault</option>
-                        <option value="LS">LS – Load Shedding</option>
-                        <option value="MS">MS – Maintenance / Scheduled</option>
-                        <option value="OT">OT – Other</option>
-                    </select>
+                    <?= FaultCodes::renderSelect('fault_code', 'fault_code', '', [
+                        'class'    => 'form-control',
+                        'required' => 'required',
+                    ]) ?>
                 </div>
                 <div class="form-group">
                     <label for="fault_remark">Fault Remark *</label>
