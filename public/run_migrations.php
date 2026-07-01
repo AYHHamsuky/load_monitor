@@ -51,20 +51,69 @@ step('fdr33kv_data — drop fault_code constraint', function () use ($db, $drive
 
 // ── 2 & 3. Raise max_load thresholds ────────────────────────────────────────
 step('fdr11kv — set max_load = 13.00 MW for every feeder', function () use ($db, $driver) {
-    if ($driver === 'sqlite') recreateFdrWithNewMax($db, 'fdr11kv', 'fdr11kv_code', 'fdr11kv_name', 13.00, 20.00, true);
-    else $db->exec("ALTER TABLE fdr11kv MODIFY COLUMN max_load DECIMAL(6,2) NOT NULL DEFAULT 13.00");
+    $extra = '';
+    if ($driver === 'sqlite') {
+        $r = recreateFdrWithNewMax($db, 'fdr11kv', 'fdr11kv_code', 'fdr11kv_name', 13.00, 20.00, true);
+        if (!empty($r['skipped'])) $extra = ' (schema already upgraded)';
+        else {
+            if ($r['dropped']) $extra .= ' [deps restored: ' . implode(', ', $r['dropped']) . ']';
+            if ($r['failed'])  $extra .= ' [FAILED deps: ' . implode('; ', $r['failed']) . ']';
+        }
+    } else {
+        $db->exec("ALTER TABLE fdr11kv MODIFY COLUMN max_load DECIMAL(6,2) NOT NULL DEFAULT 13.00");
+    }
     $n = $db->exec("UPDATE fdr11kv SET max_load = 13.00");
-    return "{$n} rows updated";
+    return "{$n} rows updated{$extra}";
 }, $log);
 
 step('fdr33kv — set max_load = 25.00 MW for every feeder', function () use ($db, $driver) {
-    if ($driver === 'sqlite') recreateFdrWithNewMax($db, 'fdr33kv', 'fdr33kv_code', 'fdr33kv_name', 25.00, 30.00, false);
-    else $db->exec("ALTER TABLE fdr33kv MODIFY COLUMN max_load DECIMAL(6,2) NOT NULL DEFAULT 25.00");
+    $extra = '';
+    if ($driver === 'sqlite') {
+        $r = recreateFdrWithNewMax($db, 'fdr33kv', 'fdr33kv_code', 'fdr33kv_name', 25.00, 30.00, false);
+        if (!empty($r['skipped'])) $extra = ' (schema already upgraded)';
+        else {
+            if ($r['dropped']) $extra .= ' [deps restored: ' . implode(', ', $r['dropped']) . ']';
+            if ($r['failed'])  $extra .= ' [FAILED deps: ' . implode('; ', $r['failed']) . ']';
+        }
+    } else {
+        $db->exec("ALTER TABLE fdr33kv MODIFY COLUMN max_load DECIMAL(6,2) NOT NULL DEFAULT 25.00");
+    }
     $n = $db->exec("UPDATE fdr33kv SET max_load = 25.00");
-    return "{$n} rows updated";
+    return "{$n} rows updated{$extra}";
 }, $log);
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Save and drop any views / triggers that reference $tbl, then run $cb, then
+// recreate the views / triggers.  Prevents "no such table" errors on SQLite
+// when we DROP + RENAME a table that a view references.
+function withDependentsSaved(PDO $db, string $tbl, callable $cb): array {
+    $depNames  = [];
+    $depFailed = [];
+    $rows = $db->query("
+        SELECT type, name, sql FROM sqlite_master
+         WHERE (type='view' OR type='trigger')
+           AND sql IS NOT NULL
+           AND sql LIKE '%{$tbl}%'
+    ")->fetchAll(PDO::FETCH_ASSOC);
+
+    // Drop in reverse order (triggers first, then views — safer)
+    foreach ($rows as $r) {
+        try {
+            $db->exec("DROP {$r['type']} IF EXISTS \"{$r['name']}\"");
+            $depNames[] = $r['name'];
+        } catch (Throwable $e) { /* ignore */ }
+    }
+
+    $cb();
+
+    // Recreate them
+    foreach ($rows as $r) {
+        try { $db->exec($r['sql']); }
+        catch (Throwable $e) { $depFailed[] = $r['name'] . ' (' . $e->getMessage() . ')'; }
+    }
+    return ['dropped' => $depNames, 'failed' => $depFailed];
+}
+
 function recreateWithoutCheck(PDO $db, string $tbl, string $feederCol): string {
     $cur = $db->query("SELECT sql FROM sqlite_master WHERE type='table' AND name='{$tbl}'")->fetchColumn();
     if (!$cur) return "table {$tbl} not found";
@@ -72,9 +121,9 @@ function recreateWithoutCheck(PDO $db, string $tbl, string $feederCol): string {
         return "already upgraded (no CHECK on fault_code)";
     }
 
-    $db->beginTransaction();
-    try {
+    $deps = withDependentsSaved($db, $tbl, function () use ($db, $tbl, $feederCol) {
         $tmp = $tbl . '_new_mig';
+        $db->exec("DROP TABLE IF EXISTS {$tmp}");
         $db->exec("
             CREATE TABLE {$tmp} (
                 entry_date   TEXT NOT NULL,
@@ -98,13 +147,16 @@ function recreateWithoutCheck(PDO $db, string $tbl, string $feederCol): string {
         ");
         $db->exec("DROP TABLE {$tbl}");
         $db->exec("ALTER TABLE {$tmp} RENAME TO {$tbl}");
-        $db->commit();
-    } catch (Throwable $e) {
-        $db->rollBack();
-        throw $e;
+    });
+
+    $rows   = $db->query("SELECT COUNT(*) FROM {$tbl}")->fetchColumn();
+    $depMsg = $deps['dropped']
+        ? ' (dependents saved+restored: ' . implode(', ', $deps['dropped']) . ')'
+        : '';
+    if ($deps['failed']) {
+        $depMsg .= ' — FAILED to recreate: ' . implode('; ', $deps['failed']);
     }
-    $rows = $db->query("SELECT COUNT(*) FROM {$tbl}")->fetchColumn();
-    return "CHECK dropped, {$rows} rows preserved";
+    return "CHECK dropped, {$rows} rows preserved{$depMsg}";
 }
 
 function alterEnumToVarchar(PDO $db, string $tbl): string {
@@ -119,16 +171,17 @@ function alterEnumToVarchar(PDO $db, string $tbl): string {
 }
 
 function recreateFdrWithNewMax(PDO $db, string $tbl, string $codeCol, string $nameCol,
-                                float $newDefault, float $newCeiling, bool $is11kv): void {
+                                float $newDefault, float $newCeiling, bool $is11kv): array {
     $cur = $db->query("SELECT sql FROM sqlite_master WHERE type='table' AND name='{$tbl}'")->fetchColumn();
-    if (!$cur) return;
-    if (stripos($cur, 'CHECK') === false || stripos($cur, 'max_load') === false) return; // already fine
+    if (!$cur) return ['dropped' => [], 'failed' => [], 'skipped' => true];
+    if (stripos($cur, 'CHECK') === false || stripos($cur, 'max_load') === false) {
+        return ['dropped' => [], 'failed' => [], 'skipped' => true];
+    }
 
-    // Column list differs between 11kV (has fdr33kv_code, band, ao_code, iss_code)
-    // and 33kV (has ts_code). Keep it schema-preserving.
-    $db->beginTransaction();
-    try {
+    return withDependentsSaved($db, $tbl, function () use ($db, $tbl, $codeCol, $nameCol, $newDefault, $newCeiling, $is11kv) {
         $tmp = $tbl . '_new_mig';
+        $db->exec("DROP TABLE IF EXISTS {$tmp}");
+
         if ($is11kv) {
             $db->exec("
                 CREATE TABLE {$tmp} (
@@ -167,11 +220,7 @@ function recreateFdrWithNewMax(PDO $db, string $tbl, string $codeCol, string $na
         }
         $db->exec("DROP TABLE {$tbl}");
         $db->exec("ALTER TABLE {$tmp} RENAME TO {$tbl}");
-        $db->commit();
-    } catch (Throwable $e) {
-        $db->rollBack();
-        throw $e;
-    }
+    });
 }
 ?>
 <!DOCTYPE html>
