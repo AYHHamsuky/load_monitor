@@ -336,9 +336,15 @@
                 <strong>📋 How to use:</strong>
                 <ol>
                     <li>Select the <strong>Transmission Station</strong> — the modal shows all feeders under it.</li>
-                    <li>In your Excel sheet, select rows where <strong>column 1</strong> is the feeder name/code and <strong>columns 2-25</strong> are the 24 hourly values (00:00 → 23:00, or set a Starting Hour below).</li>
-                    <li>Click in the paste area and press <strong>Ctrl+V</strong>. Header rows (with hour labels) are auto-detected and skipped.</li>
-                    <li>Review the preview grid — each cell is colour-coded — then click <strong>Save All</strong>.</li>
+                    <li>Copy your daily 33kV sheet directly from Excel. Both layouts work:
+                        <ul style="margin:4px 0 4px 18px;font-size:12px;">
+                            <li><strong>Full sheet</strong> — first column = TS name, second column = Feeder name, next 24 columns = hourly values (extra summary columns like TOTAL / AVG / PEAK / BAND are ignored).</li>
+                            <li><strong>Feeder-only</strong> — first column = Feeder name, next 24 columns = hourly values.</li>
+                        </ul>
+                    </li>
+                    <li>Fault text in a cell is recognised automatically: <code>O/C</code>, <code>E/F</code>, <code>O/C, E/F</code>, <code>LS</code>, <code>OS</code>, <code>EF&amp;OC</code> — saved as load=0 with that fault code.</li>
+                    <li><code>TIED TO DAM</code>, <code>OUT OF SERVICE</code>, blank cells, TOTAL and header rows are all auto-skipped.</li>
+                    <li>Click in the paste area, press <strong>Ctrl+V</strong>, review the preview grid, then click <strong>Save All</strong>.</li>
                 </ol>
             </div>
 
@@ -662,6 +668,10 @@ const saveUrl = (function() {
 })();
 
 const allFeeders = <?= json_encode(array_values($all_feeders)) ?>;
+
+// Master fault-code list from `interruption_codes` (code → description),
+// used by the paste parser to recognise text like "O/C", "E/F", "LS", etc.
+const VALID_FAULT_CODES = <?= json_encode($fault_codes) ?>;
 
 const feederMaxLoad = {};
 <?php foreach ($all_feeders as $f): ?>
@@ -993,11 +1003,15 @@ function loadFeedersForPasteTs(tsCode) {
     }
     const feeders = allFeeders.filter(f => f.ts_code === tsCode);
     feeders.forEach(f => {
-        // Index by code and by name (lower-cased + collapsed whitespace) for matching
-        const codeKey = String(f.fdr33kv_code).trim().toLowerCase();
-        const nameKey = String(f.fdr33kv_name).trim().toLowerCase().replace(/\s+/g, ' ');
-        pasteTsFeederIndex[codeKey] = f;
-        pasteTsFeederIndex[nameKey] = f;
+        // Index by code AND by several name variants so the parser can match
+        // whether the sheet uses "AREWA", "33KV AREWA", "33kV Arewa", etc.
+        const codeKey    = String(f.fdr33kv_code).trim().toLowerCase();
+        const nameLc     = String(f.fdr33kv_name).trim().toLowerCase().replace(/\s+/g, ' ');
+        const nameNoPfx  = nameLc.replace(/^33\s*k?v?\s+/i, '').trim();
+        pasteTsFeederIndex[codeKey]              = f;
+        pasteTsFeederIndex[nameLc]               = f;
+        if (nameNoPfx && nameNoPfx !== nameLc) pasteTsFeederIndex[nameNoPfx] = f;
+        pasteTsFeederIndex['33kv ' + nameNoPfx]  = f;
 
         const chip = document.createElement('span');
         chip.className   = 'chip';
@@ -1012,8 +1026,67 @@ function loadFeedersForPasteTs(tsCode) {
 }
 
 function _lookupFeederInTs(token) {
-    const t = String(token || '').trim().toLowerCase().replace(/\s+/g, ' ');
-    return pasteTsFeederIndex[t] || null;
+    if (token == null) return null;
+    const t = String(token).trim().toLowerCase().replace(/\s+/g, ' ');
+    if (!t) return null;
+    if (pasteTsFeederIndex[t]) return pasteTsFeederIndex[t];
+    // Also try stripping "33KV " / "33kV " prefix from the token
+    const stripped = t.replace(/^33\s*k?v?\s+/i, '').trim();
+    return pasteTsFeederIndex[stripped] || null;
+}
+
+// ── Fault-code recognition ──────────────────────────────────────────────────
+// Aliases the dispatch team commonly writes in the sheet → canonical codes
+// from the interruption_codes table.
+const FAULT_ALIASES = {
+    'ls':      'SBT KE',       // Load Shedding
+    'ls ke':   'SBT KE',
+    'ls tcn':  'SBT TCN',
+    'os':      'O/S KE',       // Out of Supply
+    'os ke':   'O/S KE',
+    'os tcn':  'O/S TCN',
+    'fo':      'O/S KE',       // Old "Feeder Off"
+    'bf':      'B/F KE',       // Old "Breaker Fault"
+    'doff':    'P/O KE',       // Old "Deliberately Off"
+    'mvr':     'P/O KE',       // Old "Maintenance"
+    'ef':      'E/F',
+    'oc':      'O/C',
+    'ef&oc':   'O/C and E/F',
+    'oc&ef':   'O/C and E/F',
+    'ef,oc':   'O/C and E/F',
+    'oc,ef':   'O/C and E/F',
+};
+
+function _normalizeFaultCode(raw) {
+    if (raw == null) return null;
+    const s = String(raw).trim();
+    if (!s) return null;
+
+    // "TIED TO X" / "OUT OF SERVICE" → not a real fault code, skip cell
+    if (/^tied to\b/i.test(s) || /^out of service/i.test(s)) return { skip: true };
+
+    const lc = s.toLowerCase().replace(/\s+/g, ' ');
+
+    // 1. Direct case-insensitive match against valid interruption codes
+    for (const code in VALID_FAULT_CODES) {
+        if (code.toLowerCase() === lc) return { code };
+    }
+
+    // 2. Alias table
+    if (FAULT_ALIASES[lc]) return { code: FAULT_ALIASES[lc] };
+
+    // 3. Handle combined forms: "O/C, E/F", "E/F & O/C", "OC/EF", etc.
+    const collapsed = lc.replace(/[,&/]/g, ' ').replace(/\s+/g, ' ').trim();
+    const hasEF   = /\be\/?f\b/.test(collapsed);
+    const hasOC   = /\bo\/?c\b/.test(collapsed);
+    const hasInst = /\binst\.?\b|\binstantaneous\b/.test(collapsed);
+
+    if (hasInst && hasEF && hasOC) return { code: 'Inst. E/F and H/S' };
+    if (hasEF && hasOC)            return { code: 'O/C and E/F' };
+    if (hasInst && hasEF)          return { code: 'Inst. E/F' };
+    if (hasInst && hasOC)          return { code: 'Inst. O/C' };
+
+    return null;   // unrecognised
 }
 
 function handlePasteEvent(event) {
@@ -1036,9 +1109,25 @@ function reparsePreview() {
 }
 
 /**
- * Multi-row Excel paste parser.
- * Each input row: col 1 = feeder identifier, cols 2-25 = 24 hour values.
- * Header rows (e.g. "Feeder | 00:00 | 01:00 | ...") are auto-detected and skipped.
+ * Multi-row Excel paste parser — accepts the dispatch team's daily sheet.
+ *
+ * Layout tolerated:
+ *   • Column 1 may be either the Feeder name OR the Transmission Station
+ *     name (with the Feeder in column 2).  The parser tries a feeder lookup
+ *     on col 1 first, then col 2.
+ *   • Columns after the leader hold 24 hourly values in order.  Any extra
+ *     summary columns (TOTAL, AVG, PEAK, BAND, etc.) are ignored — only the
+ *     first 24 values are consumed.
+ *   • Each value cell may be:
+ *       - A number (MW)                    → saved as load
+ *       - A fault code (O/C, E/F, LS, …)   → saved as load=0 + fault_code
+ *       - "TIED TO …" / "OUT OF SERVICE"   → skipped (not saved)
+ *       - Empty                            → skipped
+ *   • Rows matching "TOTAL =", section headers (TS name only), or where every
+ *     value cell says "TIED TO …" are skipped silently.
+ *   • Header row (e.g. "TRANSMISSION STATION | 33KV FEEDER | 1:00 | 2:00 | …")
+ *     is auto-detected and skipped.
+ *   • "33KV " prefix on feeder names is stripped during matching.
  */
 function parsePasteInput() {
     const raw       = document.getElementById('pasteInput').value;
@@ -1050,6 +1139,7 @@ function parsePasteInput() {
     pasteEntries     = [];
     pasteRowSummary  = [];
     const warnings   = [];
+    let   skippedRows= 0;
 
     if (!tsCode) {
         document.getElementById('pastePreviewWrap').style.display = 'none';
@@ -1059,28 +1149,58 @@ function parsePasteInput() {
     }
 
     const lines = raw.split(/\r?\n/).map(r => r.replace(/\s+$/,'')).filter(r => r.trim().length > 0);
-    if (lines.length === 0) {
-        clearPasteInput();
-        return;
-    }
+    if (lines.length === 0) { clearPasteInput(); return; }
 
     lines.forEach((line, lineIdx) => {
         const cells = line.split('\t').map(c => c.trim());
-        if (cells.length < 2) return;   // not a usable row
+        if (cells.length < 2) return;
 
-        // Header-row autodetect: skip rows where col 1 doesn't look like a feeder
-        // AND col 2 looks like an hour label (e.g. "00:00", "0", "Hour 0")
-        if (lineIdx === 0 && !_lookupFeederInTs(cells[0])) {
-            const c2 = (cells[1] || '').toLowerCase();
-            const looksLikeHour = /^h?\d{1,2}([:.]?\d{0,2})?(:00|h|hour)?$/i.test(cells[1]) || c2.includes('hour') || c2.includes(':00');
-            if (looksLikeHour) return;  // skip header
+        // ── Skip: TOTAL rows ──────────────────────────────────────────────
+        if (/^total\b|^grand\s*total/i.test(cells[0]) || /^total\b/i.test(cells[1] || '')) {
+            skippedRows++; return;
         }
 
-        const feederToken = cells[0];
-        const feeder      = _lookupFeederInTs(feederToken);
+        // ── Skip: known header rows ──────────────────────────────────────
+        const c0Lower = (cells[0] || '').toLowerCase();
+        if (c0Lower.includes('transmission station') || c0Lower === 's/n' ||
+            c0Lower.includes('feeder name') && c0Lower.length < 30) {
+            skippedRows++; return;
+        }
+
+        // ── Header autodetect: on line 0, if col 1 isn't a feeder and one
+        //    of the next 3 cells is an hour label like "1:00" / "00:00" ──
+        if (lineIdx === 0 && !_lookupFeederInTs(cells[0]) && !_lookupFeederInTs(cells[1] || '')) {
+            const isHourLabel = v => /^h?\d{1,2}([:.]?\d{0,2})?(:00|h|hour)?$/i.test(String(v || '').trim());
+            if (isHourLabel(cells[1]) || isHourLabel(cells[2]) || isHourLabel(cells[3])) {
+                skippedRows++; return;
+            }
+        }
+
+        // ── Decide whether col 1 or col 2 is the feeder ──────────────────
+        let feederToken = cells[0];
+        let feeder      = _lookupFeederInTs(feederToken);
+        let leaderCols  = 1;
+        if (!feeder && cells.length >= 3) {
+            const alt = cells[1];
+            const altFeeder = _lookupFeederInTs(alt);
+            if (altFeeder) { feederToken = alt; feeder = altFeeder; leaderCols = 2; }
+        }
+
+        // ── Skip: section-header-only row (TS name in col 1, everything else blank) ──
+        const remainingNonEmpty = cells.slice(leaderCols).filter(c => c && c.trim() !== '').length;
+        if (!feeder && remainingNonEmpty === 0) { skippedRows++; return; }
+
+        // Take the 24 hour columns starting after the leader, ignoring anything
+        // beyond hour 24 (summary columns like TOTAL, AVG, PEAK, BAND, …).
+        const valueCells = cells.slice(leaderCols, leaderCols + 24);
+
+        // ── Skip: row where every value cell says "TIED TO …" ────────────
+        const allTied = valueCells.length > 0 && valueCells.every(v => v === '' || /^tied to\b/i.test(v));
+        if (allTied) { skippedRows++; return; }
+
         const summary = {
             line:          lineIdx + 1,
-            feederToken,
+            feederToken:   feederToken || '(blank)',
             fdr33kv_code:  feeder ? feeder.fdr33kv_code : '',
             feeder_name:   feeder ? feeder.fdr33kv_name : '(not in this TS)',
             max_load:      feeder ? (feeder.max_load || null) : null,
@@ -1094,16 +1214,12 @@ function parsePasteInput() {
             warnings.push('Row ' + (lineIdx + 1) + ': feeder "' + feederToken + '" not in this TS — entire row skipped.');
         }
 
-        const valueCells = cells.slice(1).map(c => c.replace(',', '.'));   // comma-decimal -> dot
         for (let i = 0; i < valueCells.length; i++) {
             const hour   = startHour + i;
             const rawVal = valueCells[i];
 
             if (hour > 23) break;
-            if (rawVal === '') {
-                summary.cells.push({ hour, display: '', cls: 'paste-cell-skip', skip: true });
-                continue;
-            }
+            if (rawVal === '') { summary.cells.push({ hour, display: '', cls: 'paste-cell-skip', skip: true }); continue; }
 
             // Future hour
             if (clockSlot >= 1 && hour > clockSlot) {
@@ -1111,8 +1227,29 @@ function parsePasteInput() {
                 continue;
             }
 
-            const num = parseFloat(rawVal);
-            const isNumeric = !isNaN(num) && rawVal !== '';
+            // ── Try fault-code recognition BEFORE numeric parse ──────────
+            const fc = _normalizeFaultCode(rawVal);
+            if (fc && fc.skip) {
+                summary.cells.push({ hour, display: rawVal, cls: 'paste-cell-skip', skip: true });
+                continue;
+            }
+            if (fc && fc.code) {
+                summary.cells.push({ hour, display: fc.code, cls: 'paste-cell-fault', skip: false });
+                if (feeder) {
+                    pasteEntries.push({
+                        fdr33kv_code: feeder.fdr33kv_code, hour,
+                        load_read: 0, fault_code: fc.code,
+                        fault_remark: 'Paste — "' + rawVal + '"',
+                    });
+                    summary.validCount++;
+                }
+                continue;
+            }
+
+            // ── Numeric ──────────────────────────────────────────────────
+            const normalised = rawVal.replace(/[,\s]/g, m => m === ',' ? '.' : '');
+            const num = parseFloat(normalised);
+            const isNumeric = !isNaN(num) && normalised !== '';
 
             if (!isNumeric) {
                 summary.cells.push({ hour, display: '"' + rawVal + '"', cls: 'paste-cell-err', skip: true });
@@ -1125,7 +1262,7 @@ function parsePasteInput() {
                 continue;
             }
 
-            // Zero load — need fault code
+            // Zero load with a default fault
             if (num === 0) {
                 if (!defFault) {
                     summary.cells.push({ hour, display: '0', cls: 'paste-cell-skip', skip: true });
@@ -1177,7 +1314,8 @@ function parsePasteInput() {
     const totalCells = pasteRowSummary.reduce((s, r) => s + r.cells.length, 0);
     document.getElementById('pastePreviewTitle').textContent =
         'Preview — ' + pasteRowSummary.length + ' row(s) parsed, ' +
-        totalValid + ' / ' + totalCells + ' cells will be saved';
+        totalValid + ' / ' + totalCells + ' cells will be saved' +
+        (skippedRows > 0 ? ' (' + skippedRows + ' TOTAL/header/TIED rows auto-skipped)' : '');
     document.getElementById('pastePreviewWrap').style.display = 'block';
     document.getElementById('pasteSaveBtn').disabled = (totalValid === 0);
 }
