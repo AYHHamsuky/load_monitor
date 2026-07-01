@@ -96,6 +96,11 @@ switch ($page) {
         require __DIR__ . '/../app/controllers/LateEntryReportController.php';
         break;
 
+    case 'hierarchy':
+        Guard::requireLogin();
+        require __DIR__ . '/../app/controllers/HierarchyController.php';
+        break;
+
     case 'analytics':
         Guard::requireLogin();
         $user = Auth::user();

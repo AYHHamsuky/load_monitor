@@ -315,6 +315,12 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
                         <span>Late Entry Log</span>
                     </a>
                 </li>
+                <li class="<?= $current_page === 'hierarchy' ? 'active' : '' ?>">
+                    <a href="?page=hierarchy">
+                        <i class="fas fa-sitemap"></i>
+                        <span>Feeder Hierarchy</span>
+                    </a>
+                </li>
                 <li>
                     <a href="<?= $bp ?? (defined('BASE_PATH') ? BASE_PATH : '') ?>/admin_backup.php">
                         <i class="fas fa-database"></i>
@@ -358,6 +364,12 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
                     <a href="?page=late_entries">
                         <i class="fas fa-clock"></i>
                         <span>Late Entry Log</span>
+                    </a>
+                </li>
+                <li class="<?= $current_page === 'hierarchy' ? 'active' : '' ?>">
+                    <a href="?page=hierarchy">
+                        <i class="fas fa-sitemap"></i>
+                        <span>Feeder Hierarchy</span>
                     </a>
                 </li>
                 <li>
@@ -422,6 +434,12 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
                     <a href="?page=late_entries">
                         <i class="fas fa-clock"></i>
                         <span>Late Entry Log</span>
+                    </a>
+                </li>
+                <li class="<?= $current_page === 'hierarchy' ? 'active' : '' ?>">
+                    <a href="?page=hierarchy">
+                        <i class="fas fa-sitemap"></i>
+                        <span>Feeder Hierarchy</span>
                     </a>
                 </li>
             <?php endif; ?>
