@@ -343,7 +343,8 @@
                         </ul>
                     </li>
                     <li>Fault text in a cell is recognised automatically: <code>O/C</code>, <code>E/F</code>, <code>O/C, E/F</code>, <code>LS</code>, <code>OS</code>, <code>EF&amp;OC</code> — saved as load=0 with that fault code.</li>
-                    <li><code>TIED TO DAM</code>, <code>OUT OF SERVICE</code>, blank cells, TOTAL and header rows are all auto-skipped.</li>
+                    <li><code>TIED TO DAM</code> / <code>TIED TO KAMBA</code> / <code>OUT OF SERVICE</code> are recorded as Limitation / Out-of-Supply entries (load = 0), keeping the exact text in the fault remark for reporting.</li>
+                    <li>Only blank cells, section-header rows and <code>TOTAL =</code> rows are auto-skipped.</li>
                     <li>Click in the paste area, press <strong>Ctrl+V</strong>, review the preview grid, then click <strong>Save All</strong>.</li>
                 </ol>
             </div>
@@ -1065,8 +1066,12 @@ function _normalizeFaultCode(raw) {
     const s = String(raw).trim();
     if (!s) return null;
 
-    // "TIED TO X" / "OUT OF SERVICE" → not a real fault code, skip cell
-    if (/^tied to\b/i.test(s) || /^out of service/i.test(s)) return { skip: true };
+    // "TIED TO X" — dispatch's way of saying the feeder is tied to another
+    // circuit for this hour.  Save as a Limitation-KE row so it shows in
+    // reports, keeping the exact text ("TIED TO DAM", "TIED TO KAMBA", …)
+    // verbatim in the fault_remark.
+    if (/^tied to\b/i.test(s))       return { code: 'L/S KE', remark: s.toUpperCase() };
+    if (/^out of service/i.test(s))  return { code: 'O/S KE', remark: s.toUpperCase() };
 
     const lc = s.toLowerCase().replace(/\s+/g, ' ');
 
@@ -1197,10 +1202,6 @@ function parsePasteInput() {
         // beyond hour 24 (summary columns like TOTAL, AVG, PEAK, BAND, …).
         const valueCells = cells.slice(leaderCols, leaderCols + 24);
 
-        // ── Skip: row where every value cell says "TIED TO …" ────────────
-        const allTied = valueCells.length > 0 && valueCells.every(v => v === '' || /^tied to\b/i.test(v));
-        if (allTied) { skippedRows++; return; }
-
         const summary = {
             line:          lineIdx + 1,
             feederToken:   feederToken || '(blank)',
@@ -1232,17 +1233,17 @@ function parsePasteInput() {
 
             // ── Try fault-code recognition BEFORE numeric parse ──────────
             const fc = _normalizeFaultCode(rawVal);
-            if (fc && fc.skip) {
-                summary.cells.push({ hour, display: rawVal, cls: 'paste-cell-skip', skip: true });
-                continue;
-            }
             if (fc && fc.code) {
-                summary.cells.push({ hour, display: fc.code, cls: 'paste-cell-fault', skip: false });
+                // If the normaliser supplied its own remark (e.g. verbatim
+                // "TIED TO DAM"), use it; otherwise fall back to the
+                // "Paste — <text>" form so we always keep the original.
+                const remark = fc.remark ? fc.remark : ('Paste — "' + rawVal + '"');
+                const shortDisplay = fc.remark ? rawVal : fc.code;
+                summary.cells.push({ hour, display: shortDisplay, cls: 'paste-cell-fault', skip: false });
                 if (feeder) {
                     pasteEntries.push({
                         fdr33kv_code: feeder.fdr33kv_code, hour,
-                        load_read: 0, fault_code: fc.code,
-                        fault_remark: 'Paste — "' + rawVal + '"',
+                        load_read: 0, fault_code: fc.code, fault_remark: remark,
                     });
                     summary.validCount++;
                 }
