@@ -33,6 +33,19 @@ switch ($action) {
         require __DIR__ . '/../views/interruptions/log_form.php';
         break;
 
+    /* ── BULK PASTE (paste the full daily interruption log spreadsheet) ── */
+    case 'bulk-paste':
+        if (empty($feeders_33kv)) die('No 33kV feeders configured. Contact administrator.');
+        $codesStmt = $db->query("
+            SELECT interruption_code, interruption_description, interruption_type,
+                   interruption_group, body_responsible
+              FROM interruption_codes
+          ORDER BY interruption_type, interruption_description
+        ");
+        $interruptionCodes = $codesStmt->fetchAll(PDO::FETCH_ASSOC);
+        require __DIR__ . '/../views/interruptions/bulk_paste.php';
+        break;
+
     /* ── SIMPLE LOG (single combined form — matches dispatch Excel sheet) ─ */
     case 'simple-log':
         if (empty($feeders_33kv)) die('No 33kV feeders configured. Contact administrator.');

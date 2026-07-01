@@ -106,6 +106,12 @@ $pendingApprovalCount = InterruptionApproval::getPendingCount($user['role']);
                         <span>Quick Log (Single Form)</span>
                     </a>
                 </li>
+                <li class="<?= ($current_page === 'interruptions' && $current_action === 'bulk-paste') ? 'active' : '' ?>">
+                    <a href="?page=interruptions&action=bulk-paste">
+                        <i class="fas fa-paste"></i>
+                        <span>Bulk Paste (Excel Log)</span>
+                    </a>
+                </li>
                 <li class="<?= $current_page === 'interruptions' && $current_action === 'my-requests' ? 'active' : '' ?>">
                     <a href="?page=interruptions&action=my-requests">
                         <i class="fas fa-clock"></i>

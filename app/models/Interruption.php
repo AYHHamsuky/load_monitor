@@ -250,14 +250,24 @@ class Interruption {
     public static function logSingle(array $data): array {
         $db = Database::connect();
 
-        foreach (['fdr33kv_code','interruption_code','datetime_out','datetime_in','load_loss','reason_for_interruption','user_id'] as $f) {
+        // datetime_in and reason_for_interruption are only required when
+        // the interruption is being marked as fully restored (COMPLETED).
+        // Bulk paste allows rows where restoration hasn't happened yet — those
+        // are saved with form_status = PENDING_COMPLETION and no datetime_in.
+        foreach (['fdr33kv_code','interruption_code','datetime_out','load_loss','user_id'] as $f) {
             if (!isset($data[$f]) || $data[$f] === '' || $data[$f] === null) {
                 return ['success' => false, 'message' => "Missing required field: {$f}"];
             }
         }
 
-        if (strtotime($data['datetime_in']) <= strtotime($data['datetime_out'])) {
-            return ['success' => false, 'message' => 'Date/Time In must be after Date/Time Out.'];
+        $hasRestore = !empty($data['datetime_in']);
+        if ($hasRestore) {
+            if (strtotime($data['datetime_in']) <= strtotime($data['datetime_out'])) {
+                return ['success' => false, 'message' => 'Date/Time In must be after Date/Time Out.'];
+            }
+            if (empty($data['reason_for_interruption'])) {
+                return ['success' => false, 'message' => 'Reason for interruption is required for restored interruptions.'];
+            }
         }
         if ((float)$data['load_loss'] < 0) {
             return ['success' => false, 'message' => 'Load loss cannot be negative.'];
@@ -287,9 +297,18 @@ class Interruption {
 
         $ticket = self::generateTicket($data['fdr33kv_code'], $db);
 
-        $formStatus     = $isPastDay ? 'AWAITING_APPROVAL'      : 'COMPLETED';
-        $approvalStatus = $isPastDay ? 'PENDING'                : 'NOT_REQUIRED';
-        $reqApproval    = $isPastDay ? 'YES'                    : 'NO';
+        // Status logic:
+        //   past day + restore  → AWAITING_APPROVAL (needs UL3/UL4 sign-off)
+        //   past day + no restore → AWAITING_APPROVAL (same)
+        //   today   + restore   → COMPLETED
+        //   today   + no restore → PENDING_COMPLETION (Stage 2 still open)
+        if ($isPastDay) {
+            $formStatus = 'AWAITING_APPROVAL'; $approvalStatus = 'PENDING';      $reqApproval = 'YES';
+        } elseif ($hasRestore) {
+            $formStatus = 'COMPLETED';         $approvalStatus = 'NOT_REQUIRED'; $reqApproval = 'NO';
+        } else {
+            $formStatus = 'PENDING_COMPLETION';$approvalStatus = 'NOT_REQUIRED'; $reqApproval = 'NO';
+        }
 
         try {
             // datetime_in / load_loss / reason / resolution all saved upfront so
@@ -304,17 +323,18 @@ class Interruption {
                      approval_note, requires_approval, approval_status, form_status,
                      started_by, started_at, completed_by, completed_at,
                      user_id, timestamp)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, NOW(), ?, NOW())
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?, NOW())
             ");
+            $completedAt = ($formStatus === 'COMPLETED') ? date('Y-m-d H:i:s') : null;
             $stmt->execute([
                 $ticket,
                 $data['fdr33kv_code'],
                 $interruptionType,
                 $data['interruption_code'],
                 $data['datetime_out'],
-                $data['datetime_in'],
+                $hasRestore ? $data['datetime_in']  : null,
                 (float)$data['load_loss'],
-                $data['reason_for_interruption'],
+                $data['reason_for_interruption'] ?? null,
                 $data['resolution']         ?? null,
                 $data['weather_condition']  ?? null,
                 $data['reason_for_delay']   ?? null,
@@ -324,7 +344,8 @@ class Interruption {
                 $approvalStatus,
                 $formStatus,
                 $data['user_id'],
-                $isPastDay ? null : $data['user_id'],
+                ($formStatus === 'COMPLETED') ? $data['user_id'] : null,
+                $completedAt,
                 $data['user_id'],
             ]);
 
