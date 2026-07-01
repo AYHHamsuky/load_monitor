@@ -444,6 +444,9 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:#f0f2f5; color:#333; }
 
+/* Push dashboard content clear of the 62-px fixed top header */
+.main-content { padding:22px; padding-top:82px; min-height:100vh; }
+
 /* Page Header */
 .page-header { display:flex; justify-content:space-between; align-items:center;
     flex-wrap:wrap; gap:14px; margin-bottom:30px;
