@@ -36,13 +36,17 @@ switch ($action) {
     /* ── SIMPLE LOG (single combined form — matches dispatch Excel sheet) ─ */
     case 'simple-log':
         if (empty($feeders_33kv)) die('No 33kV feeders configured. Contact administrator.');
-        // Codes list for the Interruption Type dropdown
+        // Full metadata for cascading dropdowns + auto-populated fields
         $codesStmt = $db->query("
-            SELECT interruption_code, interruption_description, interruption_type
+            SELECT interruption_code, interruption_description, interruption_type,
+                   interruption_group, body_responsible, approval_requirement
               FROM interruption_codes
           ORDER BY interruption_type, interruption_description
         ");
         $interruptionCodes = $codesStmt->fetchAll(PDO::FETCH_ASSOC);
+        $codesByType = [];
+        foreach ($interruptionCodes as $c) { $codesByType[$c['interruption_type']][] = $c; }
+        $interruptionTypes = array_values(array_unique(array_column($interruptionCodes, 'interruption_type')));
         require __DIR__ . '/../views/interruptions/single_form.php';
         break;
 

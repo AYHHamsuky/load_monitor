@@ -45,7 +45,9 @@ try {
     $required = ['fdr33kv_code', 'interruption_code', 'load_loss', 'reason_for_interruption'];
     $missing  = [];
     foreach ($required as $f) {
-        if ($_POST[$f] ?? '' === '') $missing[] = $f;
+        // NOTE: parens required — `??` has LOWER precedence than `===`,
+        // so `$_POST[$f] ?? '' === ''` parses as `$_POST[$f] ?? true`.
+        if (($_POST[$f] ?? '') === '') $missing[] = $f;
     }
     if ($datetimeOut === '') $missing[] = 'datetime_out';
     if ($datetimeIn  === '') $missing[] = 'datetime_in';
@@ -75,6 +77,8 @@ try {
         'reason_for_interruption' => trim($_POST['reason_for_interruption']),
         'resolution'              => trim($_POST['resolution']        ?? '') ?: null,
         'weather_condition'       => trim($_POST['weather_condition'] ?? '') ?: null,
+        'reason_for_delay'        => trim($_POST['reason_for_delay']  ?? '') ?: null,
+        'other_reasons'           => trim($_POST['other_reasons']     ?? '') ?: null,
         'approval_note'           => trim($_POST['approval_note']     ?? '') ?: null,
         'user_id'                 => $user['payroll_id'],
         'user_name'               => $user['staff_name'] ?? $user['payroll_id'],

@@ -440,11 +440,14 @@ body {
 /* ── Page Header ── */
 .page-header {
     display:flex; justify-content:space-between; align-items:center;
-    margin-bottom:30px; background:white; padding:25px;
+    flex-wrap:wrap; gap:14px;
+    margin-bottom:30px; background:white; padding:20px 22px;
     border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.1);
 }
-.page-header h1 { font-size:28px; color:#2c3e50; margin-bottom:5px; }
+.page-header > div:first-child { min-width:0; flex:1 1 260px; }
+.page-header h1 { font-size:24px; color:#2c3e50; margin-bottom:5px; }
 .subtitle        { color:#7f8c8d; font-size:14px; }
+.page-header .btn-primary { flex-shrink:0; white-space:nowrap; font-size:13px; padding:10px 18px; }
 
 /* ── Buttons ── */
 .btn-primary {

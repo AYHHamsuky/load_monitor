@@ -99,23 +99,42 @@ $bp = defined('BASE_PATH') ? BASE_PATH : '';
                 </select>
             </div>
 
-            <!-- Interruption Type -->
-            <div class="fg col-4">
+            <!-- Interruption Type (Unplanned / Planned / Emergency) -->
+            <div class="fg col-3">
                 <label>Interruption Type <span class="req">*</span></label>
-                <select name="interruption_code" id="interruption_code" required>
+                <select name="interruption_type" id="interruption_type" required>
                     <option value="">— Select Type —</option>
-                    <?php foreach ($interruptionCodes as $c): ?>
-                        <option value="<?= htmlspecialchars($c['interruption_code']) ?>">
-                            <?= htmlspecialchars($c['interruption_code']) ?>
-                            — <?= htmlspecialchars($c['interruption_description']) ?>
-                        </option>
+                    <?php foreach ($interruptionTypes as $t): ?>
+                        <option value="<?= htmlspecialchars($t) ?>"><?= htmlspecialchars($t) ?></option>
                     <?php endforeach; ?>
+                </select>
+            </div>
+
+            <!-- Interruption Code (cascades from type) -->
+            <div class="fg col-3">
+                <label>Interruption Code <span class="req">*</span></label>
+                <select name="interruption_code" id="interruption_code" required disabled>
+                    <option value="">— Pick a type first —</option>
                 </select>
                 <div class="hint">e.g. O/C, E/F, O/C and E/F</div>
             </div>
 
+            <!-- Auto-populated read-only details -->
+            <div class="fg col-4">
+                <label>Code Description</label>
+                <div class="computed" id="code_description">—</div>
+            </div>
+            <div class="fg col-4">
+                <label>Interruption Group</label>
+                <div class="computed" id="code_group">—</div>
+            </div>
+            <div class="fg col-4">
+                <label>Body Responsible</label>
+                <div class="computed" id="code_body">—</div>
+            </div>
+
             <!-- Load Loss -->
-            <div class="fg col-2">
+            <div class="fg col-3">
                 <label>Load Loss (MW) <span class="req">*</span></label>
                 <input type="number" name="load_loss" id="load_loss" min="0" step="0.01" value="0.00" required>
             </div>
@@ -181,6 +200,28 @@ $bp = defined('BASE_PATH') ? BASE_PATH : '';
                 </select>
             </div>
 
+            <!-- Reason for Delay (only if restoration took long) -->
+            <div class="fg col-6">
+                <label>Reason for Delay <small style="font-weight:400;color:#64748b;">(if any)</small></label>
+                <select name="reason_for_delay" id="reason_for_delay">
+                    <option value="">— No Delay —</option>
+                    <option value="DSO communicated late">DSO communicated late</option>
+                    <option value="Lack of vehicle or fuel for patrol">Lack of vehicle or fuel for patrol</option>
+                    <option value="Lack of staff during restoration work">Lack of staff during restoration work</option>
+                    <option value="Lack of material">Lack of material</option>
+                    <option value="Delay to get security">Delay to get security</option>
+                    <option value="Line in marshy Area">Line in marshy Area</option>
+                    <option value="Technical staff negligence">Technical staff negligence</option>
+                    <option value="others">Other reason (specify below)</option>
+                </select>
+            </div>
+
+            <!-- Other reason free-text (only if delay=others) -->
+            <div class="fg col-12" id="otherReasonWrap" style="display:none;">
+                <label>Other Reason for Delay <span class="req">*</span></label>
+                <input type="text" name="other_reasons" id="other_reasons" placeholder="Describe the delay reason…">
+            </div>
+
             <!-- Approval Note (shown only for past-date entries) -->
             <div class="col-12">
                 <div class="approval-box" id="approvalBox">
@@ -211,6 +252,50 @@ $bp = defined('BASE_PATH') ? BASE_PATH : '';
 <script>
 const BASE = <?= json_encode($bp) ?>;
 const TODAY = <?= json_encode(date('Y-m-d')) ?>;
+const CODES_BY_TYPE = <?= json_encode($codesByType) ?>;
+
+// ── Cascade: Type → Code → auto-populated Description/Group/Body ────────────
+document.addEventListener('DOMContentLoaded', function () {
+    const typeSel = document.getElementById('interruption_type');
+    const codeSel = document.getElementById('interruption_code');
+    const desc    = document.getElementById('code_description');
+    const grp     = document.getElementById('code_group');
+    const body    = document.getElementById('code_body');
+
+    typeSel.addEventListener('change', function () {
+        // Repopulate Interruption Code dropdown from CODES_BY_TYPE[type]
+        codeSel.innerHTML = '<option value="">— Select Code —</option>';
+        desc.textContent = grp.textContent = body.textContent = '—';
+        const list = CODES_BY_TYPE[this.value] || [];
+        if (!list.length) { codeSel.disabled = true; return; }
+        list.forEach(function (c) {
+            const opt = document.createElement('option');
+            opt.value = c.interruption_code;
+            opt.textContent = c.interruption_code + ' — ' + c.interruption_description;
+            opt.dataset.description = c.interruption_description;
+            opt.dataset.group       = c.interruption_group;
+            opt.dataset.body        = c.body_responsible;
+            codeSel.appendChild(opt);
+        });
+        codeSel.disabled = false;
+    });
+
+    codeSel.addEventListener('change', function () {
+        const opt = this.options[this.selectedIndex];
+        desc.textContent = opt && opt.dataset.description ? opt.dataset.description : '—';
+        grp.textContent  = opt && opt.dataset.group       ? opt.dataset.group       : '—';
+        body.textContent = opt && opt.dataset.body        ? opt.dataset.body        : '—';
+    });
+
+    // Reason for Delay = "others" → show free-text field
+    const delaySel = document.getElementById('reason_for_delay');
+    const otherWrap= document.getElementById('otherReasonWrap');
+    const otherInp = document.getElementById('other_reasons');
+    delaySel.addEventListener('change', function () {
+        if (this.value === 'others') { otherWrap.style.display = ''; otherInp.required = true; }
+        else                          { otherWrap.style.display = 'none'; otherInp.required = false; otherInp.value = ''; }
+    });
+});
 
 function showToast(msg, type) {
     const t = document.getElementById('toast');

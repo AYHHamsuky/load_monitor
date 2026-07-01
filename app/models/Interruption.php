@@ -300,10 +300,11 @@ class Interruption {
                     (ticket_number, fdr33kv_code, interruption_type, interruption_code,
                      datetime_out, datetime_in, load_loss,
                      reason_for_interruption, resolution, weather_condition,
+                     reason_for_delay, other_reasons,
                      approval_note, requires_approval, approval_status, form_status,
                      started_by, started_at, completed_by, completed_at,
                      user_id, timestamp)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, NOW(), ?, NOW())
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, NOW(), ?, NOW())
             ");
             $stmt->execute([
                 $ticket,
@@ -316,6 +317,8 @@ class Interruption {
                 $data['reason_for_interruption'],
                 $data['resolution']         ?? null,
                 $data['weather_condition']  ?? null,
+                $data['reason_for_delay']   ?? null,
+                $data['other_reasons']      ?? null,
                 $data['approval_note']      ?? null,
                 $reqApproval,
                 $approvalStatus,
